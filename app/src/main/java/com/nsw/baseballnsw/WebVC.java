@@ -6,7 +6,7 @@ import android.util.Log;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 
-public class WebVC extends BaseSC {
+public class WebVC extends BaseVC {
 
     public static String url;
     public static String title ="";

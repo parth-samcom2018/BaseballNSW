@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1006978669053",
+    "firebase_url": "https://baseball-nsw.firebaseio.com",
+    "project_id": "baseball-nsw",
+    "storage_bucket": "baseball-nsw.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1006978669053:android:4c6508dbe24c8182",
+        "android_client_info": {
+          "package_name": "com.nsw.baseballnsw"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1006978669053-qerm52lpjqgia7lvq56u0u9g2vn2kc09.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nsw.baseballnsw",
+            "certificate_hash": "a3732f3f780f1032fb42006bd83da21362a2c6ab"
+          }
+        },
+        {
+          "client_id": "1006978669053-hvjrv661te8a6967k8lgbiop4gtcc9rv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD98KT2AlcO_j1nuCktuvdfrTBbaixfKbA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1006978669053-hvjrv661te8a6967k8lgbiop4gtcc9rv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

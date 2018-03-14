@@ -28,20 +28,28 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nsw.baseballnsw.models.Register;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Vector;
 
@@ -53,7 +61,8 @@ import retrofit.client.Response;
 import retrofit.mime.TypedByteArray;
 import retrofit.mime.TypedFile;
 
-public class Registration extends AppCompatActivity {
+public class Registration extends BaseVC {
+
 
     static final int REQUEST_TAKE_PHOTO = 1;
     static final int REQUEST_PICK_IMAGE = 2;
@@ -83,18 +92,18 @@ public class Registration extends AppCompatActivity {
     private RadioButton buttonSG2;
     private EditText birthYearET;
     private EditText countryET;
+    private Spinner countrySpinner;
     private EditText postCodeET;
     private Button chooseCountryButton;
 
     private Switch termsSwitch;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_register);
 
-        chooseImageButton = findViewById(R.id.photo_button);
 
         emailET = findViewById(R.id.email);
         passwordET = findViewById(R.id.password);
@@ -124,6 +133,7 @@ public class Registration extends AppCompatActivity {
 
         birthYearET = findViewById(R.id.birthYearET);
         countryET = findViewById(R.id.countryET);
+
         //countryET.setEnabled(false);
 
         countryET.setOnClickListener(new View.OnClickListener() {
@@ -192,11 +202,10 @@ public class Registration extends AppCompatActivity {
 
         termsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                switchOn = b;
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                switchOn = isChecked;
             }
         });
-
 
     }
 
@@ -404,6 +413,7 @@ public class Registration extends AppCompatActivity {
             registerModel.country = countryET.getText().toString();
             registerModel.postCode = postCodeET.getText().toString();
 
+
             DM.getApi().getInvitedGrouping(registerModel.email, new Callback<Response>() {
                 @Override
                 public void success(Response response, Response response2) {
@@ -448,12 +458,11 @@ public class Registration extends AppCompatActivity {
                 @Override
                 public void failure(RetrofitError error) {
                     Toast.makeText(Registration.this, "could not check groups", Toast.LENGTH_LONG).show();
-
                 }
             });
+
         }
 
-        //Toast.makeText(this, "Jump on Other", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -576,9 +585,138 @@ public class Registration extends AppCompatActivity {
         this.finish();
     }
 
+    private void choosePhotoAction()
+    {
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        // Start the Intent
+        startActivityForResult(galleryIntent, REQUEST_PICK_IMAGE);
+    }
+
+    private Uri capturedImageUri;
+    String mCurrentPhotoPath;
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+
+        capturedImageUri = Uri.fromFile(image);
+        return image;
+    }
 
 
+    private String imgDecodableString;
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+        Bitmap b = null;
+
+        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
+            // Bundle extras = data.getExtras();
+            //Bitmap imageBitmap = (Bitmap) extras.get("data");
+
+            Log.d("hq", "request take photo");
+            try {
+                b = MediaStore.Images.Media.getBitmap(this.getApplicationContext().getContentResolver(), capturedImageUri);
+                Log.d("hipcook", "I now have a photo bitmap:" + b.getWidth());
+                float scaleFactor = 640f / b.getWidth();
+                b = DM.createScaledBitmap(b, scaleFactor);
+                Log.d("hipcook", "I now have a scaled photo bitmap:" + b.getWidth());
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.d("hipcook", "bitmap exception");
+            }
+        } else if (requestCode == REQUEST_PICK_IMAGE &&
+                resultCode == Activity.RESULT_OK &&
+                null != data) {
+            // Get the Image from data
+
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+            // Get the cursor
+            Cursor cursor = this.getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            imgDecodableString = cursor.getString(columnIndex);
+            cursor.close();
+
+            b = DM.decodeSampledBitmapFromFile(imgDecodableString, 640, 640);
+            Log.d("hipcook", "I now have a bitmap:" + b.getWidth());
+
+
+        } else {
+            Toast.makeText(this, "You haven't picked Image", Toast.LENGTH_LONG).show();
+        }
+
+        //if found a bitmap, upload or save in registration model
+        if (b != null) {
+
+            profileIV.setImageBitmap(b);
+            newProfileImage = b;
+        }
+    }
+
+    private Bitmap newProfileImage = null;
+    private void postImagefromImageView()
+    {
+        if(newProfileImage == null) return; //no need to upload
+        final Bitmap b = newProfileImage;
+
+        final ProgressDialog pd = DM.getPD(this, "Updating Profile Image...");
+        pd.show();
+
+        String fileName = "photo.png";
+        File f = new File(this.getCacheDir(), fileName);
+        try {
+            f.createNewFile();
+            //Convert bitmap to byte array
+
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            b.compress(Bitmap.CompressFormat.PNG, 0 /*ignored for PNG*/, bos);
+            byte[] bitmapdata = bos.toByteArray();
+
+            //write the bytes in file
+            FileOutputStream fos = new FileOutputStream(f);
+            fos.write(bitmapdata);
+            fos.flush();
+            fos.close();
+
+
+            TypedFile typedImage = new TypedFile("image/png", f);
+            DM.getApi().postProfileImage(DM.getAuthString(), typedImage, new Callback<Response>() {
+                @Override
+                public void success(Response response, Response response2) {
+                    Toast.makeText(Registration.this, "Profile Image Updated", Toast.LENGTH_LONG).show();
+                    pd.hide();
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+
+                    Toast.makeText(Registration.this, "Could not update profile image: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                    pd.hide();
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.d("hq", "file exception");
+        }
+
+    }
 
 
     public boolean isOnline() {
@@ -604,4 +742,3 @@ public class Registration extends AppCompatActivity {
     }
 
 }
-
