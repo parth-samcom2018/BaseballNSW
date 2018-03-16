@@ -29,7 +29,7 @@ public class LaddersVC extends Fragment implements SwipeRefreshLayout.OnRefreshL
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         inflater = (LayoutInflater)this.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.fragment_ladder,container,false);
+        View view = inflater.inflate(R.layout.fragment_ladders,container,false);
 
         ll_orientation = view.findViewById(R.id.ll_orientation);
         ll_second = view.findViewById(R.id.ll_second);
