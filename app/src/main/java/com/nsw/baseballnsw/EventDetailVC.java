@@ -33,11 +33,11 @@ public class EventDetailVC extends Fragment {
         inflater = (LayoutInflater) this.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v= inflater.inflate(R.layout.fragment_event_detail_vc, container, false);
 
-        titleTV = (TextView) v.findViewById(R.id.titleTV);
-        dateTv = (TextView) v.findViewById(R.id.dateTV);
-        timeTv = (TextView) v.findViewById(R.id.timeTV);
-        locationTV = (TextView) v.findViewById(R.id.locationTV);
-        notesTV = (TextView) v.findViewById(R.id.notesTV);
+        titleTV = v.findViewById(R.id.titleTV);
+        dateTv = v.findViewById(R.id.dateTV);
+        timeTv = v.findViewById(R.id.timeTV);
+        locationTV = v.findViewById(R.id.locationTV);
+        notesTV = v.findViewById(R.id.notesTV);
 
         modelToView();
 

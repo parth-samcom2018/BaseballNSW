@@ -1,6 +1,7 @@
 package com.nsw.baseballnsw;
 
 import android.*;
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -65,15 +66,7 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
     static final int REQUEST_TAKE_PHOTO = 1;
     static final int REQUEST_PICK_IMAGE = 2;
 
-    boolean isSelected;
-
     public static final int MY_PERMISSIONS_REQUEST_CAMERA = 100;
-    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 100;
-    public static final int MY_PERMISSIONS_REQUEST_READ_PHONE = 100;
-    public static final int MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE = 100;
-    public static final int MY_WRITE_EXTERNAL_STORAGE = 200;
-    public static final int MY_READ_EXTERNAL_STORAGE = 100;
-    public static final int MY_READ_PHONE_STATE = 100;
     public static final String ALLOW_KEY = "ALLOWED";
     public static final String CAMERA_PREF = "camera_pref";
     public Group group;
@@ -83,8 +76,7 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
     private ListView listView;
     private ArrayAdapter listAdapter;
     private ImageView emptyIV;
-    private ProgressBar progressBar1;
-    private TextView tv_main,tv_media_main;
+    private TextView tv_media_main;
 
 
     public MediaVC() {
@@ -184,7 +176,7 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
                                 progressBar.setVisibility(View.GONE);
                                 //progressBar1.setVisibility(View.GONE);
 
-                                showiv.setImageResource(R.drawable.splashlogo);
+                                showiv.setImageResource(R.drawable.icon);
                                 showiv.setScaleType(ImageView.ScaleType.CENTER);
                             }
                         });
@@ -222,6 +214,17 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
                 Button flagButton = convertView.findViewById(R.id.flagButton);
                 flagButton.setOnClickListener(DM.getFlagOnClickListener(MediaVC.this.getActivity()));
 
+
+                /*convertView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        MediaDetailVC.mediaAlbum = album;
+                        Intent i = new Intent(getActivity(), MediaDetailVC.class);
+                        startActivity(i);
+
+                    }
+                });*/
 
 
                 return convertView;
@@ -287,7 +290,7 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
             listPermissionsNeeded.add(android.Manifest.permission.CAMERA);
         }
         if (permissionSendMessage != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded.add(android.Manifest.permission.ACCESS_FINE_LOCATION);
+            listPermissionsNeeded.add(Manifest.permission.ACCESS_FINE_LOCATION);
         }
 
 
@@ -308,6 +311,7 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
 
         inflater.inflate(R.menu.create_album_menu, menu);
     }
+
 
 
 
@@ -403,7 +407,6 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
         capturedImageUri = Uri.fromFile(image);
         return image;
     }
-
 
 
 
@@ -537,7 +540,7 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
         Log.d("hq","uploading bitmap to server, albumID="+albumID);
         String fileName = "photo.png";
 
-        File f = new File(this.getContext().getCacheDir(), fileName);
+        File f = new File(this.getActivity().getCacheDir(), fileName);
         try {
             f.createNewFile();
             //Convert bitmap to byte array
@@ -572,6 +575,20 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
                 }
             });
 
+            /*DM.getApi().postImageToAlbums(DM.getAuthString(), albumID, typedImage, new Callback<Response>() {
+                @Override
+                public void success(Response response, Response response2) {
+                    Toast.makeText(MediaVC.this.getActivity(), "Imaged posted to album", Toast.LENGTH_SHORT).show();
+                    loadData();
+                    pd.hide();
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Toast.makeText(getActivity(),"Imaged posting failed: "+error.getMessage(),Toast.LENGTH_LONG).show();
+                    pd.hide();
+                }
+            });*/
         } catch (IOException e) {
             e.printStackTrace();
             Log.d("hq","file exception");
@@ -630,10 +647,38 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
             }
         });
 
+        /*if (group != null) DM.getApi().getGroupingMediaAlbums(DM.getAuthString(), group.groupId, new Callback<MediaAlbumResponse>() {
+            @Override
+            public void success(MediaAlbumResponse mediaAlbumResponse, Response response) {
 
+
+                albums = mediaAlbumResponse.getData().mediaModels;
+
+                for(MediaAlbum a : albums)
+                {
+                    a.sortMediaAlbumsByDate();
+                }
+
+                listAdapter.notifyDataSetChanged();
+                refreshLayout.setRefreshing(false);
+                pd.dismiss();
+
+
+                if(mediaAlbumResponse.getData().size()==0) emptyIV.setVisibility(View.VISIBLE);
+                else emptyIV.setVisibility(View.GONE);
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                pd.dismiss();
+                refreshLayout.setRefreshing(false);
+                Toast.makeText(MediaVC.this.getActivity(), "Error " + error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });*/
     }
 
-    private class RoundedCornersTransform implements Transformation {
+    private class RoundedCornersTransform implements Transformation{
         public  Bitmap getRoundedCornerBitmap(Bitmap bitmap, float r, float v, float r1, float v1) {
             Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
                     bitmap.getHeight(), Bitmap.Config.ARGB_8888);
@@ -683,4 +728,3 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
         }
     }
 }
-

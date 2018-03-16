@@ -109,7 +109,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.hq.sportshqnetwork.EventVC"
+        tools:context="com.hq.sporthqnetwork.EventVC"
         android:orientation="vertical"
         android:layout_below="@+id/relativeLayout">
 
@@ -123,8 +123,8 @@
             />
 
 
-        <com.hq.sportshqnetwork.CustomViewPager
-            android:id="@+id/container"
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewPager_event"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"

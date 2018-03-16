@@ -107,6 +107,24 @@ public class NoticeBoardVCN extends Fragment {
         Log.d("HQ","text: "+text+" familyId:" +group.groupId+ " familyName:"+group.groupName);
 
 
+        /*DM.getApi().postNotification(DM.getAuthString(), n,  new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+
+                Toast.makeText(getActivity(),"Notification Posted!",Toast.LENGTH_LONG).show();
+                textPoster.clearText();
+                loadData(true);
+                pd.dismiss();
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+                Toast.makeText(getActivity(),"Post failed "+error.getMessage(),Toast.LENGTH_LONG).show();
+                pd.dismiss();
+            }
+        });*/
+
         DM.getApi().postNotifications(DM.getAuthString(), n,  new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
@@ -137,6 +155,21 @@ public class NoticeBoardVCN extends Fragment {
 
         Log.d("HQ","groupID : "+this.group.groupId);
 
+        /*DM.getApi().postInviteUser(DM.getAuthString(), "unknown", email, true, this.group.groupId, new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+
+                Toast.makeText(getActivity(), "User has been invited!", Toast.LENGTH_LONG).show();
+                pd.dismiss();
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Toast.makeText(getActivity(), "Failed to invite user", Toast.LENGTH_LONG).show();
+                pd.dismiss();
+            }
+        });*/
         DM.getApi().postInviteUsers(DM.getAuthString(), "unknown", email, true, this.group.groupId, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
@@ -379,54 +412,25 @@ public class NoticeBoardVCN extends Fragment {
                                 }
                             });
 
-                        }
-
-
-                        if (n.notificationTypeId == Notification.TYPE_ARTICLE) {
-
-                            final ProgressDialog pd = DM.getPD(getActivity(), "Loading Article...");
-                            pd.show();
-                            DM.getApi().getArticle(DM.getAuthString(), n.notificationItemId, new Callback<Article>() {
+                            /*DM.getApi().getMediaAlbums(DM.getAuthString(), n.notificationItemId, new Callback<MediaAlbumResponse>() {
                                 @Override
-                                public void success(final Article article, Response response) {
+                                public void success(MediaAlbumResponse mediaAlbumResponse, Response response) {
+                                    pd.dismiss();
+                                    MediaDetailVC.mediaAlbum = mediaAlbumResponse.getData();
+                                    MediaDetailVC.selectedMediaId = n.mediaId; //can be null
 
-                                    DM.getApi().getAllGrouping(DM.getAuthString(), new Callback<GroupResponse>() {
-                                        @Override
-                                        public void success(GroupResponse gs, Response response) {
-
-
-                                            pd.dismiss();
-                                            for (Group g : gs.getData()) {
-                                                if (g.groupId == n.familyId) {
-                                                    ArticleVC.group = g;
-                                                    break;
-                                                }
-                                            }
-
-                                            ArticleVC.article = article;
-                                            Intent i = new Intent(NoticeBoardVCN.this.getActivity(), ArticleVC.class);
-                                            startActivity(i);
-                                        }
-
-                                        @Override
-                                        public void failure(RetrofitError error) {
-                                            pd.dismiss();
-                                            Toast.makeText(getActivity(), "Could not load " + error.getMessage(), Toast.LENGTH_LONG).show();
-                                        }
-                                    });
-
+                                    Intent i = new Intent(NoticeBoardVC.this.getActivity(), MediaDetailVC.class);
+                                    startActivity(i);
                                 }
 
                                 @Override
                                 public void failure(RetrofitError error) {
-
                                     pd.dismiss();
-                                    Toast.makeText(getActivity(), "Could not load article, try later " + error.getMessage(), Toast.LENGTH_LONG).show();
-
+                                    Toast.makeText(getActivity(), "Could not load media, try later", Toast.LENGTH_LONG).show();
                                 }
-                            });
-
+                            });*/
                         }
+
 
 
                         if (n.notificationTypeId == Notification.TYPE_EVENT) {
@@ -450,6 +454,22 @@ public class NoticeBoardVCN extends Fragment {
                                     Toast.makeText(getActivity(), "Could not load event, try later", Toast.LENGTH_LONG).show();
                                 }
                             });
+
+                            /*DM.getApi().getEvents(DM.getAuthString(), n.notificationItemId, new Callback<EventResponse>() {
+                                @Override
+                                public void success(EventResponse eventResponse, Response response) {
+                                    pd.dismiss();
+                                    EventVC.event = eventResponse.getData();
+                                    Intent i = new Intent(NoticeBoardVC.this.getActivity(), EventVC.class);
+                                    startActivity(i);
+                                }
+
+                                @Override
+                                public void failure(RetrofitError error) {
+                                    pd.dismiss();
+                                    Toast.makeText(getActivity(), "Could not load event, try later", Toast.LENGTH_LONG).show();
+                                }
+                            });*/
 
                         }
                     }
@@ -538,6 +558,21 @@ public class NoticeBoardVCN extends Fragment {
             //api.getGroupNotifications(auth,group.groupId,cb);
             api.getGroupNotificationsnew(auth,group.groupId,cb);
         }
+
+        //Load user groups secretly in background
+        /*DM.getApi().getAllGroups(auth, new Callback<List<Group>>() {
+            @Override
+            public void success(List<Group> gs, Response response) {
+                userGroups = gs;
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+
+            }
+        });*/
 
 
         DM.getApi().getAllGrouping(auth, new Callback<GroupResponse>() {

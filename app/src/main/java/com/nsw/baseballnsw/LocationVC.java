@@ -44,7 +44,7 @@ public class LocationVC extends Fragment {
                 MarkerOptions options = new MarkerOptions();
                 options.position(new LatLng(lattitude,longitude));
                 options.title("Location");
-                options.icon(BitmapDescriptorFactory.fromResource(R.drawable.logo_log_in));
+                options.icon(BitmapDescriptorFactory.fromResource(R.drawable.mappin));
 
                 map.addMarker(options);
                 //   map.getUiSettings().setMyLocationButtonEnabled(false);

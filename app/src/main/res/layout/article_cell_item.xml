@@ -171,7 +171,7 @@
                     android:id="@+id/flagButton"
                     android:layout_width="@dimen/flag_button_width"
                     android:layout_height="@dimen/flag_button_width"
-                    android:background="@drawable/flaglight"
+                    android:background="@drawable/flag"
                     android:elevation="10dp"
                     android:layout_margin="10dp"
                     />

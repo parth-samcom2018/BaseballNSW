@@ -6,6 +6,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,7 +27,7 @@ public class EventVC extends BaseVC implements SwipeRefreshLayout.OnRefreshListe
     private TextView tv_event_title;
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
-    private CustomViewPager mViewPager;
+    private ViewPager mViewPager;
     private TabLayout tabLayout;
 
     private EventDetailVC eventDetailVC;
@@ -40,7 +41,7 @@ public class EventVC extends BaseVC implements SwipeRefreshLayout.OnRefreshListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        setContentView(R.layout.activity_event_sc);
+        setContentView(R.layout.activity_event_vc);
 
 
         //this.setTitle(event.eventName);
@@ -84,8 +85,8 @@ public class EventVC extends BaseVC implements SwipeRefreshLayout.OnRefreshListe
 
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = findViewById(R.id.container);
-        mViewPager.setPagingEnabled(true);
+        mViewPager = findViewById(R.id.viewPager_event);
+        //mViewPager.setPagingEnabled(true);
 
 
         mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -170,5 +171,3 @@ public class EventVC extends BaseVC implements SwipeRefreshLayout.OnRefreshListe
         return super.onOptionsItemSelected(item);
     }
 }
-
-

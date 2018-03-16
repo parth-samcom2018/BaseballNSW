@@ -153,10 +153,22 @@ public class MainTabbing extends BaseVC {
                         noticeBoardVC.loadIfUnloaded();
                         break;
                     case 1:
-                        tvend.setVisibility(View.GONE);
+                        try
+                        {
+                            tvend.setVisibility(View.GONE);
+                            frmL.setVisibility(View.GONE);
+                            mTitle.setText("Groups");
+                            //ll_edit.setVisibility(View.GONE);
+                            groupsVC.loadIfUnloaded();
+                        }
+                        catch (NullPointerException e){
+                            e.printStackTrace();
+                            Log.e(TAG, "onPageSelected: "+e.getMessage());
+                        }
+                       /* tvend.setVisibility(View.GONE);
                         frmL.setVisibility(View.GONE);
                         mTitle.setText("Groups");
-                        groupsVC.loadIfUnloaded();
+                        groupsVC.loadIfUnloaded();*/
                         break;
                     case 2:
                         frmL.setVisibility(View.GONE);

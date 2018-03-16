@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/shape_ladder"
+        android:id="@+id/ll_main"
+        android:layout_margin="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:background="@color/light_blue"
+            android:padding="10dp"
+            android:layout_weight="2"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:id="@+id/ll_orientation">
+
+            <TextView
+                android:layout_weight="2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/rotate"
+                android:textColor="@color/black"
+                android:fontFamily="@font/lato_lightitalic"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"/>
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/icon_phone"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="6"
+        android:id="@+id/ll_second"
+        android:layout_below="@+id/ll_main"
+        android:layout_margin="10dp"
+        android:background="@android:color/transparent">
+
+        <TextView
+            android:layout_weight="3.2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/team"
+            android:layout_gravity="center"
+            android:id="@+id/tv"
+            android:layout_marginLeft="10dp"/>
+
+        <TextView
+            android:layout_weight="0.5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="W"
+            android:layout_gravity="center"
+            android:id="@+id/tv1"/>
+
+        <TextView
+            android:layout_weight="0.5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="L"
+            android:layout_gravity="center"
+            android:id="@+id/tv2"/>
+
+        <TextView
+            android:layout_weight="0.5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="D"
+            android:layout_gravity="center"
+            android:id="@+id/tv3"/>
+
+        <TextView
+            android:layout_weight="0.5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="P"
+            android:layout_gravity="center"
+            android:id="@+id/tv4"/>
+
+        <TextView
+            android:layout_weight="0.5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/score"
+            android:layout_gravity="center"
+            android:id="@+id/tv5"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="10"
+        android:id="@+id/ll_third"
+        android:layout_below="@+id/ll_second"
+        android:layout_margin="10dp"
+        android:background="@android:color/transparent">
+
+        <TextView
+            android:layout_weight="3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/team"
+            android:layout_gravity="center"
+            android:id="@+id/tv_t"
+            android:layout_marginLeft="10dp"/>
+        
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="9">
+
+
+            <TextView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="W"
+                android:layout_gravity="center"
+                android:id="@+id/tv_t_1"/>
+
+            <TextView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="L"
+                android:layout_gravity="center"
+                android:id="@+id/tv_t_2"/>
+
+            <TextView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="D"
+                android:layout_gravity="center"
+                android:id="@+id/tv_t_3"/>
+
+            <TextView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="P"
+                android:layout_gravity="center"
+                android:id="@+id/tv_t_4"/>
+
+            <TextView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="B"
+                android:layout_gravity="center"
+                android:id="@+id/tv_t_5"/>
+
+            <TextView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="F"
+                android:layout_gravity="center"
+                android:id="@+id/tv_t_6"/>
+
+            <TextView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="A"
+                android:layout_gravity="center"
+                android:id="@+id/tv_t_7"/>
+
+            <TextView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="GD"
+                android:layout_gravity="center"
+                android:id="@+id/tv_t_8"/>
+
+            <TextView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/score"
+                android:layout_gravity="center"
+                android:id="@+id/tv_t_9"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="2"
+        android:elevation="3dp"
+        android:orientation="horizontal"
+        android:background="@drawable/textshape"
+        android:layout_below="@+id/ll_third"
+        android:layout_margin="5dp">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/group_first"/>
+
+
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/team"
+            android:padding="15dp"
+            android:gravity="center|left"/>
+    </LinearLayout>
+
+</RelativeLayout>

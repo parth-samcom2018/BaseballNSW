@@ -32,18 +32,18 @@ public class GroupVC extends BaseVC {
 
     private TextView tv_grp_title,tv_edit;
     private LinearLayout ll_back,ll_edit;
-    private SectionsPagerAdapter mSectionsPagerAdapter;
+    private GroupVC.SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
     private TabLayout tabLayout;
 
     private NoticeBoardVCN noticeBoardVCN;
-    private NoticeboardFragment noticeBoardVC;
     private MediaVC mediaVC;
-    private ArticlesVC articlesVC;
+    private FixturesVC fixturesVC;
+    private LaddersVC laddersVC;
     private DocumentsVC documentsVC;
     public Folder rootFolder = null;
 
-    private String[] titles = {"Notification", "Media", "Articles", "Documents"};
+    private String[] titles = {"Notification", "Media", "Fixtures", "Ladders", "Documents"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,13 +52,10 @@ public class GroupVC extends BaseVC {
         setContentView(R.layout.activity_group_vc); //Call the EVENT layout cause it's the same
 
 
-        //BACK, rest defined in base class
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        mSectionsPagerAdapter = new SectionsPagerAdapter(this.getSupportFragmentManager());
+        mSectionsPagerAdapter = new GroupVC.SectionsPagerAdapter(this.getSupportFragmentManager());
         try{
 
-            tv_grp_title = findViewById(R.id.tv_grp_title);
+            tv_grp_title = findViewById(R.id.group_title);
             tv_grp_title.setText(group.groupName);
         }
 
@@ -88,7 +85,6 @@ public class GroupVC extends BaseVC {
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = findViewById(R.id.grp_view_pager);
-
 
         ViewPager.OnPageChangeListener pageListener = new ViewPager.OnPageChangeListener() {
             @Override
@@ -123,20 +119,18 @@ public class GroupVC extends BaseVC {
 
                         break;
                     case 2:
-                        articlesVC.loadIfUnloaded();
+                        fixturesVC.loadIfUnloaded();
                         ll_edit.setVisibility(View.GONE);
                         break;
                     case 3:
+                        laddersVC.loadIfUnloaded();
+                        ll_edit.setVisibility(View.GONE);
+                        break;
+
+                    case 4:
                         documentsVC.loadIfUnloaded();
                         ll_edit.setVisibility(View.VISIBLE);
                         tv_edit.setText("");
-                        /*ll_edit.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                newFolderAction();
-                            }
-                        });*/
-
                         break;
                 }
 
@@ -172,8 +166,11 @@ public class GroupVC extends BaseVC {
         this.mediaVC = (MediaVC) MediaVC.instantiate(this, MediaVC.class.getName());
         this.mediaVC.group = group;
 
-        this.articlesVC = (ArticlesVC) ArticlesVC.instantiate(this, ArticlesVC.class.getName());
-        this.articlesVC.group = group;
+        this.fixturesVC = (FixturesVC) FixturesVC.instantiate(this, FixturesVC.class.getName());
+        this.fixturesVC.group = group;
+
+        this.laddersVC = (LaddersVC)LaddersVC.instantiate(this, LaddersVC.class.getName());
+        this.laddersVC.group = group;
 
         this.documentsVC = (DocumentsVC) DocumentsVC.instantiate(this, DocumentsVC.class.getName());
         this.documentsVC.group = group;
@@ -257,8 +254,9 @@ public class GroupVC extends BaseVC {
         lila1.setOrientation(LinearLayout.VERTICAL);
         final EditText nameET = new EditText(this);
         nameET.setHint("Album Name");
-        /*final EditText descET = new EditText(this);
-        descET.setHint("Album Description");*/
+        final EditText descET = new EditText(this);
+        descET.setVisibility(View.GONE);
+        descET.setHint("Album Description");
         lila1.addView(nameET);
         //lila1.addView(descET);
         int pad = (int)getResources().getDimension(R.dimen.small_pad);
@@ -272,7 +270,7 @@ public class GroupVC extends BaseVC {
         alert.setPositiveButton("Create", new DialogInterface.OnClickListener() {
             public void onClick(final DialogInterface dialog, int whichButton) {
                 String name = nameET.getText().toString();
-                //String description = descET.getText().toString();
+                String description = descET.getText().toString();
 
                 if(name.length() == 0 || name == null)
                 {
@@ -281,24 +279,7 @@ public class GroupVC extends BaseVC {
                     return;
                 }
 
-                /*DM.getApi().postMediaAlbum(DM.getAuthString(), name, description, group.groupId, new Callback<Response>() {
-                    @Override
-                    public void success(Response response, Response response2) {
-                        Toast.makeText(GroupVC.this,"Album Created!",Toast.LENGTH_LONG).show();
-                        dialog.dismiss();
-                        DM.hideKeyboard(GroupVC.this);
-
-                    }
-
-                    @Override
-                    public void failure(RetrofitError error) {
-                        Toast.makeText(GroupVC.this,"Could not create album: "+error.getMessage(),Toast.LENGTH_LONG).show();
-
-
-                    }
-                });*/
-
-                DM.getApi().postMediaAlbums(DM.getAuthString(), name,  group.groupId, new Callback<Response>() {
+                DM.getApi().postMediaAlbum(DM.getAuthString(), name,  group.groupId, new Callback<Response>() {
                     @Override
                     public void success(Response response, Response response2) {
                         Toast.makeText(GroupVC.this,"Album Created!",Toast.LENGTH_LONG).show();
@@ -314,6 +295,7 @@ public class GroupVC extends BaseVC {
 
                     }
                 });
+
             }
         });
         alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -416,9 +398,9 @@ public class GroupVC extends BaseVC {
 
             if (position == 0) return noticeBoardVCN;
             else if (position == 1) return mediaVC;
-            else if (position == 2) return articlesVC;
+            else if (position == 2) return fixturesVC;
+            else if (position ==3) return laddersVC;
             else return documentsVC;
-
 
         }
 
@@ -427,7 +409,7 @@ public class GroupVC extends BaseVC {
         public int getCount() {
             // tab count
 
-            return 4;
+            return 5;
         }
 
         @Override

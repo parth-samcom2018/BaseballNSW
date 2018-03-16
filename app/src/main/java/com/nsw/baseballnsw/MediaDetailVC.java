@@ -370,7 +370,7 @@ public class MediaDetailVC extends BaseVC {
     {
         final ProgressDialog pd = DM.getPD(this,"Refreshing Media...");
         pd.show();
-        /*DM.getApi().getMediaAlbum(DM.getAuthString(), mediaAlbum.mediaAlbumId, new Callback<MediaAlbum>() {
+        DM.getApi().getMediaAlbum(DM.getAuthString(), mediaAlbum.mediaAlbumId, new Callback<MediaAlbum>() {
             @Override
             public void success(MediaAlbum ma, Response response) {
                 mediaAlbum = ma;
@@ -397,9 +397,9 @@ public class MediaDetailVC extends BaseVC {
                 pd.dismiss();
                 refreshLayout.setRefreshing(false);
             }
-        });*/
+        });
 
-        DM.getApi().getMediaAlbums(DM.getAuthString(), mediaAlbum.mediaAlbumId, new Callback<MediaAlbumResponse>() {
+        /*DM.getApi().getMediaAlbums(DM.getAuthString(), mediaAlbum.mediaAlbumId, new Callback<MediaAlbumResponse>() {
             @Override
             public void success(MediaAlbumResponse ma, Response response) {
                 mediaAlbum = ma.getData();
@@ -424,7 +424,7 @@ public class MediaDetailVC extends BaseVC {
                 pd.dismiss();
                 refreshLayout.setRefreshing(false);
             }
-        });
+        });*/
     }
 
     @Override
