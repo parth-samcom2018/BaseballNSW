@@ -1,5 +1,7 @@
 package com.nsw.baseballnsw;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.support.v4.app.Fragment;
 import android.content.Context;
@@ -19,7 +21,7 @@ public class LaddersVC extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
     Group group;
     private LinearLayout ll_orientation,ll_second,ll_landscape;
-    boolean isSelected = false;
+    int click = 0;
 
     public LaddersVC() {
         // Required empty public constructor
@@ -39,20 +41,21 @@ public class LaddersVC extends Fragment implements SwipeRefreshLayout.OnRefreshL
             @Override
             public void onClick(View view) {
 
-
-                if (isSelected = false){
-                    ll_second.setVisibility(View.VISIBLE);
-                    ll_landscape.setVisibility(View.GONE);
-                    getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                    isSelected = true;
-                }
-
-                if (isSelected = true){
+                if (click == 0){
                     ll_second.setVisibility(View.GONE);
                     ll_landscape.setVisibility(View.VISIBLE);
                     getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                    isSelected = false;
+                    click+=1;
+                    return;
                 }
+
+                if (click == 1){
+                    ll_second.setVisibility(View.VISIBLE);
+                    ll_landscape.setVisibility(View.GONE);
+                    getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                    click-=1;
+                }
+
             }
         });
 

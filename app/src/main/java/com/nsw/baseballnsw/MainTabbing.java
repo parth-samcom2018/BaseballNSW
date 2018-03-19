@@ -171,18 +171,26 @@ public class MainTabbing extends BaseVC {
                         groupsVC.loadIfUnloaded();*/
                         break;
                     case 2:
-                        frmL.setVisibility(View.GONE);
-                        mTitle.setText("Events");
-                        tvend.setVisibility(View.VISIBLE);
-                        tvend.setText("CREATE");
-                        tvend.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                newEventAction();
-                            }
-                        });
-                        eventsVC.loadIfUnloaded();
-                        break;
+
+                        try{
+                            tvend.setVisibility(View.VISIBLE);
+                            frmL.setVisibility(View.GONE);
+                            mTitle.setText("Events");
+                            tvend.setText("CREATE");
+                            tvend.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    newEventAction();
+                                }
+                            });
+                            eventsVC.loadIfUnloaded();
+                            break;
+                        }
+                        catch (NullPointerException e){
+                            e.printStackTrace();
+                            Log.e(TAG, "onPageSelected: "+e.getMessage());
+                        }
+
                     case 3:
                         tvend.setVisibility(View.GONE);
                         frmL.setVisibility(View.VISIBLE);
