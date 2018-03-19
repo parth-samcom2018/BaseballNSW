@@ -254,6 +254,8 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
 
 
                 if (checkpermission()==true){
+
+
                     cameraAction();
                 }
                 //showAlert();
