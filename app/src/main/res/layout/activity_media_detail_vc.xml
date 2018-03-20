@@ -66,6 +66,7 @@
                 />
 
         </LinearLayout>
+
     </LinearLayout>
 
     <include layout="@layout/textposter"
@@ -73,7 +74,6 @@
 
 
     <android.support.v4.widget.SwipeRefreshLayout
-
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".NoticeBoardVC"
@@ -81,13 +81,10 @@
         android:layout_above="@id/textposter"
         android:layout_below="@id/header">
 
-
         <ListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/list">
-
-        </ListView>
+            android:id="@+id/list"/>
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.nsw.baseballnsw.models.Folder;
 import com.nsw.baseballnsw.models.Group;
+import com.nsw.baseballnsw.models.Ladders;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -29,6 +30,7 @@ public class GroupVC extends BaseVC {
 
     //MODEL
     public static Group group;
+    public static Ladders ladder;
 
     private TextView tv_grp_title,tv_edit;
     private LinearLayout ll_back,ll_edit;
@@ -170,12 +172,12 @@ public class GroupVC extends BaseVC {
         this.fixturesVC.group = group;
 
         this.laddersVC = (LaddersVC)LaddersVC.instantiate(this, LaddersVC.class.getName());
-        this.laddersVC.group = group;
+        this.laddersVC.ladder = ladder;
 
         this.documentsVC = (DocumentsVC) DocumentsVC.instantiate(this, DocumentsVC.class.getName());
         this.documentsVC.group = group;
 
-        this.setTitle(group.groupName);
+        //this.setTitle(group.groupName);
 
     }
 

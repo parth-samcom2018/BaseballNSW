@@ -63,8 +63,10 @@ import retrofit.mime.TypedFile;
 
 public class MediaVC extends Fragment implements CropActivity.CropProtocol {
 
-    static final int REQUEST_TAKE_PHOTO = 1;
+    static final int REQUEST_TAKE_PHOTO = 100;
     static final int REQUEST_PICK_IMAGE = 2;
+
+    boolean isSelected;
 
     public static final int MY_PERMISSIONS_REQUEST_CAMERA = 100;
     public static final String ALLOW_KEY = "ALLOWED";
@@ -76,8 +78,9 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
     private ListView listView;
     private ArrayAdapter listAdapter;
     private ImageView emptyIV;
-    private TextView tv_media_main;
-
+    private ProgressBar progressBar1;
+    private TextView tv_main,tv_media_main;
+    File photoFile = null;
 
     public MediaVC() {
         // Required empty public constructor
@@ -141,13 +144,13 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
                     Picasso p = builder.build();
 
                     if (showiv==null || album.mediaModels==null){
-                        showiv.setImageResource(R.drawable.splashlogo);
+                        showiv.setImageResource(R.drawable.icon);
                         showiv.setClickable(false);
 
                     }
                     else {
                         p.load(album.coverImage)//.networkPolicy(NetworkPolicy.NO_CACHE)
-                                .placeholder(R.drawable.splashlogo).into(showiv);
+                                .placeholder(R.drawable.icon).into(showiv);
 
                         p.load(album.coverImage).transform(new RoundedCornersTransform()).into(showiv, new com.squareup.picasso.Callback() {
                             @Override
@@ -176,7 +179,7 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
                                 progressBar.setVisibility(View.GONE);
                                 //progressBar1.setVisibility(View.GONE);
 
-                                showiv.setImageResource(R.drawable.icon);
+                                showiv.setImageResource(R.drawable.splashlogo);
                                 showiv.setScaleType(ImageView.ScaleType.CENTER);
                             }
                         });
@@ -198,11 +201,7 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
                             }
                         });
                     }
-
-
                 }
-
-
 
 
                 TextView firstTV = convertView.findViewById(R.id.firstTV);
@@ -210,21 +209,9 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
                 firstTV.setTextColor(getResources().getColor(R.color.white));
 
 
-
                 Button flagButton = convertView.findViewById(R.id.flagButton);
                 flagButton.setOnClickListener(DM.getFlagOnClickListener(MediaVC.this.getActivity()));
 
-
-                /*convertView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        MediaDetailVC.mediaAlbum = album;
-                        Intent i = new Intent(getActivity(), MediaDetailVC.class);
-                        startActivity(i);
-
-                    }
-                });*/
 
 
                 return convertView;
@@ -254,11 +241,8 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
 
 
                 if (checkpermission()==true){
-
-
                     cameraAction();
                 }
-                //showAlert();
                 checkpermission();
             }
         });
@@ -275,21 +259,22 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
         return v;
     }
 
+
     private boolean checkpermission() {
         int permissionSendMessage = ContextCompat.checkSelfPermission(MediaVC.this.getActivity(),
-                android.Manifest.permission.ACCESS_FINE_LOCATION);
+                Manifest.permission.ACCESS_FINE_LOCATION);
         int locationPermission = ContextCompat.checkSelfPermission(MediaVC.this.getActivity(),
-                android.Manifest.permission.CAMERA);
+                Manifest.permission.CAMERA);
         int permissionExternal = ContextCompat.checkSelfPermission(MediaVC.this.getActivity(),
-                android.Manifest.permission.READ_EXTERNAL_STORAGE);
+                Manifest.permission.READ_EXTERNAL_STORAGE);
 
         List<String> listPermissionsNeeded = new ArrayList<>();
 
         if (permissionExternal != PackageManager.PERMISSION_GRANTED){
-            listPermissionsNeeded.add(android.Manifest.permission.READ_EXTERNAL_STORAGE);
+            listPermissionsNeeded.add(Manifest.permission.READ_EXTERNAL_STORAGE);
         }
         if (locationPermission != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded.add(android.Manifest.permission.CAMERA);
+            listPermissionsNeeded.add(Manifest.permission.CAMERA);
         }
         if (permissionSendMessage != PackageManager.PERMISSION_GRANTED) {
             listPermissionsNeeded.add(Manifest.permission.ACCESS_FINE_LOCATION);
@@ -316,31 +301,27 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
 
 
 
-
-
-
     private void cameraAction() {
-
 
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(this.getActivity().getPackageManager()) != null) {
             // Create the File where the photo should go
-            File photoFile = null;
+
             try {
                 photoFile = createImageFile();
-            } catch (IOException ex) {
-                // Error occurred while creating the File
+            } catch (IOException e) {
+                e.printStackTrace();
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
                         Uri.fromFile(photoFile));
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+                return;
             }
 
         }
-
         saveToPreferences(MediaVC.this.getActivity(), ALLOW_KEY, true);
 
     }
@@ -348,6 +329,7 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
     @Override
     public void onRequestPermissionsResult
             (int requestCode, String permissions[], int[] grantResults) {
+
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_CAMERA: {
                 for (int i = 0, len = permissions.length; i < len; i++) {
@@ -409,8 +391,6 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
         capturedImageUri = Uri.fromFile(image);
         return image;
     }
-
-
 
     private String imgDecodableString;
     @Override
@@ -542,7 +522,7 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
         Log.d("hq","uploading bitmap to server, albumID="+albumID);
         String fileName = "photo.png";
 
-        File f = new File(this.getActivity().getCacheDir(), fileName);
+        File f = new File(this.getContext().getCacheDir(), fileName);
         try {
             f.createNewFile();
             //Convert bitmap to byte array
@@ -577,20 +557,7 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
                 }
             });
 
-            /*DM.getApi().postImageToAlbums(DM.getAuthString(), albumID, typedImage, new Callback<Response>() {
-                @Override
-                public void success(Response response, Response response2) {
-                    Toast.makeText(MediaVC.this.getActivity(), "Imaged posted to album", Toast.LENGTH_SHORT).show();
-                    loadData();
-                    pd.hide();
-                }
 
-                @Override
-                public void failure(RetrofitError error) {
-                    Toast.makeText(getActivity(),"Imaged posting failed: "+error.getMessage(),Toast.LENGTH_LONG).show();
-                    pd.hide();
-                }
-            });*/
         } catch (IOException e) {
             e.printStackTrace();
             Log.d("hq","file exception");
@@ -649,35 +616,6 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
             }
         });
 
-        /*if (group != null) DM.getApi().getGroupingMediaAlbums(DM.getAuthString(), group.groupId, new Callback<MediaAlbumResponse>() {
-            @Override
-            public void success(MediaAlbumResponse mediaAlbumResponse, Response response) {
-
-
-                albums = mediaAlbumResponse.getData().mediaModels;
-
-                for(MediaAlbum a : albums)
-                {
-                    a.sortMediaAlbumsByDate();
-                }
-
-                listAdapter.notifyDataSetChanged();
-                refreshLayout.setRefreshing(false);
-                pd.dismiss();
-
-
-                if(mediaAlbumResponse.getData().size()==0) emptyIV.setVisibility(View.VISIBLE);
-                else emptyIV.setVisibility(View.GONE);
-
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                pd.dismiss();
-                refreshLayout.setRefreshing(false);
-                Toast.makeText(MediaVC.this.getActivity(), "Error " + error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });*/
     }
 
     private class RoundedCornersTransform implements Transformation{

@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.TextUtils;
@@ -39,13 +40,12 @@ import it.sephiroth.android.library.imagezoom.ImageViewTouch;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-
 public class MediaDetailVC extends BaseVC {
 
     public static MediaAlbum mediaAlbum;
     public static int selectedMediaId;
 
-    private Media selectedMedia;
+    private  Media selectedMedia;
 
     //VIEWS
     private ListView listView;
@@ -140,7 +140,7 @@ public class MediaDetailVC extends BaseVC {
                 Picasso p = Picasso.with(this.getContext());
                 p.setIndicatorsEnabled(true);
                 p.load(mc.memberAvatar)
-                        .placeholder(R.drawable.splashlogo)
+                        .placeholder(R.drawable.icon)
                         //.fetch();
                         .into(userIV);
 
@@ -232,7 +232,7 @@ public class MediaDetailVC extends BaseVC {
         Picasso p = Picasso.with(this);
         p.setIndicatorsEnabled(true);
         p.load(mediaAlbum.createdByAvatar)
-                .placeholder(R.drawable.splashlogo)
+                .placeholder(R.drawable.icon)
                 //.fetch();
                 .into(imageView);
 
@@ -249,7 +249,14 @@ public class MediaDetailVC extends BaseVC {
                     //  .description("desc")
                     .image(m.url)
                     .setScaleType(BaseSliderView.ScaleType.CenterCrop);
+            //.setOnSliderClickListener(this);
 
+            //add your extra information
+                    /*
+                    textSliderView.bundle(new Bundle());
+                    textSliderView.getBundle()
+                            .putString("extra",name);
+                            */
 
             textSliderView.setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
                 @Override
@@ -263,7 +270,7 @@ public class MediaDetailVC extends BaseVC {
                     Picasso p = Picasso.with(MediaDetailVC.this);
                     p.setIndicatorsEnabled(true);
                     p.load(m.url)
-                            .placeholder(R.drawable.splashlogo)
+                            .placeholder(R.drawable.icon)
                             //.fetch();
                             .into(iv);
 
@@ -346,6 +353,23 @@ public class MediaDetailVC extends BaseVC {
         final ProgressDialog pd = DM.getPD(this,"Posting Comment...");
         pd.show();
 
+        /*DM.getApi().postMediaComments(DM.getAuthString(), selectedMedia.mediaId, text, new Callback<Response>() {
+            @Override
+            public void success(Response response, Response response2) {
+
+                Toast.makeText(MediaDetailVC.this,"Comment Posted!",Toast.LENGTH_LONG).show();
+                textPoster.clearText();
+                refreshMedia();
+                pd.dismiss();
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+                Toast.makeText(MediaDetailVC.this,"Comment failed "+error.getMessage(),Toast.LENGTH_LONG).show();
+                pd.dismiss();
+            }
+        });*/
 
         DM.getApi().postMediaComments(DM.getAuthString(), selectedMedia.mediaId, text, new Callback<Response>() {
             @Override
@@ -370,7 +394,7 @@ public class MediaDetailVC extends BaseVC {
     {
         final ProgressDialog pd = DM.getPD(this,"Refreshing Media...");
         pd.show();
-        DM.getApi().getMediaAlbum(DM.getAuthString(), mediaAlbum.mediaAlbumId, new Callback<MediaAlbum>() {
+        /*DM.getApi().getMediaAlbum(DM.getAuthString(), mediaAlbum.mediaAlbumId, new Callback<MediaAlbum>() {
             @Override
             public void success(MediaAlbum ma, Response response) {
                 mediaAlbum = ma;
@@ -397,9 +421,9 @@ public class MediaDetailVC extends BaseVC {
                 pd.dismiss();
                 refreshLayout.setRefreshing(false);
             }
-        });
+        });*/
 
-        /*DM.getApi().getMediaAlbums(DM.getAuthString(), mediaAlbum.mediaAlbumId, new Callback<MediaAlbumResponse>() {
+        DM.getApi().getMediaAlbums(DM.getAuthString(), mediaAlbum.mediaAlbumId, new Callback<MediaAlbumResponse>() {
             @Override
             public void success(MediaAlbumResponse ma, Response response) {
                 mediaAlbum = ma.getData();
@@ -424,7 +448,7 @@ public class MediaDetailVC extends BaseVC {
                 pd.dismiss();
                 refreshLayout.setRefreshing(false);
             }
-        });*/
+        });
     }
 
     @Override

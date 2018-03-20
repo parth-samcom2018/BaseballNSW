@@ -412,21 +412,6 @@ public class EventFormVC extends BaseVC {
     private void networkPost()
     {
 
-           /* DM.getApi().postEvent(DM.getAuthString(), event, new Callback<Response>() {
-                @Override
-                public void success(Response response, Response response2) {
-                    Toast.makeText(EventFormVC.this,"Event Created!",Toast.LENGTH_LONG).show();
-                    EventsVC.oneShotRefresh = true; //reload events...
-                    EventFormVC.this.finish();
-                }
-
-                @Override
-                public void failure(RetrofitError error) {
-
-                    Log.d("hq",error.getMessage());
-                    Toast.makeText(EventFormVC.this,"Could not create event: "+error.getMessage(),Toast.LENGTH_LONG).show();
-                }
-            });*/
         DM.getApi().postEvents(DM.getAuthString(), event, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {

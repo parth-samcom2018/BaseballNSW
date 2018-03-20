@@ -196,21 +196,6 @@ public class EventCommentsVC extends Fragment {
             }
         });
 
-        /*DM.getApi().getEvents(DM.getAuthString(), event.eventId, new Callback<EventResponse>() {
-            @Override
-            public void success(EventResponse eventResponse, Response response) {
-                event = eventResponse.getData();
-                listAdapter.notifyDataSetChanged();
-                pd.dismiss();
-                refreshLayout.setRefreshing(false);
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                pd.dismiss();
-                refreshLayout.setRefreshing(false);
-            }
-        });*/
     }
 
 }
