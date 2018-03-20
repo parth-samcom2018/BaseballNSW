@@ -45,6 +45,7 @@ public class LaddersVC extends Fragment implements SwipeRefreshLayout.OnRefreshL
     private ArrayAdapter<Ladders> listadapter;
     private SwipeRefreshLayout refreshLayout;
     private ImageView emptyIV;
+    //private TextView tvteam, tvWon, tvLost,tvDrawn,tvPlayed,tvPoints;
 
     private List<Ladders> ladders = new Vector<Ladders>();
 
@@ -93,7 +94,12 @@ public class LaddersVC extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 final ImageView myImageView = convertView.findViewById(R.id.myImageView);
 
 
-                final TextView tv = convertView.findViewById(R.id.textView);
+                final TextView tvteam = convertView.findViewById(R.id.tvteam);
+                /*final TextView tvWon = convertView.findViewById(R.id.tvWon);
+                final TextView tvLost = convertView.findViewById(R.id.tvLost);
+                final TextView tvDrawn = convertView.findViewById(R.id.tvDrawn);
+                final TextView tvPlayed = convertView.findViewById(R.id.tvPlayed);
+                final TextView tvPoints = convertView.findViewById(R.id.tvPoints);*/
 
                 Picasso.Builder builder = new Picasso.Builder(LaddersVC.this.getActivity());
                 builder.listener(new Picasso.Listener() {
@@ -106,7 +112,12 @@ public class LaddersVC extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 try {
                     Picasso p = builder.build();
                     p.load(ladder.teamLogo).placeholder(R.drawable.splashlogo).into(myImageView);//.networkPolicy(NetworkPolicy.NO_CACHE).
-                    tv.setText(ladder.teamName);
+                    tvteam.setText(ladder.teamName);
+                    /*tvWon.setText(ladder.gamesWon);
+                    tvLost.setText(ladder.gamesLost);
+                    tvDrawn.setText(ladder.gamesDrawn);
+                    tvPlayed.setText(ladder.gamesPlayed);
+                    tvPoints.setText(ladder.totalPoints);*/
 
                 }
                 catch (NullPointerException n){
