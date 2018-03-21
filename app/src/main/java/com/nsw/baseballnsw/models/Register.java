@@ -1,6 +1,7 @@
 package com.nsw.baseballnsw.models;
 
 public class Register {
+
     public String email;
     public String password;
     public String confirmPassword;
@@ -13,5 +14,6 @@ public class Register {
     public String birthYear;
 
     public String GroupName;
+    public String AppName;
 
 }

@@ -45,7 +45,7 @@ public class LaddersVC extends Fragment implements SwipeRefreshLayout.OnRefreshL
     private ListView listView;
     private ArrayAdapter<Ladders> listadapter;
     private SwipeRefreshLayout refreshLayout;
-    private ImageView emptyIV;
+    private TextView emptyIV;
 
 
     private List<Ladders> ladders = new Vector<Ladders>();

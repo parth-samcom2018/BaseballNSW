@@ -352,6 +352,8 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
         }
     }
 
+
+
     public static void saveToPreferences(Context context, String key,
                                          Boolean allowed) {
         SharedPreferences myPrefs = context.getSharedPreferences

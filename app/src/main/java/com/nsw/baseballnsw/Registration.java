@@ -424,34 +424,12 @@ public class Registration extends BaseVC {
                         makeRegistrationRequest(registerModel);
                     } else {
 
+                        String name = "Baseball NSW";
 
-                        final Dialog dialog = new Dialog(Registration.this);
-                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                        dialog.setCancelable(true);
-                        dialog.setContentView(R.layout.custom_dialogbox_register);
-                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-
-                        final EditText etName = dialog.findViewById(R.id.etName);
-
-                        Button dialogBtn_done = dialog.findViewById(R.id.btn_dialog);
-                        dialogBtn_done.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-
-                                String name = etName.getText().toString();
-                                if (name.isEmpty()) {
-                                    Toast.makeText(Registration.this, "You must provide a name", Toast.LENGTH_LONG).show();
-                                    return;
-                                }
-
-                                registerModel.GroupName = name;
-                                makeRegistrationRequest(registerModel);
-                                dialog.dismiss();
-                            }
-                        });
+                        registerModel.GroupName = name;
+                        makeRegistrationRequest(registerModel);
 
 
-                        dialog.show();
                     }
                 }
 
