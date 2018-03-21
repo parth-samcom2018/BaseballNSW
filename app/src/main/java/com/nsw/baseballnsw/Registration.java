@@ -525,13 +525,9 @@ public class Registration extends BaseVC {
         }
 
         else {
-
             registerAction1();
         }
-
     }
-
-
 
     public static void saveToPreferences(Context context, String key,
                                          Boolean allowed) {
