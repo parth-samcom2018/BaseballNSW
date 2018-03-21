@@ -166,7 +166,31 @@ public class EventsFragment extends Fragment implements SwipeRefreshLayout.OnRef
         String auth = DM.getAuthString();
 
 
-        DM.getApi().getAllEventings(auth,new Callback<EventResponse>() {
+        DM.getApi().getAllEvents(auth,new Callback<EventResponse>() {
+            @Override
+            public void success(EventResponse events, Response response) {
+
+
+                EventsFragment.this.events = events.getData();
+                Log.d("hq", "events: "+events.getData().size()+"");
+                listAdapter.notifyDataSetChanged();
+                refreshLayout.setRefreshing(false);
+                pd.dismiss();
+
+                if(events.getData().size()==0) emptyIV.setVisibility(View.VISIBLE);
+                else emptyIV.setVisibility(View.GONE);
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+                Log.d("hq", "failed: "+error.getMessage());
+                refreshLayout.setRefreshing(false);
+                pd.dismiss();
+            }
+        });
+        /*DM.getApi().getAllEventings(auth,new Callback<EventResponse>() {
             @Override
             public void success(EventResponse events, Response response) {
 
@@ -189,7 +213,7 @@ public class EventsFragment extends Fragment implements SwipeRefreshLayout.OnRef
                 refreshLayout.setRefreshing(false);
                 pd.dismiss();
             }
-        });
+        });*/
 
     }
 

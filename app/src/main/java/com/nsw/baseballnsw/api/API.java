@@ -7,6 +7,7 @@ import com.nsw.baseballnsw.models.ArticleResponse;
 import com.nsw.baseballnsw.models.Event;
 import com.nsw.baseballnsw.models.EventResponse;
 import com.nsw.baseballnsw.models.Folder;
+import com.nsw.baseballnsw.models.Forget;
 import com.nsw.baseballnsw.models.Group;
 import com.nsw.baseballnsw.models.GroupFoldersRes;
 import com.nsw.baseballnsw.models.GroupResponse;
@@ -51,6 +52,9 @@ public interface API {
                          @Body Register registerModel,
                          Callback<Response> callback);
 
+    @POST("/apiv2/account/forgotpassword")
+    public void postForgetPassword(@Path("email") String email, Callback<Response> response);
+
     //new api v2
     @FormUrlEncoded
     @POST("/apiv2/notifications/registerDeviceForPush")
@@ -71,6 +75,11 @@ public interface API {
 
     @GET("/apiv2/account/memberdetails")
     public void getMemberDetailing(@Header("Authorization") String auth, Callback<Profile> callback);
+
+    //older version
+    @GET("/apiv2/events/all")      //here is the other url part.best way is to start using /
+    public void getAllEvents(@Header("Authorization") String auth, Callback<EventResponse> response);
+
 
     @GET("/apiv2/events/all")      //here is the other url part.best way is to start using /
     public void getAllEventings(@Header("Authorization") String auth, Callback<EventResponse> response);

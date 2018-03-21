@@ -1,9 +1,11 @@
 package com.nsw.baseballnsw;
 
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
@@ -13,13 +15,16 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nsw.baseballnsw.models.Forget;
 import com.nsw.baseballnsw.models.Member;
+import com.nsw.baseballnsw.models.Register;
 import com.nsw.baseballnsw.models.Token;
 
 import retrofit.Callback;
@@ -34,8 +39,10 @@ public class Login extends AppCompatActivity {
 
     private EditText mEmailView,mPasswordView;
     private Button btn_register;
+    private TextView tv_forgot1;
     public static String justRegisteredUsername = null;
     public static String justRegisteredPassword = null;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,6 +53,14 @@ public class Login extends AppCompatActivity {
         mEmailView = findViewById(R.id.et_username);
         mPasswordView = findViewById(R.id.et_password);
         btn_register = findViewById(R.id.register_button);
+        tv_forgot1 = findViewById(R.id.tv_forgot1);
+
+        tv_forgot1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                forgot();
+            }
+        });
 
         btn_register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,6 +104,52 @@ public class Login extends AppCompatActivity {
         unique_id = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
         DeviceID.setText("My ID is: " + unique_id);
         Log.i(TAG, "Registration Device: " + unique_id);
+    }
+
+    private void forgot() {
+        final Dialog dialog = new Dialog(Login.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.custom_dialogbox_register);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        final EditText etEmail = dialog.findViewById(R.id.etName);
+
+        Button dialogBtn_done = dialog.findViewById(R.id.btn_dialog);
+        dialogBtn_done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String name = etEmail.getText().toString();
+                if(name.isEmpty())
+                {
+                    Toast.makeText(Login.this, "You must provide an Email ID", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                final Forget forgetModel = new Forget();
+
+                DM.getApi().postForgetPassword(forgetModel.email, new Callback<Response>() {
+                            @Override
+                            public void success(Response response, Response response2) {
+                                Toast.makeText(Login.this, "Mail Send", Toast.LENGTH_SHORT).show();
+                                dialog.dismiss();
+                            }
+
+                            @Override
+                            public void failure(RetrofitError error) {
+                                dialog.dismiss();
+                                Toast.makeText(Login.this, "Not Mail Send", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+
+                dialog.dismiss();
+            }
+        });
+
+
+        dialog.show();
     }
 
     private void register() {
