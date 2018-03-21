@@ -429,7 +429,6 @@ public class Registration extends BaseVC {
                         registerModel.GroupName = name;
                         makeRegistrationRequest(registerModel);
 
-
                     }
                 }
 
@@ -464,7 +463,6 @@ public class Registration extends BaseVC {
 
                 finish();
 
-
             }
 
             @Override
@@ -475,7 +473,6 @@ public class Registration extends BaseVC {
                 String s =  new String(((TypedByteArray)error.getResponse().getBody()).getBytes());
                 Log.d("HQ",s);
 
-
                 if(s.contains("already in use"))
                 {
 
@@ -483,11 +480,8 @@ public class Registration extends BaseVC {
                 }
                 else
                 {
-
                     Toast.makeText(Registration.this, "Registration failed: "+error.getMessage(), Toast.LENGTH_LONG).show();
                 }
-
-
 
             }
         });
@@ -532,7 +526,6 @@ public class Registration extends BaseVC {
 
         else {
 
-            //registerAction();
             registerAction1();
         }
 
