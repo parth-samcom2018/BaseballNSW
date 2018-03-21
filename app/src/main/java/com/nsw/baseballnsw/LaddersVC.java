@@ -45,13 +45,8 @@ public class LaddersVC extends Fragment implements SwipeRefreshLayout.OnRefreshL
     private ArrayAdapter<Ladders> listadapter;
     private SwipeRefreshLayout refreshLayout;
     private ImageView emptyIV;
-    //private TextView tvteam, tvWon, tvLost,tvDrawn,tvPlayed,tvPoints;
 
     private List<Ladders> ladders = new Vector<Ladders>();
-
-    /*private LinearLayout ll_orientation,ll_second,ll_landscape;
-    int click = 0;*/
-
     public LaddersVC() {
         // Required empty public constructor
     }
@@ -90,9 +85,7 @@ public class LaddersVC extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
                 final Ladders ladder = ladders.get(position);
 
-
                 final ImageView myImageView = convertView.findViewById(R.id.myImageView);
-
 
                 final TextView tvteam = convertView.findViewById(R.id.tvteam);
 
@@ -130,8 +123,6 @@ public class LaddersVC extends Fragment implements SwipeRefreshLayout.OnRefreshL
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-
-                //   getActivity().overridePendingTransition(android.R.anim.slide_out_right,android.R.anim.slide_in_left);
             }
         });
 
@@ -158,7 +149,6 @@ public class LaddersVC extends Fragment implements SwipeRefreshLayout.OnRefreshL
     private void loadData()
     {
         initialLoaded = true;
-        //checkPermission();
 
         final ProgressDialog pd = DM.getPD(getActivity(),"Loading Ladders...");
         if(this.isVisible())pd.show();
