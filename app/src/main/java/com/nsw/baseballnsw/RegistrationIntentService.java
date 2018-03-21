@@ -84,24 +84,6 @@ public class RegistrationIntentService extends IntentService {
                 }
             });
 
-            DM.getApi().registerDeviceForPushs(DM.getAuthString(), DEVICE_TYPE, token, MEMBER_ID, new Callback<Response>() {
-                @Override
-                public void success(Response response, Response response2) {
-
-                    Log.d("hq","Updated GCM on server");
-
-                    SharedPreferences prefs = getSharedPreferences("HQGCM",MODE_PRIVATE);
-                    SharedPreferences.Editor editor = prefs.edit();
-                    editor.putString("GCM_TOKEN",token);
-                    editor.commit();
-                }
-
-                @Override
-                public void failure(RetrofitError error) {
-                    Log.d("hq","could not register for push "+error.getMessage());
-                }
-            });
-
 
         }
 

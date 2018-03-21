@@ -303,25 +303,25 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
 
     private void cameraAction() {
 
+
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(this.getActivity().getPackageManager()) != null) {
             // Create the File where the photo should go
-
+            File photoFile = null;
             try {
                 photoFile = createImageFile();
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
                         Uri.fromFile(photoFile));
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-                return;
             }
-
         }
+
         saveToPreferences(MediaVC.this.getActivity(), ALLOW_KEY, true);
 
     }
@@ -590,7 +590,7 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
         pd.show();
 
 
-        if(group != null) DM.getApi().getGroupMediaAlbums(DM.getAuthString(), group.groupId, new Callback<List<MediaAlbum>>() {
+        if(group != null) DM.getApi().getGroupingMediaAlbums(DM.getAuthString(), group.groupId, new Callback<List<MediaAlbum>>() {
             @Override
             public void success(List<MediaAlbum> mediaAlbums, Response response) {
                 albums = mediaAlbums;

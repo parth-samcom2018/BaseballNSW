@@ -205,7 +205,7 @@ public interface API {
 
     //new api v2
     @GET("/apiv2/media/get/{groupID}")
-    public void getGroupingMediaAlbums(@Header("Authorization") String auth, @Path("groupID") int groupID, Callback<MediaAlbumResponse> response);
+    public void getGroupingMediaAlbums(@Header("Authorization") String auth, @Path("groupID") int groupID, Callback<List<MediaAlbum>> response);
 
     //new api v2
     @FormUrlEncoded
