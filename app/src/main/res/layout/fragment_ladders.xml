@@ -1,60 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="10dp">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@drawable/shape_ladder"
-        android:id="@+id/ll_main"
-        android:layout_margin="10dp"
-        android:visibility="gone">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:orientation="horizontal"
-            android:background="@color/light_blue"
-            android:padding="10dp"
-            android:layout_weight="2"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:id="@+id/ll_orientation">
-
-            <TextView
-                android:layout_weight="2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/rotate"
-                android:textColor="@color/black"
-                android:fontFamily="@font/lato_lightitalic"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"/>
-
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/icon_phone"/>
-        </LinearLayout>
-
-    </LinearLayout>
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="6"
-        android:id="@+id/ll_second"
-        android:layout_below="@+id/ll_main"
-        android:layout_margin="10dp"
+        android:id="@+id/ll_first"
+        android:layout_margin="15dp"
         android:background="@android:color/transparent"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <TextView
-            android:layout_weight="3.2"
+            android:layout_weight="3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/team"
@@ -67,7 +27,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="W"
+            android:padding="5dp"
             android:layout_gravity="center"
+            android:gravity="center"
             android:id="@+id/tv1"/>
 
         <TextView
@@ -75,7 +37,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="L"
+            android:padding="5dp"
             android:layout_gravity="center"
+            android:gravity="center"
             android:id="@+id/tv2"/>
 
         <TextView
@@ -83,7 +47,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="D"
+            android:padding="5dp"
             android:layout_gravity="center"
+            android:gravity="center"
             android:id="@+id/tv3"/>
 
         <TextView
@@ -91,152 +57,19 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="P"
+            android:gravity="center"
             android:layout_gravity="center"
-            android:id="@+id/tv4"/>
+            android:id="@+id/tv4"
+            android:padding="5dp"/>
 
         <TextView
-            android:layout_weight="0.5"
+            android:layout_weight="0.8"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/score"
             android:layout_gravity="center"
+            android:gravity="center"
             android:id="@+id/tv5"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_below="@+id/ll_second"
-        android:id="@+id/ll_landscape"
-        android:visibility="gone">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="3">
-
-            <TextView
-                android:layout_weight="1.6"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/team"
-                android:layout_gravity="center"
-                android:id="@+id/tv_ot1"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="9.7"
-                android:layout_weight="1.3">
-
-
-                <TextView
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="W"
-                    android:layout_gravity="center"
-                    android:id="@+id/tv_t_1"
-                    tools:ignore="NestedWeights" />
-
-                <TextView
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="L"
-                    android:layout_gravity="center"
-                    android:id="@+id/tv_t_2"/>
-
-                <TextView
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="D"
-                    android:layout_gravity="center"
-                    android:id="@+id/tv_t_3"/>
-
-                <TextView
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="P"
-                    android:layout_gravity="center"
-                    android:id="@+id/tv_t_4"/>
-
-                <TextView
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="B"
-                    android:layout_gravity="center"
-                    android:id="@+id/tv_t_5"/>
-
-                <TextView
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="F"
-                    android:layout_gravity="center"
-                    android:id="@+id/tv_t_6"/>
-
-                <TextView
-                    android:layout_weight="1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="A"
-                    android:layout_gravity="center"
-                    android:id="@+id/tv_t_7"/>
-
-                <TextView
-                    android:layout_weight="1.2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="GD"
-                    android:layout_gravity="center"
-                    android:id="@+id/tv_t_8"/>
-
-                <TextView
-                    android:layout_weight="1.5"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/score"
-                    android:layout_gravity="center"
-                    android:id="@+id/tv_t_9"/>
-            </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:weightSum="2"
-        android:elevation="3dp"
-        android:orientation="horizontal"
-        android:background="@drawable/textshape"
-        android:layout_below="@+id/ll_landscape"
-        android:layout_margin="10dp"
-        android:visibility="gone">
-
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:src="@drawable/group_first"/>
-
-
-        <TextView
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/team"
-            android:padding="15dp"
-            android:gravity="center|left"/>
     </LinearLayout>
 
     <ImageView
@@ -245,6 +78,17 @@
         android:id="@+id/empty"
         android:src="@drawable/group_list_empty"
         android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_below="@+id/ll_first"
+        android:padding="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/textshape"
+        android:elevation="10dp">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
@@ -258,7 +102,9 @@
             android:verticalSpacing="0dp"
             android:horizontalSpacing="0dp"
             android:numColumns="2"
-            android:layout_margin="10dp"/>
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
+    </LinearLayout>
 </RelativeLayout>

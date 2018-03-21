@@ -115,7 +115,7 @@ public interface API {
                                   Callback<Response> callback);
 
     @FormUrlEncoded
-    @POST("/api/media/album")
+    @POST("/apiv2/media/album")
     public void postMediaAlbum(@Header("Authorization") String auth,
                                 @Field("name") String name,
                                 @Field("groupid") int groupID,
@@ -231,8 +231,8 @@ public interface API {
     public void getGroupFoldersnew(@Header("Authorization") String auth, @Path("groupID") int groupID, Callback<GroupFoldersRes> response);
 
     //older
-    @PUT("/api/folder/Update")
-    public void putFolder(@Header("Authorization") String auth,
+    @PUT("/apiv2/folder/Update")
+    public void putFolders(@Header("Authorization") String auth,
                           @Body Folder registerModel,
                           Callback<Response> callback);
 

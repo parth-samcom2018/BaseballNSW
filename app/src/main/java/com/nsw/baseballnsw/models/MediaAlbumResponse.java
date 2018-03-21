@@ -1,6 +1,6 @@
 package com.nsw.baseballnsw.models;
 
-public class MediaAlbumResponse {
+public class MediaAlbumResponse extends Media{
     private boolean error;
     private String message;
     private MediaAlbum data;

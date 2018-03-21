@@ -407,7 +407,24 @@ public class DocumentsVC extends Fragment {
 
 
 
-                DM.getApi().putFolder(DM.getAuthString(), editFolder, new Callback<Response>() {
+                /*DM.getApi().putFolder(DM.getAuthString(), editFolder, new Callback<Response>() {
+                    @Override
+                    public void success(Response response, Response response2) {
+
+                        Toast.makeText(DocumentsVC.this.getActivity(), "Folder Updated!", Toast.LENGTH_LONG).show();
+                        modelToView();
+                        DM.hideKeyboard(DocumentsVC.this.getActivity());
+
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                        Toast.makeText(DocumentsVC.this.getActivity(), "Could not update folder:"+error.getMessage(), Toast.LENGTH_LONG).show();
+                        DM.hideKeyboard(DocumentsVC.this.getActivity());
+                    }
+                });*/
+                DM.getApi().putFolders(DM.getAuthString(), editFolder, new Callback<Response>() {
                     @Override
                     public void success(Response response, Response response2) {
 

@@ -1,5 +1,6 @@
 package com.nsw.baseballnsw;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -46,6 +47,7 @@ public class LaddersVC extends Fragment implements SwipeRefreshLayout.OnRefreshL
     private SwipeRefreshLayout refreshLayout;
     private ImageView emptyIV;
 
+
     private List<Ladders> ladders = new Vector<Ladders>();
     public LaddersVC() {
         // Required empty public constructor
@@ -64,11 +66,12 @@ public class LaddersVC extends Fragment implements SwipeRefreshLayout.OnRefreshL
         if(this.isVisible())pd.show();
 
         listView = v.findViewById(R.id.list);
-
+        listView.setDividerHeight(0);
 
         listadapter= new ArrayAdapter<Ladders>(this.getActivity(), R.layout.ladder_cell){
 
 
+            @SuppressLint("NewApi")
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -83,30 +86,25 @@ public class LaddersVC extends Fragment implements SwipeRefreshLayout.OnRefreshL
                     }
                 }
 
-                final Ladders ladder = ladders.get(position);
+                Ladders ladder = ladders.get(position);
 
-                final ImageView myImageView = convertView.findViewById(R.id.myImageView);
+                TextView textteam = convertView.findViewById(R.id.tvteam);
+                textteam.setText(""+ladder.teamName);
 
-                final TextView tvteam = convertView.findViewById(R.id.tvteam);
+                TextView textwin = convertView.findViewById(R.id.tvwin);
+                textwin.setText(Integer.toString(ladder.gamesWon));
 
+                TextView textlost = convertView.findViewById(R.id.tvlost);
+                textlost.setText(Integer.toString(ladder.gamesLost));
 
-                Picasso.Builder builder = new Picasso.Builder(LaddersVC.this.getActivity());
-                builder.listener(new Picasso.Listener() {
-                    @Override
-                    public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
-                        Log.d("hq", "uri: " + uri.getPath());
-                        exception.printStackTrace();
-                    }
-                });
-                try {
-                    Picasso p = builder.build();
-                    p.load(ladder.teamLogo).placeholder(R.drawable.splashlogo).into(myImageView);//.networkPolicy(NetworkPolicy.NO_CACHE).
-                    tvteam.setText(ladder.teamName);
+                TextView textdrawn = convertView.findViewById(R.id.tvdrawn);
+                textdrawn.setText(Integer.toString(ladder.gamesDrawn));
 
-                }
-                catch (NullPointerException n){
-                    n.printStackTrace();
-                }
+                TextView textplayed = convertView.findViewById(R.id.tvplayed);
+                textplayed.setText(Integer.toString(ladder.gamesPlayed));
+
+                TextView textpoints = convertView.findViewById(R.id.tvpoints);
+                textpoints.setText(Integer.toString(ladder.totalPoints));
 
                 return convertView;
             }

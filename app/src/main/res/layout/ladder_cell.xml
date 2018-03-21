@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,47 +21,47 @@
             android:layout_height="wrap_content"
             android:text="@string/team"
             android:layout_gravity="center"
-            android:id="@+id/tv"
+            android:id="@+id/tvteam"
             android:layout_marginLeft="10dp"/>
 
         <TextView
             android:layout_weight="0.5"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="W"
+            android:text="0"
             android:padding="5dp"
             android:layout_gravity="center"
             android:gravity="center"
-            android:id="@+id/tv1"/>
+            android:id="@+id/tvwin"/>
 
         <TextView
             android:layout_weight="0.5"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="L"
+            android:text="0"
             android:padding="5dp"
             android:layout_gravity="center"
             android:gravity="center"
-            android:id="@+id/tv2"/>
+            android:id="@+id/tvlost"/>
 
         <TextView
             android:layout_weight="0.5"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="D"
+            android:text="0"
             android:padding="5dp"
             android:layout_gravity="center"
             android:gravity="center"
-            android:id="@+id/tv3"/>
+            android:id="@+id/tvdrawn"/>
 
         <TextView
             android:layout_weight="0.5"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="P"
+            android:text="0"
             android:gravity="center"
             android:layout_gravity="center"
-            android:id="@+id/tv4"
+            android:id="@+id/tvplayed"
             android:padding="5dp"/>
 
         <TextView
@@ -69,87 +71,7 @@
             android:text="@string/score"
             android:layout_gravity="center"
             android:gravity="center"
-            android:id="@+id/tv5"/>
+            android:id="@+id/tvpoints"/>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="4.9"
-        android:id="@+id/ll_second"
-        android:layout_below="@+id/ll_first"
-        android:layout_margin="10dp"
-        android:background="@android:color/transparent"
-        android:visibility="visible">
-
-        <ImageView
-            android:id="@+id/myImageView"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/splashlogo" />
-
-        <TextView
-            android:layout_weight="2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/team"
-            android:singleLine="true"
-            android:maxLines="1"
-            android:layout_gravity="center"
-            android:id="@+id/tvteam"
-            android:textColor="@color/black"
-            android:fontFamily="@font/lato_regular"
-            android:layout_marginLeft="10dp"
-            android:gravity="left|center"/>
-
-        <TextView
-            android:layout_weight="0.5"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="W"
-            android:padding="5dp"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:id="@+id/tvWon"/>
-
-        <TextView
-            android:layout_weight="0.5"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="L"
-            android:padding="5dp"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:id="@+id/tvLost"/>
-
-        <TextView
-            android:layout_weight="0.5"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="D"
-            android:padding="5dp"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:id="@+id/tvDrawn"/>
-
-        <TextView
-            android:layout_weight="0.5"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="P"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:id="@+id/tvPlayed"
-            android:padding="5dp"/>
-
-        <TextView
-            android:layout_weight="0.8"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/score"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:id="@+id/tvPoints"/>
-    </LinearLayout>
 </RelativeLayout>
