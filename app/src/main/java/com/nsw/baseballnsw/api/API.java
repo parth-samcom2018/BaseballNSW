@@ -1,6 +1,8 @@
 package com.nsw.baseballnsw.api;
 
 
+import android.widget.EditText;
+
 import com.nsw.baseballnsw.models.Article;
 import com.nsw.baseballnsw.models.ArticleComment;
 import com.nsw.baseballnsw.models.ArticleResponse;
@@ -53,7 +55,8 @@ public interface API {
                          Callback<Response> callback);
 
     @POST("/apiv2/account/forgotpassword")
-    public void postForgetPassword(@Path("email") String email, Callback<Response> response);
+    public void postForgetPassword(@Header("Authorization") String auth,
+                                   @Path("email") String email, Callback<Response> response);
 
     //new api v2
     @FormUrlEncoded

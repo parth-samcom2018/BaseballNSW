@@ -42,7 +42,7 @@ public class Login extends AppCompatActivity {
     private TextView tv_forgot1;
     public static String justRegisteredUsername = null;
     public static String justRegisteredPassword = null;
-
+    final Forget forgetModel = new Forget();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -126,22 +126,9 @@ public class Login extends AppCompatActivity {
                     Toast.makeText(Login.this, "You must provide an Email ID", Toast.LENGTH_LONG).show();
                     return;
                 }
-
-                final Forget forgetModel = new Forget();
-
-                DM.getApi().postForgetPassword(forgetModel.email, new Callback<Response>() {
-                            @Override
-                            public void success(Response response, Response response2) {
-                                Toast.makeText(Login.this, "Mail Send", Toast.LENGTH_SHORT).show();
-                                dialog.dismiss();
-                            }
-
-                            @Override
-                            public void failure(RetrofitError error) {
-                                dialog.dismiss();
-                                Toast.makeText(Login.this, "Not Mail Send", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                /*Toast toast = Toast.makeText(Login.this, "Mail Send", Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.CENTER,0,0);
+                toast.show();*/
 
 
                 dialog.dismiss();
