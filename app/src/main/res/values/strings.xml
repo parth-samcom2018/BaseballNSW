@@ -17,7 +17,6 @@
     <string name="add_user">USER +</string>
     <string name="notification_title">Notification</string>
     <string name="prompt_email">Email:</string>
-    <string name="prompt_name">USERNAME:</string>
     <string name="prompt_pw">PASSWORD:</string>
     <string name="prompt_password">Password:</string>
     <string name="prompt_cm_pw">Confirm Password:</string>

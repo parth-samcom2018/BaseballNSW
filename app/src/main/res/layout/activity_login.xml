@@ -61,24 +61,13 @@
                     android:padding="15dp"
                     android:background="@drawable/editshape">
 
-                    <TextView
-                        android:id="@+id/tv_forgot"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="10dp"
-                        android:layout_gravity="right|center_vertical"
-                        android:textColor="@color/white"
-                        android:text="@string/forgot"
-                        android:elevation="10dp"
-                        android:background="@null"/>
-
                     <EditText
                         android:id="@+id/et_username"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:background="@null"
                         android:elevation="10dp"
-                        android:hint="@string/prompt_name"
+                        android:hint="@string/prompt_email"
                         android:inputType="text"
                         android:singleLine="true"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
