@@ -36,6 +36,7 @@ public class ChangePassowrd extends BaseVC{
         savebutton = findViewById(R.id.save_button);
         cancel_button = findViewById(R.id.cancel_button);
 
+        getDetails();
 
         savebutton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,6 +51,13 @@ public class ChangePassowrd extends BaseVC{
                 finish();
             }
         });
+    }
+
+    private void getDetails() {
+
+        final Register registerModel = new Register();
+
+        registerModel.password = et_old_pw.getText().toString();
     }
 
 

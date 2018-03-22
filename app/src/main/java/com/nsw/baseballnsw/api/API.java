@@ -87,7 +87,8 @@ public interface API {
                           Callback<Response> callback);
 
     @GET("/apiv2/account/memberdetails")
-    public void getMemberDetailing(@Header("Authorization") String auth, Callback<Profile> callback);
+    public void getMemberDetailing(@Header("Authorization") String auth,
+                                   Callback<Profile> callback);
 
     //older version
     @GET("/apiv2/events/all")      //here is the other url part.best way is to start using /
