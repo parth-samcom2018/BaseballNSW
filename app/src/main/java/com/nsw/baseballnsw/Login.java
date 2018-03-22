@@ -43,7 +43,6 @@ public class Login extends AppCompatActivity {
     private TextView tv_forgot1;
     public static String justRegisteredUsername = null;
     public static String justRegisteredPassword = null;
-    final Forget forgetModel = new Forget();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,10 +76,8 @@ public class Login extends AppCompatActivity {
 
                 if (mEmailView.getText().toString().isEmpty() && mPasswordView.getText().toString().isEmpty()){
 
-                    /*Toast toast = */Toast.makeText(Login.this, "Username and Password Missing!", Toast.LENGTH_SHORT).show();
-                    /*toast.setGravity(Gravity.CENTER,0,0);
-                    toast.show();*/
-                    return ;
+                    Toast.makeText(Login.this, "Username and Password Missing!", Toast.LENGTH_SHORT).show();
+                    return;
                 }
                 attemptLogin();
             }
@@ -108,6 +105,7 @@ public class Login extends AppCompatActivity {
     }
 
     private void forgot() {
+
         final Dialog dialog = new Dialog(Login.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(true);
@@ -135,7 +133,6 @@ public class Login extends AppCompatActivity {
                     return;
                 }
 
-
                 final ProgressDialog pd = DM.getPD(Login.this, "Sending mail...");
                 pd.show();
 
@@ -146,8 +143,6 @@ public class Login extends AppCompatActivity {
                         Toast.makeText(Login.this, "Mail Send success!", Toast.LENGTH_LONG).show();
                         DM.hideKeyboard(Login.this);
                         pd.dismiss();
-
-
                     }
 
                     @Override
@@ -156,7 +151,6 @@ public class Login extends AppCompatActivity {
                         Toast.makeText(Login.this, "Failed Send mail!", Toast.LENGTH_LONG).show();
                         DM.hideKeyboard(Login.this);
                         pd.dismiss();
-
                     }
                 });
                 dialog.dismiss();
