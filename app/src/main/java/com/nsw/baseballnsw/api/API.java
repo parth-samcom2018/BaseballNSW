@@ -54,9 +54,12 @@ public interface API {
                          @Body Register registerModel,
                          Callback<Response> callback);
 
+
+    @FormUrlEncoded
     @POST("/apiv2/account/forgotpassword")
-    public void postForgetPassword(@Header("Authorization") String auth,
-                                   @Path("email") String email, Callback<Response> response);
+    public void forgetPassword(@Header("Authorization") String auth,
+                                @Field("email") String email,
+                                Callback<Response> callback);
 
     //new api v2
     @FormUrlEncoded

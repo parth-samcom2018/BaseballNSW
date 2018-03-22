@@ -30,6 +30,7 @@ import com.nsw.baseballnsw.models.Token;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import retrofit.mime.TypedByteArray;
 
 public class Login extends AppCompatActivity {
 
@@ -120,17 +121,44 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                String name = etEmail.getText().toString();
-                if(name.isEmpty())
+                String email = etEmail.getText().toString();
+                if(email.isEmpty())
                 {
                     Toast.makeText(Login.this, "You must provide an Email ID", Toast.LENGTH_LONG).show();
                     return;
                 }
-                /*Toast toast = Toast.makeText(Login.this, "Mail Send", Toast.LENGTH_SHORT);
-                toast.setGravity(Gravity.CENTER,0,0);
-                toast.show();*/
+                if(!email.matches("[a-zA-Z0-9._-]+@[a-z]+.[a-z]+")){
+                    Toast toast = Toast.makeText(Login.this, "Invalid Email ID", Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER,0,0);
+                    toast.show();
+                    dialog.dismiss();
+                    return;
+                }
 
 
+                final ProgressDialog pd = DM.getPD(Login.this, "Sending mail...");
+                pd.show();
+
+                DM.getApi().forgetPassword(DM.getAuthString(), email, new Callback<Response>() {
+                    @Override
+                    public void success(Response response, Response response2) {
+
+                        Toast.makeText(Login.this, "Mail Send success!", Toast.LENGTH_LONG).show();
+                        DM.hideKeyboard(Login.this);
+                        pd.dismiss();
+
+
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                        Toast.makeText(Login.this, "Failed Send mail!", Toast.LENGTH_LONG).show();
+                        DM.hideKeyboard(Login.this);
+                        pd.dismiss();
+
+                    }
+                });
                 dialog.dismiss();
             }
         });
@@ -159,7 +187,6 @@ public class Login extends AppCompatActivity {
         DM.member.memberId = tokenModel.memberId;
 
         Log.d("HQ","here is a memberID"+DM.member.memberId);
-
 
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
