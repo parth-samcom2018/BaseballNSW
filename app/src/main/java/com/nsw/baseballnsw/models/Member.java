@@ -30,7 +30,6 @@ public class Member {
     public String aboutMe;
     public String postCode;
 
-
     @SerializedName("error")
     private boolean error;
     @SerializedName("message")

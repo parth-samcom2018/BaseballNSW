@@ -14,6 +14,5 @@ public class Register {
     public String birthYear;
 
     public String GroupName;
-    public String AppName;
 
 }

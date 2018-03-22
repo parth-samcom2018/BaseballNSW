@@ -38,6 +38,7 @@ import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.nsw.baseballnsw.models.Profile;
+import com.nsw.baseballnsw.models.Register;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -217,7 +218,6 @@ public class ProfileFragment extends Fragment {
 
     private void modelToView()
     {
-
 
 
         emailET.setText(DM.member.username);

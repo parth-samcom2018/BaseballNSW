@@ -220,6 +220,7 @@
                                 />
                         </android.support.design.widget.TextInputLayout>
                     </LinearLayout>
+
                 </LinearLayout>
 
                 <info.hoang8f.android.segmented.SegmentedGroup

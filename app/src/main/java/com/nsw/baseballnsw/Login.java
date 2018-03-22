@@ -1,6 +1,7 @@
 package com.nsw.baseballnsw;
 
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -43,6 +44,7 @@ public class Login extends BaseVC {
     private TextView tv_forgot1;
     public static String justRegisteredUsername = null;
     public static String justRegisteredPassword = null;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -168,6 +170,7 @@ public class Login extends BaseVC {
     }
 
     private void proceed() {
+
         //  if(true)return;
         Intent i = new Intent(this, MainTabbing.class);
         startActivity(i);
@@ -208,6 +211,7 @@ public class Login extends BaseVC {
 
     }
 
+    @SuppressLint("CommitPrefEdits")
     private void attemptLogin() {
 
 
@@ -252,6 +256,7 @@ public class Login extends BaseVC {
             // form field with an error.
             focusView.requestFocus();
         } else {
+
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             DM.hideKeyboard(this);
