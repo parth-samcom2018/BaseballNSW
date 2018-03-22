@@ -78,7 +78,7 @@ public class MainTabbing extends BaseVC {
 
     private String[] titles = {"Noticeboard", "Groups", "Events", "Profile"};
 
-    private TextView tv_title,tv_create,mTitle,tvend;
+    private TextView tv_title,tv_create,mTitle,tvend,tv_left;
     private LinearLayout ll_edit;
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -108,6 +108,7 @@ public class MainTabbing extends BaseVC {
         Toolbar toolbar = findViewById(R.id.toolbar_top);
         mTitle = toolbar.findViewById(R.id.toolbar_title);
         tvend = toolbar.findViewById(R.id.tv_end);
+        tv_left = toolbar.findViewById(R.id.tv_left);
 
         setSupportActionBar(toolbar);
         mTitle.setText("Noticeboard");
@@ -148,6 +149,7 @@ public class MainTabbing extends BaseVC {
                 {
                     case 0:
                         tvend.setVisibility(View.GONE);
+                        tv_left.setVisibility(View.GONE);
                         frmL.setVisibility(View.GONE);
                         mTitle.setText("Noticeboard");
                         noticeBoardVC.loadIfUnloaded();
@@ -156,6 +158,7 @@ public class MainTabbing extends BaseVC {
                         try
                         {
                             tvend.setVisibility(View.GONE);
+                            tv_left.setVisibility(View.GONE);
                             frmL.setVisibility(View.GONE);
                             mTitle.setText("Groups");
                             //ll_edit.setVisibility(View.GONE);
@@ -174,6 +177,7 @@ public class MainTabbing extends BaseVC {
 
                         try{
                             tvend.setVisibility(View.VISIBLE);
+                            tv_left.setVisibility(View.GONE);
                             frmL.setVisibility(View.GONE);
                             mTitle.setText("Events");
                             tvend.setText("CREATE");
@@ -193,6 +197,13 @@ public class MainTabbing extends BaseVC {
 
                     case 3:
                         tvend.setVisibility(View.GONE);
+                        tv_left.setVisibility(View.VISIBLE);
+                        tv_left.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                onChangePassword();
+                            }
+                        });
                         frmL.setVisibility(View.VISIBLE);
                         mTitle.setText("Profile");
                         ib_edit.setOnClickListener(new View.OnClickListener() {
@@ -262,6 +273,11 @@ public class MainTabbing extends BaseVC {
                         "Could not load member details:"+error.getMessage(),Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private void onChangePassword() {
+        Intent i = new Intent(MainTabbing.this,ChangePassowrd.class);
+        startActivity(i);
     }
 
     private void setupTabIcons() {

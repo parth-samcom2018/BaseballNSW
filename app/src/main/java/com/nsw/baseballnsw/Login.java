@@ -32,7 +32,7 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.mime.TypedByteArray;
 
-public class Login extends AppCompatActivity {
+public class Login extends BaseVC {
 
     private static final String TAG = "RegisterToken";
     private TextView DeviceID;

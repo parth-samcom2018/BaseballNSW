@@ -6,6 +6,7 @@ import android.widget.EditText;
 import com.nsw.baseballnsw.models.Article;
 import com.nsw.baseballnsw.models.ArticleComment;
 import com.nsw.baseballnsw.models.ArticleResponse;
+import com.nsw.baseballnsw.models.ChangePW;
 import com.nsw.baseballnsw.models.Event;
 import com.nsw.baseballnsw.models.EventResponse;
 import com.nsw.baseballnsw.models.Folder;
@@ -59,6 +60,12 @@ public interface API {
     @POST("/apiv2/account/forgotpassword")
     public void forgetPassword(@Header("Authorization") String auth,
                                 @Field("email") String email,
+                                Callback<Response> callback);
+
+    @FormUrlEncoded
+    @POST("/apiv2/account/setpassword")
+    public void postNewPassword(@Header("Authorization")String auth,
+                                @Body ChangePW changePWModel,
                                 Callback<Response> callback);
 
     //new api v2
