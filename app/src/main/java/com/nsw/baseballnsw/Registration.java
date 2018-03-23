@@ -16,6 +16,7 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -67,6 +68,7 @@ public class Registration extends BaseVC {
     static final int REQUEST_TAKE_PHOTO = 1;
     static final int REQUEST_PICK_IMAGE = 2;
 
+    public static final String MYPref = "Pref";
     public static final String ALLOW_KEY = "ALLOWED";
     public static final String CAMERA_PREF = "camera_pref";
     String email1;
@@ -95,7 +97,7 @@ public class Registration extends BaseVC {
     private Spinner countrySpinner;
     private EditText postCodeET;
     private Button chooseCountryButton;
-
+    SharedPreferences sPref;
     private Switch termsSwitch;
 
     @Override
@@ -104,6 +106,7 @@ public class Registration extends BaseVC {
         this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_register);
 
+        sPref = getSharedPreferences(MYPref, MODE_PRIVATE);
 
         emailET = findViewById(R.id.email);
         passwordET = findViewById(R.id.password);
@@ -259,8 +262,8 @@ public class Registration extends BaseVC {
 
         // Store values at the time of the login attempt.
         final String email = emailET.getText().toString();
-        String password = passwordET.getText().toString();
-        String passwordConfirm = passwordConfirmET.getText().toString();
+        final String password = passwordET.getText().toString();
+        final String passwordConfirm = passwordConfirmET.getText().toString();
         String firstName = firstNameET.getText().toString();
         String lastName = surnameET.getText().toString();
         String birthday = birthYearET.getText().toString();
@@ -428,6 +431,11 @@ public class Registration extends BaseVC {
 
                         registerModel.GroupName = name;
                         makeRegistrationRequest(registerModel);
+
+                        SharedPreferences preferences = getSharedPreferences(MYPref, Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putString("autoSave", passwordConfirmET.getText().toString());
+                        editor.apply();
 
                     }
                 }

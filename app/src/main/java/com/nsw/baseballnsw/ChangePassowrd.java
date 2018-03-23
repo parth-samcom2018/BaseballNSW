@@ -1,6 +1,7 @@
 package com.nsw.baseballnsw;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -23,12 +24,16 @@ public class ChangePassowrd extends BaseVC{
 
     private Button savebutton,cancel_button;
     private EditText et_old_pw,etnewpw,etconfirmpw;
-
+    SharedPreferences pref;
+    public static final String MYPref = "Pref";
+    String getData;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change);
+
+        pref = getSharedPreferences(MYPref, MODE_PRIVATE);
 
         et_old_pw = findViewById(R.id.et_old_pw);
         etnewpw = findViewById(R.id.et_new_pw);
@@ -36,7 +41,6 @@ public class ChangePassowrd extends BaseVC{
         savebutton = findViewById(R.id.save_button);
         cancel_button = findViewById(R.id.cancel_button);
 
-        getDetails();
 
         savebutton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,16 +57,25 @@ public class ChangePassowrd extends BaseVC{
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getDetails();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        getDetails();
+    }
+
     private void getDetails() {
 
-        final Register registerModel = new Register();
-
-        registerModel.password = et_old_pw.getText().toString();
+        et_old_pw.setText(pref.getString("autoSave", ""));
     }
 
 
     private void changePasswordAction() {
-
 
         et_old_pw.setError(null);
         etnewpw.setError(null);
@@ -134,14 +147,11 @@ public class ChangePassowrd extends BaseVC{
             return;
         }
 
-
-
         final ProgressDialog pd = DM.getPD(ChangePassowrd.this, "Loading for Changing Password...");
         pd.show();
 
-        final ChangePW changePWModel = new ChangePW();
 
-        DM.getApi().postNewPassword(DM.getAuthString(), changePWModel, new Callback<Response>() {
+        DM.getApi().postNewPassword(DM.getAuthString(), oldPassword,newPassword,confirmPassword , new Callback<Response>() {
                     @Override
                     public void success(Response response, Response response2) {
                         Toast toast = Toast.makeText(ChangePassowrd.this, "New password Changed!", Toast.LENGTH_SHORT);
@@ -149,6 +159,8 @@ public class ChangePassowrd extends BaseVC{
                         toast.show();
                         pd.dismiss();
                         DM.hideKeyboard(ChangePassowrd.this);
+
+                        finish();
                     }
 
                     @Override
@@ -161,8 +173,5 @@ public class ChangePassowrd extends BaseVC{
                     }
                 });
     }
-
-
-
 }
 

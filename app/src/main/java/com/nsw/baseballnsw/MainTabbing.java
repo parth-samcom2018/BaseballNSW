@@ -168,10 +168,7 @@ public class MainTabbing extends BaseVC {
                             e.printStackTrace();
                             Log.e(TAG, "onPageSelected: "+e.getMessage());
                         }
-                       /* tvend.setVisibility(View.GONE);
-                        frmL.setVisibility(View.GONE);
-                        mTitle.setText("Groups");
-                        groupsVC.loadIfUnloaded();*/
+
                         break;
                     case 2:
 

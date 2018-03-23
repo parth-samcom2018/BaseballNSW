@@ -11,7 +11,9 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -40,6 +42,8 @@ public class Login extends BaseVC {
     private TextView tv_forgot1;
     public static String justRegisteredUsername = null;
     public static String justRegisteredPassword = null;
+    SharedPreferences pref;
+    public static final String MYPref = "Pref";
 
 
     @Override
@@ -47,6 +51,8 @@ public class Login extends BaseVC {
         super.onCreate(savedInstanceState);
         this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_login);
+
+        pref = getSharedPreferences(MYPref, MODE_PRIVATE);
 
         mEmailView = findViewById(R.id.et_username);
         mPasswordView = findViewById(R.id.et_password);
@@ -100,6 +106,7 @@ public class Login extends BaseVC {
         unique_id = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
         DeviceID.setText("My ID is: " + unique_id);
         Log.i(TAG, "Registration Device: " + unique_id);
+
     }
 
     private void forgot() {
