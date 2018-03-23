@@ -12,7 +12,7 @@
         android:id="@+id/iv"
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        android:src="@drawable/header_bg"
+        android:src="@drawable/bg_img"
         android:scaleType="centerCrop"
         android:background="#80000000"/>
 
@@ -45,6 +45,8 @@
             android:textStyle="bold"
             tools:ignore="TextViewEdits" />
     </LinearLayout>
+
+
 
     <ScrollView
         android:layout_width="match_parent"
@@ -99,6 +101,7 @@
                         android:inputType="text"
                         android:background="@null"
                         android:maxLines="1"
+                        android:padding="5dp"
                         android:textSize="16sp"
                         android:singleLine="true"
                         android:focusable="true"
@@ -131,6 +134,7 @@
                         android:textSize="16sp"
                         android:singleLine="true"
                         android:focusable="true"
+                        android:padding="5dp"
                         android:focusableInTouchMode="true"
                         android:imeOptions="actionNext"
                         android:fontFamily="@font/lato_regular"
@@ -160,6 +164,7 @@
                         android:textSize="16sp"
                         android:singleLine="true"
                         android:focusable="true"
+                        android:padding="5dp"
                         android:focusableInTouchMode="true"
                         android:imeOptions="actionNext"
                         tools:ignore="InvalidImeActionId,TextFields"
@@ -172,7 +177,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:weightSum="4"
+                android:weightSum="3"
                 android:elevation="5dp"
                 android:orientation="vertical"
                 android:background="@drawable/textshape"
@@ -181,11 +186,11 @@
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:layout_margin="15dp"
-                    android:textColorHint="@color/black"
-                    app:passwordToggleEnabled="true">
-                    <AutoCompleteTextView
+                    android:textColorHint="@color/black">
+
+                    <EditText
                         android:id="@+id/firstNameET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -195,13 +200,13 @@
                         android:maxLines="1"
                         android:textSize="16sp"
                         android:singleLine="true"
+                        android:padding="5dp"
                         android:focusable="true"
                         android:focusableInTouchMode="true"
                         android:imeOptions="actionNext"
                         android:fontFamily="@font/lato_regular"
                         android:textColorHint="@color/black"
-                        android:textColor="@color/black"
-                        />
+                        android:textColor="@color/black"/>
                 </android.support.design.widget.TextInputLayout>
 
 
@@ -209,18 +214,18 @@
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="2"
+                    android:layout_weight="1"
                     android:layout_margin="15dp"
-                    android:textColorHint="@color/black"
-                    app:passwordToggleEnabled="true">
+                    android:textColorHint="@color/black">
 
-                    <AutoCompleteTextView
+                    <EditText
                         android:id="@+id/surnameET"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/l_name"
-                        android:background="@null"
                         android:inputType="text"
+                        android:background="@null"
+                        android:padding="5dp"
                         android:maxLines="1"
                         android:textSize="16sp"
                         android:singleLine="true"
@@ -247,7 +252,8 @@
                 segmentedgroup:sc_corner_radius="5dp"
                 segmentedgroup:sc_tint_color="@color/colorPrimary"
                 android:background="@drawable/mfshape"
-                android:weightSum="2">
+                android:weightSum="2"
+                >
 
                 <RadioButton
                     android:id="@+id/buttonsg1"
@@ -273,7 +279,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:weightSum="3"
+                android:weightSum="4"
                 android:elevation="5dp"
                 android:orientation="vertical"
                 android:background="@drawable/textshape"
@@ -295,6 +301,7 @@
                         android:background="@null"
                         android:textSize="16sp"
                         android:singleLine="true"
+                        android:padding="5dp"
                         android:focusable="true"
                         android:focusableInTouchMode="true"
                         android:imeOptions="actionNext"
@@ -312,11 +319,27 @@
                     android:textColorHint="@color/black">
 
                     <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/country_drop"
+                        android:weightSum="1">
+
+                        <Spinner
+                            android:id="@+id/spinner1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:weightSum="1"
-                        android:id="@+id/ll_country_register">
+                        android:id="@+id/ll_country_register"
+                        android:visibility="gone">
 
 
                         <EditText
@@ -331,6 +354,7 @@
                             android:imeOptions="actionNext"
                             android:inputType="text"
                             android:maxLines="4"
+                            android:padding="5dp"
                             android:singleLine="true"
                             android:textSize="16sp"
                             android:fontFamily="@font/lato_regular"
@@ -443,6 +467,7 @@
                     android:textSize="14sp"
                     android:inputType="textCapWords"
                     android:textStyle="bold"
+                    android:onClick="onMain"
                     android:fontFamily="@font/lato_regular" />
 
                 <Button
@@ -455,7 +480,8 @@
                     android:inputType="text"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                     android:layout_weight="0.5"
-                    android:fontFamily="@font/lato_regular" />
+                    android:fontFamily="@font/lato_regular"
+                    />
 
 
             </LinearLayout>
