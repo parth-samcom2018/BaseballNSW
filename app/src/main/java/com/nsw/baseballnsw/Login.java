@@ -11,11 +11,13 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -40,6 +42,7 @@ public class Login extends BaseVC {
     private EditText mEmailView,mPasswordView;
     private Button btn_register;
     private TextView tv_forgot1;
+
     public static String justRegisteredUsername = null;
     public static String justRegisteredPassword = null;
     SharedPreferences pref;

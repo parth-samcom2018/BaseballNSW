@@ -160,6 +160,11 @@ public class ChangePassowrd extends BaseVC{
                         DM.hideKeyboard(ChangePassowrd.this);
 
                         finish();
+
+                        SharedPreferences preferences = getSharedPreferences(MYPref, Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putString("autoSave", etconfirmpw.getText().toString());
+                        editor.apply();
                     }
 
                     @Override

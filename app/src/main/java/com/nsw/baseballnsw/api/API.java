@@ -141,6 +141,7 @@ public interface API {
     public void postMediaAlbum(@Header("Authorization") String auth,
                                 @Field("name") String name,
                                 @Field("groupid") int groupID,
+                                @Field("mediaAlbumId") int mediaAlbumId,
                                 Callback<Response> callback);
 
     @FormUrlEncoded

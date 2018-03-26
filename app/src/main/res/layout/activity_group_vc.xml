@@ -129,7 +129,7 @@
             android:elevation="10dp"
             android:textAlignment="center"
             android:layout_marginLeft="10dp"
-            app:tabGravity="fill"
+            app:tabGravity="center"
             app:tabMaxWidth="0dp"
             app:tabTextColor="@color/gray"
             android:layout_marginRight="10dp"

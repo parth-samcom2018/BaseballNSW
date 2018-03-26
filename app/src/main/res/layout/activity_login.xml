@@ -2,6 +2,8 @@
 <RelativeLayout android:layout_height="match_parent"
     android:layout_width="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@drawable/login_bg">
 
     <ScrollView
@@ -55,11 +57,19 @@
                     android:textStyle="bold"
                     android:layout_marginBottom="10dp"/>
 
-                <FrameLayout
-                    android:layout_width="fill_parent"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="15dp"
+                    android:orientation="horizontal"
+                    android:weightSum="2"
                     android:background="@drawable/editshape">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:passwordToggleEnabled="true"
+                        app:hintEnabled="false"
+                        android:padding="12dp">
 
                     <EditText
                         android:id="@+id/et_username"
@@ -72,10 +82,11 @@
                         android:singleLine="true"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                         android:textColor="@color/white"
-                        android:textColorHint="@color/white"
-                        android:textStyle="bold" />
+                        android:fontFamily="@font/lato_regular"
+                        android:textColorHint="@color/white"/>
 
-                </FrameLayout>
+                    </android.support.design.widget.TextInputLayout>
+                </LinearLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -84,15 +95,42 @@
                     android:text="@string/prompt_pw"
                     android:textStyle="bold"
                     android:layout_marginTop="15dp"
-                    android:layout_marginBottom="0dp"/>
+                    android:layout_marginBottom="10dp"/>
 
-                <FrameLayout
-                    android:layout_width="fill_parent"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="15dp"
-                    android:background="@drawable/editshape"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginBottom="20dp">
+                    android:orientation="horizontal"
+                    android:weightSum="2"
+                    android:background="@drawable/editshape">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:passwordToggleEnabled="true"
+                        app:hintEnabled="false"
+                        android:layout_weight="2"
+                        android:paddingLeft="10dp">
+
+
+                        <EditText
+                            android:id="@+id/et_password"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/prompt_password"
+                            android:inputType="textPassword"
+                            android:maxLines="1"
+                            android:backgroundTint="@android:color/transparent"
+                            android:singleLine="true"
+                            android:focusable="true"
+                            android:textColor="@color/white"
+                            android:background="@android:color/transparent"
+                            android:focusableInTouchMode="true"
+                            tools:ignore="InvalidImeActionId"
+                            android:fontFamily="@font/lato_regular"
+                            android:textColorHint="@color/white"/>
+
+                    </android.support.design.widget.TextInputLayout>
 
                     <TextView
                         android:id="@+id/tv_forgot1"
@@ -100,24 +138,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10dp"
                         android:layout_gravity="right|center_vertical"
-                        android:textColor="@color/white"
+                        android:textColor="@color/black"
                         android:text="@string/forgot"
                         android:elevation="10dp"
                         />
-
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/et_password"
-                        android:ems="10"
-                        android:hint="Password:"
-                        android:inputType="textPassword"
-                        android:background="@null"
-                        android:textColor="@color/white"
-                        android:textColorHint="@color/white"
-                        android:textStyle="bold"/>
-
-                </FrameLayout>
+                </LinearLayout>
 
                 <Button
                     android:layout_width="match_parent"

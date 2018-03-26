@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.nsw.baseballnsw.models.Folder;
 import com.nsw.baseballnsw.models.Group;
 import com.nsw.baseballnsw.models.Ladders;
+import com.nsw.baseballnsw.models.MediaAlbum;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -30,6 +31,7 @@ public class GroupVC extends BaseVC {
 
     //MODEL
     public static Group group;
+    public static MediaAlbum mediaAlbum;
     public static Ladders ladder;
 
     private TextView tv_grp_title,tv_edit;
@@ -281,7 +283,7 @@ public class GroupVC extends BaseVC {
                     return;
                 }
 
-                DM.getApi().postMediaAlbum(DM.getAuthString(), name,  group.groupId, new Callback<Response>() {
+                DM.getApi().postMediaAlbum(DM.getAuthString(), name,  group.groupId, mediaAlbum.mediaAlbumId, new Callback<Response>() {
                     @Override
                     public void success(Response response, Response response2) {
                         Toast.makeText(GroupVC.this,"Album Created!",Toast.LENGTH_LONG).show();
@@ -293,8 +295,8 @@ public class GroupVC extends BaseVC {
                     @Override
                     public void failure(RetrofitError error) {
                         Toast.makeText(GroupVC.this,"Could not create album: "+error.getMessage(),Toast.LENGTH_LONG).show();
-
-
+                        dialog.dismiss();
+                        DM.hideKeyboard(GroupVC.this);
                     }
                 });
 
