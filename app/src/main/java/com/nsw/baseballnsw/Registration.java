@@ -65,7 +65,6 @@ import retrofit.mime.TypedFile;
 
 public class Registration extends BaseVC{
 
-
     static final int REQUEST_TAKE_PHOTO = 1;
     static final int REQUEST_PICK_IMAGE = 2;
 
@@ -242,7 +241,6 @@ public class Registration extends BaseVC{
     private void registerAction1(){
 
         isOnline();
-
         // Reset errors.
         emailET.setError(null);
         passwordET.setError(null);
@@ -382,7 +380,6 @@ public class Registration extends BaseVC{
             int selectedId = genderSG.getCheckedRadioButtonId();
             buttonSG1 = findViewById(selectedId);
             //Toast.makeText(getApplicationContext(), buttonSG1.getText().toString()+" is selected", Toast.LENGTH_SHORT).show();
-
         }
 
 
@@ -439,9 +436,7 @@ public class Registration extends BaseVC{
                     Toast.makeText(Registration.this, "could not check groups", Toast.LENGTH_LONG).show();
                 }
             });
-
         }
-
     }
 
 

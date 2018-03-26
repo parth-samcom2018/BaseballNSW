@@ -41,7 +41,6 @@ public class ChangePassowrd extends BaseVC{
         savebutton = findViewById(R.id.save_button);
         cancel_button = findViewById(R.id.cancel_button);
 
-
         savebutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
