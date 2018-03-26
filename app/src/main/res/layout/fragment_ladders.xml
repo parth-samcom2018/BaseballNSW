@@ -20,7 +20,7 @@
             android:text="@string/team"
             android:layout_gravity="center"
             android:id="@+id/tv"
-            android:textColor="@color/gray"
+            android:textColor="@color/textgray"
             android:layout_marginLeft="10dp"/>
 
         <TextView
@@ -31,7 +31,7 @@
             android:padding="5dp"
             android:layout_gravity="center"
             android:gravity="center"
-            android:textColor="@color/gray"
+            android:textColor="@color/textgray"
             android:id="@+id/tv1"/>
 
         <TextView
@@ -42,7 +42,7 @@
             android:padding="5dp"
             android:layout_gravity="center"
             android:gravity="center"
-            android:textColor="@color/gray"
+            android:textColor="@color/textgray"
             android:id="@+id/tv2"/>
 
         <TextView
@@ -53,7 +53,7 @@
             android:padding="5dp"
             android:layout_gravity="center"
             android:gravity="center"
-            android:textColor="@color/gray"
+            android:textColor="@color/textgray"
             android:id="@+id/tv3"/>
 
         <TextView
@@ -62,7 +62,7 @@
             android:layout_height="wrap_content"
             android:text="P"
             android:gravity="center"
-            android:textColor="@color/gray"
+            android:textColor="@color/textgray"
             android:layout_gravity="center"
             android:id="@+id/tv4"
             android:padding="5dp"/>
@@ -72,7 +72,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/score"
-            android:textColor="@color/gray"
+            android:textColor="@color/textgray"
             android:layout_gravity="center"
             android:gravity="center"
             android:id="@+id/tv5"/>
@@ -83,7 +83,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/empty"
         android:visibility="gone"
-        android:textColor="@color/gray"
+        android:textColor="@color/textgray"
         android:text="No Data Found On Ladders"
         android:gravity="center"
         android:layout_centerInParent="true"
@@ -102,20 +102,20 @@
         android:elevation="10dp"
         android:visibility="visible">
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/swiperefresh">
-
-        <ListView
-            android:id="@+id/list"
+        <android.support.v4.widget.SwipeRefreshLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:verticalSpacing="0dp"
-            android:horizontalSpacing="0dp"
-            android:numColumns="2"
-            />
+            android:id="@+id/swiperefresh">
 
-    </android.support.v4.widget.SwipeRefreshLayout>
+            <ListView
+                android:id="@+id/list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:verticalSpacing="0dp"
+                android:horizontalSpacing="0dp"
+                android:numColumns="2"
+                />
+
+        </android.support.v4.widget.SwipeRefreshLayout>
     </LinearLayout>
 </RelativeLayout>

@@ -73,7 +73,6 @@ public class MainTabbing extends BaseVC {
     private ProfileFragment profileVC;
     private FrameLayout frmL;
     private ImageButton ib_edit;
-    private ImageView profilePic;
     private CircleImageView cp;
 
     private String[] titles = {"Noticeboard", "Groups", "Events", "Profile"};
@@ -116,7 +115,6 @@ public class MainTabbing extends BaseVC {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         cp = findViewById(R.id.profilePic1);
-        profilePic = findViewById(R.id.profilePic);
         ib_edit = findViewById(R.id.ib_edit);
         frmL = findViewById(R.id.frm);
         frmL.setVisibility(View.GONE);

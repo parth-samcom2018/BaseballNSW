@@ -159,19 +159,6 @@
             android:scaleType="center"
             android:elevation="5dp"/>
 
-        <ImageView
-            android:id="@+id/profilePic"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_gravity="center"
-            android:layout_margin="0dp"
-            android:background="@drawable/shape_user"
-            android:cropToPadding="true"
-            android:elevation="5dp"
-            android:padding="15dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/user_75_black"
-            android:visibility="gone" />
     </FrameLayout>
 
 
