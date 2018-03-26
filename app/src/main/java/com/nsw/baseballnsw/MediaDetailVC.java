@@ -423,13 +423,13 @@ public class MediaDetailVC extends BaseVC {
             }
         });*/
 
-        DM.getApi().getMediaAlbums(DM.getAuthString(), mediaAlbum.mediaAlbumId, new Callback<MediaAlbumResponse>() {
+        DM.getApi().getMediaAlbum(DM.getAuthString(), mediaAlbum.mediaAlbumId, new Callback<MediaAlbum>() {
             @Override
-            public void success(MediaAlbumResponse ma, Response response) {
-                mediaAlbum = ma.getData();
+            public void success(MediaAlbum ma, Response response) {
+                mediaAlbum = ma;
                 mediaAlbum.sortMediaAlbumsByDate();
 
-                for(Media m : ma.getData().mediaModels)
+                for(Media m : ma.mediaModels)
                 {
                     if(selectedMedia.mediaId == m.mediaId)
                     {

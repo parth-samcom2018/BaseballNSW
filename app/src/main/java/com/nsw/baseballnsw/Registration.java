@@ -34,6 +34,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -62,7 +63,7 @@ import retrofit.client.Response;
 import retrofit.mime.TypedByteArray;
 import retrofit.mime.TypedFile;
 
-public class Registration extends BaseVC {
+public class Registration extends BaseVC{
 
 
     static final int REQUEST_TAKE_PHOTO = 1;
@@ -71,7 +72,6 @@ public class Registration extends BaseVC {
     public static final String MYPref = "Pref";
     public static final String ALLOW_KEY = "ALLOWED";
     public static final String CAMERA_PREF = "camera_pref";
-    String email1;
 
     private static final int MY_PERMISSIONS_REQUEST_CAMERA = 100;
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 100;
@@ -82,7 +82,6 @@ public class Registration extends BaseVC {
 
     //VIEWS
     private CircleImageView profileIV;
-    private Button chooseImageButton;
 
     private EditText emailET;
     private EditText passwordET;
@@ -94,9 +93,8 @@ public class Registration extends BaseVC {
     private RadioButton buttonSG2;
     private EditText birthYearET;
     private EditText countryET;
-    private Spinner countrySpinner;
+    private ImageButton ib_down;
     private EditText postCodeET;
-    private Button chooseCountryButton;
     SharedPreferences sPref;
     private Switch termsSwitch;
 
@@ -133,23 +131,23 @@ public class Registration extends BaseVC {
             }
         });
 
-
         birthYearET = findViewById(R.id.birthYearET);
         countryET = findViewById(R.id.countryET);
 
-        //countryET.setEnabled(false);
+        ib_down = findViewById(R.id.ib_down);
 
-        countryET.setOnClickListener(new View.OnClickListener() {
+        ib_down.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 chooseCountryAction();
             }
         });
-        chooseCountryButton = findViewById(R.id.chooseCountryButton);
-        chooseCountryButton.setOnClickListener(new View.OnClickListener() {
+        //countryET.setEnabled(false);
+        countryET.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                chooseCountryAction();}
+            public void onClick(View view) {
+                chooseCountryAction();
+            }
         });
 
         postCodeET = findViewById(R.id.postCodeET);
@@ -176,12 +174,10 @@ public class Registration extends BaseVC {
             }
         });
 
-
         Button registerButton = findViewById(R.id.register_button);
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //registerAction();
                 showAlert();
             }
         });
@@ -202,14 +198,12 @@ public class Registration extends BaseVC {
             }
         });
 
-
         termsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 switchOn = isChecked;
             }
         });
-
     }
 
 
@@ -715,5 +709,6 @@ public class Registration extends BaseVC {
         }
         return false;
     }
+
 
 }

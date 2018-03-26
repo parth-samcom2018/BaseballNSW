@@ -176,7 +176,7 @@ public interface API {
 
     //new api v2
     @GET("/apiv2/media/album/{id}")
-    public void getMediaAlbums(@Header("Authorization") String auth, @Path("id") int mediaAlbumID, Callback<MediaAlbumResponse> response);
+    public void getMediaAlbums(@Header("Authorization") String auth, @Path("id") int mediaAlbumID, Callback<MediaAlbum> response);
 
 
     @FormUrlEncoded
@@ -227,7 +227,7 @@ public interface API {
 
     //new api v2
     @GET("/apiv2/media/get/{groupID}")
-    public void getGroupingMediaAlbums(@Header("Authorization") String auth, @Path("groupID") int groupID, Callback<List<MediaAlbum>> response);
+    public void getGroupingMediaAlbums(@Header("Authorization") String auth, @Path("groupID") int groupID, Callback<MediaAlbumResponse> response);
 
     //new api v2
     @FormUrlEncoded

@@ -1,9 +1,12 @@
 package com.nsw.baseballnsw.models;
 
+import java.util.List;
+
 public class MediaAlbumResponse extends Media{
+
     private boolean error;
     private String message;
-    private MediaAlbum data;
+    private List<MediaAlbum>  data;
 
     public MediaAlbumResponse() {
     }
@@ -24,11 +27,11 @@ public class MediaAlbumResponse extends Media{
         this.message = message;
     }
 
-    public MediaAlbum getData() {
+    public List<MediaAlbum> getData() {
         return data;
     }
 
-    public void setData(MediaAlbum data) {
+    public void setData(List<MediaAlbum> data) {
         this.data = data;
     }
 

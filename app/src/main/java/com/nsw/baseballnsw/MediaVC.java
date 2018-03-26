@@ -43,6 +43,7 @@ import android.widget.Toast;
 
 import com.nsw.baseballnsw.models.Group;
 import com.nsw.baseballnsw.models.MediaAlbum;
+import com.nsw.baseballnsw.models.MediaAlbumResponse;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
@@ -180,7 +181,7 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
                                 //progressBar1.setVisibility(View.GONE);
 
                                 showiv.setImageResource(R.drawable.splashlogo);
-                                showiv.setScaleType(ImageView.ScaleType.CENTER);
+                                showiv.setScaleType(ImageView.ScaleType.FIT_CENTER);
                             }
                         });
 
@@ -577,13 +578,10 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
     }
 
 
-    // NEEDED with configChange in manifest, stops view changer from recalling onCreateView
     private boolean initialLoaded = false;
-    public void loadIfUnloaded()
-    {
+    public void loadIfUnloaded(){
         if(initialLoaded == false) loadData();
     }
-
     private void loadData()
     {
         initialLoaded = true;
@@ -592,10 +590,10 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
         pd.show();
 
 
-        if(group != null) DM.getApi().getGroupingMediaAlbums(DM.getAuthString(), group.groupId, new Callback<List<MediaAlbum>>() {
+        if(group != null) DM.getApi().getGroupingMediaAlbums(DM.getAuthString(), group.groupId, new Callback<MediaAlbumResponse>() {
             @Override
-            public void success(List<MediaAlbum> mediaAlbums, Response response) {
-                albums = mediaAlbums;
+            public void success(MediaAlbumResponse mediaAlbums, Response response) {
+                albums = mediaAlbums.getData();
                 for(MediaAlbum a : albums)
                 {
                     a.sortMediaAlbumsByDate();
@@ -605,7 +603,7 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
                 refreshLayout.setRefreshing(false);
                 pd.dismiss();
 
-                if(mediaAlbums.size()==0) emptyIV.setVisibility(View.VISIBLE);
+                if(mediaAlbums.getData().size()==0) emptyIV.setVisibility(View.VISIBLE);
                 else emptyIV.setVisibility(View.GONE);
 
             }
