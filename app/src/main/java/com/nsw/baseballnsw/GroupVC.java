@@ -36,7 +36,7 @@ public class GroupVC extends BaseVC {
 
     private TextView tv_grp_title,tv_edit;
     private LinearLayout ll_back,ll_edit;
-    private GroupVC.SectionsPagerAdapter mSectionsPagerAdapter;
+    private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
     private TabLayout tabLayout;
 
@@ -361,21 +361,6 @@ public class GroupVC extends BaseVC {
 
         Log.d("HQ","groupID : "+ group.groupId);
 
-        /*DM.getApi().postInviteUser(DM.getAuthString(), "unknown", email, true, this.group.groupId, new Callback<Response>() {
-            @Override
-            public void success(Response response, Response response2) {
-
-                Toast.makeText(GroupVC.this, "User has been invited!", Toast.LENGTH_LONG).show();
-                pd.dismiss();
-
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Toast.makeText(GroupVC.this, "Failed to invite user", Toast.LENGTH_LONG).show();
-                pd.dismiss();
-            }
-        });*/
         DM.getApi().postInviteUsers(DM.getAuthString(), "unknown", email, true, group.groupId, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
