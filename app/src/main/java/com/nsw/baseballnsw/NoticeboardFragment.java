@@ -420,14 +420,13 @@ public class NoticeboardFragment extends Fragment {
                         }
 
 
-                        if (n.notificationTypeId == Notification.TYPE_ARTICLE) {
+                        /*if (n.notificationTypeId == Notification.TYPE_ARTICLE) {
 
                             final ProgressDialog pd = DM.getPD(getActivity(), "Loading Article...");
                             pd.show();
                             DM.getApi().getArticle(DM.getAuthString(), n.notificationItemId, new Callback<Article>() {
                                 @Override
                                 public void success(final Article article, Response response) {
-
 
                                     DM.getApi().getAllGroups(DM.getAuthString(), new Callback<List<Group>>() {
                                         @Override
@@ -440,7 +439,6 @@ public class NoticeboardFragment extends Fragment {
                                                     break;
                                                 }
                                             }
-
                                             ArticleVC.article = article;
                                             Intent i = new Intent(NoticeboardFragment.this.getActivity(), ArticleVC.class);
                                             startActivity(i);
@@ -454,7 +452,6 @@ public class NoticeboardFragment extends Fragment {
                                         }
                                     });
 
-
                                 }
 
                                 @Override
@@ -465,9 +462,7 @@ public class NoticeboardFragment extends Fragment {
 
                                 }
                             });
-
-
-                        }
+                        }*/
 
 
                         if (n.notificationTypeId == Notification.TYPE_EVENT) {

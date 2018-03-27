@@ -394,15 +394,14 @@ public class MediaDetailVC extends BaseVC {
     {
         final ProgressDialog pd = DM.getPD(this,"Refreshing Media...");
         pd.show();
+
+
         DM.getApi().getMediaAlbum(DM.getAuthString(), mediaAlbum.mediaAlbumId, new Callback<MediaAlbum>() {
             @Override
             public void success(MediaAlbum ma, Response response) {
-
-
                 mediaAlbum = ma;
                 mediaAlbum.sortMediaAlbumsByDate();
 
-                //update selected
                 for(Media m : ma.mediaModels)
                 {
                     if(selectedMedia.mediaId == m.mediaId)
@@ -411,7 +410,6 @@ public class MediaDetailVC extends BaseVC {
                         break;
                     }
                 }
-
 
                 modelToView();
                 pd.dismiss();
@@ -424,7 +422,6 @@ public class MediaDetailVC extends BaseVC {
                 refreshLayout.setRefreshing(false);
             }
         });
-
     }
 
     @Override

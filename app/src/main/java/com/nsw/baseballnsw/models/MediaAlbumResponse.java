@@ -6,7 +6,7 @@ public class MediaAlbumResponse extends Media{
 
     private boolean error;
     private String message;
-    private List<MediaAlbum>  data;
+    private List<MediaAlbum> data;
 
     public MediaAlbumResponse() {
     }
