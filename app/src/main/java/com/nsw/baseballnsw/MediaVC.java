@@ -63,7 +63,7 @@ import retrofit.mime.TypedFile;
 
 public class MediaVC extends Fragment implements CropActivity.CropProtocol {
 
-    static final int REQUEST_TAKE_PHOTO = 100;
+    static final int REQUEST_TAKE_PHOTO = 1;
     static final int REQUEST_PICK_IMAGE = 2;
 
     boolean isSelected;
@@ -216,8 +216,6 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
             }
         });
 
-
-
         View cameraButton = v.findViewById(com.nsw.baseballnsw.R.id.cameraIV);
         cameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -301,7 +299,7 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
             if (photoFile != null) {
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
                         Uri.fromFile(photoFile));
-                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+                startActivityForResult(takePictureIntent,REQUEST_TAKE_PHOTO);
             }
         }
 
@@ -386,9 +384,10 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
 
         switch (requestCode) {
             case REQUEST_TAKE_PHOTO:
-                if (resultCode == Activity.RESULT_OK &&
-                        null != data) {
+                if (requestCode == REQUEST_TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
                     // Get the Image from data
+
+
                     try {
                         bitmapImage= MediaStore.Images.Media.getBitmap(getActivity().getApplicationContext().getContentResolver(), capturedImageUri);
                         Log.d("hipcook", "I now have a photo bitmap:" + bitmapImage.getWidth());
@@ -419,26 +418,19 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
 
                     // Get the cursor
                     Cursor cursor = getActivity().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-                    //cursor.moveToFirst();
-                    cursor.moveToNext();
+                    cursor.moveToFirst();
 
                     int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                     imgDecodableString = cursor.getString(columnIndex);
                     cursor.close();
 
-                    try {
-                        bitmapImage = DM.decodeSampledBitmapFromFile(imgDecodableString, 640,640);
-                        Log.d("hipcook", "I now have a bitmap:" + bitmapImage.getWidth());
-                    }
-                    catch (NullPointerException e){
-                        e.printStackTrace();
-                    }
+                    bitmapImage = DM.decodeSampledBitmapFromFile(imgDecodableString, 640,640);
+                    Log.d("hipcook", "I now have a bitmap:" + bitmapImage.getWidth());
 
                 } else {
-                    Toast.makeText(MediaVC.this.getActivity(), "You haven't Picked Image", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this.getActivity(), "You haven't picked Image", Toast.LENGTH_LONG).show();
                 }
                 break;
-
 
         }
 

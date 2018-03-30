@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,14 +32,15 @@ public class GroupVC extends BaseVC {
 
     //MODEL
     public static Group group;
-    public static MediaAlbum mediaAlbum;
     public static Ladders ladder;
+    public static MediaAlbum mediaAlbum;
 
     private TextView tv_grp_title,tv_edit;
     private LinearLayout ll_back,ll_edit;
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
     private TabLayout tabLayout;
+    private ProgressDialog pd;
 
     private NoticeBoardVCN noticeBoardVCN;
     private MediaVC mediaVC;
@@ -115,7 +117,12 @@ public class GroupVC extends BaseVC {
                             mediaVC.loadIfUnloaded();
                             ll_edit.setVisibility(View.VISIBLE);
                             tv_edit.setText("CREATE ALBUM +");
-
+                            ll_edit.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    createAlbumAction();
+                                }
+                            });
                             break;
                         case 2:
                             fixturesVC.loadIfUnloaded();
@@ -133,15 +140,6 @@ public class GroupVC extends BaseVC {
                             break;
                     }
 
-
-                    if (position==1){
-                        ll_edit.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                createAlbumAction();
-                            }
-                        });
-                    }
                 }
 
                 @Override
@@ -261,19 +259,16 @@ public class GroupVC extends BaseVC {
         descET.setVisibility(View.GONE);
         descET.setHint("Album Description");
         lila1.addView(nameET);
-        //lila1.addView(descET);
         int pad = (int)getResources().getDimension(R.dimen.small_pad);
         lila1.setPadding(pad,pad,pad,pad);
         alert.setView(lila1);
 
-        //alert.setIcon(R.drawable.icon);
         alert.setTitle("Create Album");
 
 
         alert.setPositiveButton("Create", new DialogInterface.OnClickListener() {
             public void onClick(final DialogInterface dialog, int whichButton) {
                 String name = nameET.getText().toString();
-                String description = descET.getText().toString();
 
                 if(name.length() == 0 || name == null)
                 {
@@ -282,10 +277,15 @@ public class GroupVC extends BaseVC {
                     return;
                 }
 
-                DM.getApi().postMediaAlbum(DM.getAuthString(), name,  group.groupId, mediaAlbum.mediaAlbumId, new Callback<Response>() {
+
+                pd = DM.getPD(GroupVC.this,"Loading Creating Album..");
+                pd.show();
+
+                DM.getApi().postMediaAlbum(DM.getAuthString(), name,  group.groupId, new Callback<Response>() {
                     @Override
                     public void success(Response response, Response response2) {
                         Toast.makeText(GroupVC.this,"Album Created!",Toast.LENGTH_LONG).show();
+                        pd.dismiss();
                         dialog.dismiss();
                         DM.hideKeyboard(GroupVC.this);
 
@@ -294,6 +294,7 @@ public class GroupVC extends BaseVC {
                     @Override
                     public void failure(RetrofitError error) {
                         Toast.makeText(GroupVC.this,"Could not create album: "+error.getMessage(),Toast.LENGTH_LONG).show();
+                        pd.dismiss();
                         dialog.dismiss();
                         DM.hideKeyboard(GroupVC.this);
                     }
@@ -334,9 +335,7 @@ public class GroupVC extends BaseVC {
                     return;
                 }
 
-
                 makeInviteRequest(email);
-
 
             }
         });
@@ -389,14 +388,11 @@ public class GroupVC extends BaseVC {
             else if (position == 2) return fixturesVC;
             else if (position ==3) return laddersVC;
             else return documentsVC;
-
         }
-
 
         @Override
         public int getCount() {
             // tab count
-
             return 5;
         }
 
