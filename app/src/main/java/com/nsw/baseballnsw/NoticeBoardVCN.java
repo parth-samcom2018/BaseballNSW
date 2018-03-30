@@ -34,7 +34,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nsw.baseballnsw.api.API;
-import com.nsw.baseballnsw.models.Article;
 import com.nsw.baseballnsw.models.Event;
 import com.nsw.baseballnsw.models.Group;
 import com.nsw.baseballnsw.models.GroupResponse;

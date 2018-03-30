@@ -21,7 +21,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
@@ -30,15 +29,14 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.nsw.baseballnsw.models.Group;
 import com.nsw.baseballnsw.models.Profile;
 import com.squareup.picasso.Picasso;
 
-import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -300,7 +298,10 @@ public class MainTabbing extends BaseVC {
                 Resources res = getResources();
                 int primaryColor1 = res.getColor(R.color.tab_background_selected);
                 tab.getIcon().setColorFilter(primaryColor1, PorterDuff.Mode.SRC_IN);
-
+                /*if (tab.isSelected()){
+                    tabLayout.getTabAt(0).setIcon(tabsIcons[0]);
+                    return;
+                }*/
 
             }
 

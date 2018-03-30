@@ -3,70 +3,44 @@ package com.nsw.baseballnsw;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.preference.PreferenceManager;
-import android.provider.MediaStore;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nsw.baseballnsw.models.Register;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.Vector;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import info.hoang8f.android.segmented.SegmentedGroup;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 import retrofit.mime.TypedByteArray;
-import retrofit.mime.TypedFile;
 
 public class Registration extends BaseVC{
 
-    static final int REQUEST_TAKE_PHOTO = 1;
-    static final int REQUEST_PICK_IMAGE = 2;
 
     public static final String MYPref = "Pref";
     public static final String ALLOW_KEY = "ALLOWED";
@@ -79,9 +53,7 @@ public class Registration extends BaseVC{
 
     boolean isSelected;
 
-    //VIEWS
-    private CircleImageView profileIV;
-
+    private Button registerButton;
     private EditText emailET;
     private EditText passwordET;
     private EditText passwordConfirmET;
@@ -105,6 +77,7 @@ public class Registration extends BaseVC{
 
         sPref = getSharedPreferences(MYPref, MODE_PRIVATE);
 
+        emailET = findViewById(R.id.email);
         emailET = findViewById(R.id.email);
         passwordET = findViewById(R.id.password);
         passwordConfirmET = findViewById(R.id.password_confirm);
@@ -173,7 +146,7 @@ public class Registration extends BaseVC{
             }
         });
 
-        Button registerButton = findViewById(R.id.register_button);
+        registerButton = findViewById(R.id.register_button);
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -251,11 +224,10 @@ public class Registration extends BaseVC{
         countryET.setError(null);
 
 
-
         // Store values at the time of the login attempt.
-        final String email = emailET.getText().toString();
-        final String password = passwordET.getText().toString();
-        final String passwordConfirm = passwordConfirmET.getText().toString();
+        String email = emailET.getText().toString();
+        String password = passwordET.getText().toString();
+        String passwordConfirm = passwordConfirmET.getText().toString();
         String firstName = firstNameET.getText().toString();
         String lastName = surnameET.getText().toString();
         String birthday = birthYearET.getText().toString();
@@ -414,10 +386,9 @@ public class Registration extends BaseVC{
                     String r = response.getBody().toString();
                     Log.d("HQ", "group invite response: " + r);
                     if (r.equals("true")) {
-                        //already invited to groups..
+
                         makeRegistrationRequest(registerModel);
                     } else {
-
                         String name = "Baseball NSW";
 
                         registerModel.GroupName = name;
@@ -532,7 +503,7 @@ public class Registration extends BaseVC{
                 (CAMERA_PREF, Context.MODE_PRIVATE);
         SharedPreferences.Editor prefsEditor = myPrefs.edit();
         prefsEditor.putBoolean(key, allowed);
-        prefsEditor.commit();
+        prefsEditor.apply();
     }
 
     private void termsAction()
@@ -549,138 +520,6 @@ public class Registration extends BaseVC{
         this.finish();
     }
 
-    private void choosePhotoAction()
-    {
-        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        // Start the Intent
-        startActivityForResult(galleryIntent, REQUEST_PICK_IMAGE);
-    }
-
-    private Uri capturedImageUri;
-    String mCurrentPhotoPath;
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-
-        // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
-
-        capturedImageUri = Uri.fromFile(image);
-        return image;
-    }
-
-
-    private String imgDecodableString;
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        Bitmap b = null;
-
-        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
-            // Bundle extras = data.getExtras();
-            //Bitmap imageBitmap = (Bitmap) extras.get("data");
-
-            Log.d("hq", "request take photo");
-            try {
-                b = MediaStore.Images.Media.getBitmap(this.getApplicationContext().getContentResolver(), capturedImageUri);
-                Log.d("hipcook", "I now have a photo bitmap:" + b.getWidth());
-                float scaleFactor = 640f / b.getWidth();
-                b = DM.createScaledBitmap(b, scaleFactor);
-                Log.d("hipcook", "I now have a scaled photo bitmap:" + b.getWidth());
-
-
-            } catch (IOException e) {
-                e.printStackTrace();
-                Log.d("hipcook", "bitmap exception");
-            }
-        } else if (requestCode == REQUEST_PICK_IMAGE &&
-                resultCode == Activity.RESULT_OK &&
-                null != data) {
-            // Get the Image from data
-
-            Uri selectedImage = data.getData();
-            String[] filePathColumn = {MediaStore.Images.Media.DATA};
-
-            // Get the cursor
-            Cursor cursor = this.getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-            cursor.moveToFirst();
-
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            imgDecodableString = cursor.getString(columnIndex);
-            cursor.close();
-
-            b = DM.decodeSampledBitmapFromFile(imgDecodableString, 640, 640);
-            Log.d("hipcook", "I now have a bitmap:" + b.getWidth());
-
-
-        } else {
-            Toast.makeText(this, "You haven't picked Image", Toast.LENGTH_LONG).show();
-        }
-
-        //if found a bitmap, upload or save in registration model
-        if (b != null) {
-
-            profileIV.setImageBitmap(b);
-            newProfileImage = b;
-        }
-    }
-
-    private Bitmap newProfileImage = null;
-    private void postImagefromImageView()
-    {
-        if(newProfileImage == null) return; //no need to upload
-        final Bitmap b = newProfileImage;
-
-        final ProgressDialog pd = DM.getPD(this, "Updating Profile Image...");
-        pd.show();
-
-        String fileName = "photo.png";
-        File f = new File(this.getCacheDir(), fileName);
-        try {
-            f.createNewFile();
-            //Convert bitmap to byte array
-
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            b.compress(Bitmap.CompressFormat.PNG, 0 /*ignored for PNG*/, bos);
-            byte[] bitmapdata = bos.toByteArray();
-
-            //write the bytes in file
-            FileOutputStream fos = new FileOutputStream(f);
-            fos.write(bitmapdata);
-            fos.flush();
-            fos.close();
-
-
-            TypedFile typedImage = new TypedFile("image/png", f);
-            DM.getApi().postProfileImage(DM.getAuthString(), typedImage, new Callback<Response>() {
-                @Override
-                public void success(Response response, Response response2) {
-                    Toast.makeText(Registration.this, "Profile Image Updated", Toast.LENGTH_LONG).show();
-                    pd.hide();
-                }
-
-                @Override
-                public void failure(RetrofitError error) {
-
-                    Toast.makeText(Registration.this, "Could not update profile image: " + error.getMessage(), Toast.LENGTH_LONG).show();
-                    pd.hide();
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.d("hq", "file exception");
-        }
-
-    }
 
 
     public boolean isOnline() {

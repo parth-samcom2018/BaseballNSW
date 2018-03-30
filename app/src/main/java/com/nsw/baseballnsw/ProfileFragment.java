@@ -1,6 +1,5 @@
 package com.nsw.baseballnsw;
 
-import android.*;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -8,7 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
@@ -17,10 +15,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -38,16 +33,13 @@ import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.nsw.baseballnsw.models.Profile;
-import com.nsw.baseballnsw.models.Register;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.Vector;
 
@@ -92,14 +84,14 @@ public class ProfileFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
 
-        inflater.inflate(R.menu.update_menu, menu);
+        inflater.inflate(com.nsw.baseballnsw.R.menu.update_menu, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         //theres only create
-        if(item.getItemId() == R.id.update)this.updateAction();
+        if(item.getItemId() == com.nsw.baseballnsw.R.id.update)this.updateAction();
         return super.onOptionsItemSelected(item);
     }
 
@@ -110,20 +102,20 @@ public class ProfileFragment extends Fragment {
 
         setHasOptionsMenu(true);
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_profile, container, false);
+        View v = inflater.inflate(com.nsw.baseballnsw.R.layout.fragment_profile, container, false);
 
         isOnline();
 
-        emailET = v.findViewById(R.id.email);
+        emailET = v.findViewById(com.nsw.baseballnsw.R.id.email);
         
-        firstNameET = v.findViewById(R.id.firstNameET);
-        surnameET = v.findViewById(R.id.surnameET);
+        firstNameET = v.findViewById(com.nsw.baseballnsw.R.id.firstNameET);
+        surnameET = v.findViewById(com.nsw.baseballnsw.R.id.surnameET);
 
-        genderSG = v.findViewById(R.id.genderSG);
-        buttonSG1 = v.findViewById(R.id.buttonsg1);
-        buttonSG2 = v.findViewById(R.id.buttonsg2);
+        genderSG = v.findViewById(com.nsw.baseballnsw.R.id.genderSG);
+        buttonSG1 = v.findViewById(com.nsw.baseballnsw.R.id.buttonsg1);
+        buttonSG2 = v.findViewById(com.nsw.baseballnsw.R.id.buttonsg2);
 
-        birthYearET = v.findViewById(R.id.birthYearET);
+        birthYearET = v.findViewById(com.nsw.baseballnsw.R.id.birthYearET);
 
         birthYearET.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,9 +127,9 @@ public class ProfileFragment extends Fragment {
                 bd.showSoftInput(birthYearET, InputMethodManager.SHOW_IMPLICIT);
             }
         });
-        countryET = v.findViewById(R.id.countryET);
+        countryET = v.findViewById(com.nsw.baseballnsw.R.id.countryET);
       
-        ll_country = v.findViewById(R.id.ll_country);
+        ll_country = v.findViewById(com.nsw.baseballnsw.R.id.ll_country);
 
         ll_country.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,7 +140,7 @@ public class ProfileFragment extends Fragment {
 
        
 
-        postCodeET = v.findViewById(R.id.postCodeET);
+        postCodeET = v.findViewById(com.nsw.baseballnsw.R.id.postCodeET);
 
         postCodeET.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,7 +151,7 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        usernameTV = v.findViewById(R.id.usernameTV);
+        usernameTV = v.findViewById(com.nsw.baseballnsw.R.id.usernameTV);
 
         logoutButton = v.findViewById(R.id.logoutButton);
         logoutButton.setOnClickListener(new View.OnClickListener() {

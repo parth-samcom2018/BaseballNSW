@@ -14,7 +14,6 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Html;
@@ -36,7 +35,6 @@ import android.widget.Toast;
 import com.nsw.baseballnsw.api.API;
 import com.nsw.baseballnsw.models.Article;
 import com.nsw.baseballnsw.models.Event;
-import com.nsw.baseballnsw.models.EventResponse;
 import com.nsw.baseballnsw.models.Group;
 import com.nsw.baseballnsw.models.GroupResponse;
 import com.nsw.baseballnsw.models.MediaAlbum;
@@ -152,21 +150,6 @@ public class NoticeboardFragment extends Fragment {
 
         Log.d("HQ","groupID : "+this.group.groupId);
 
-        /*DM.getApi().postInviteUser(DM.getAuthString(), "unknown", email, true, this.group.groupId, new Callback<Response>() {
-            @Override
-            public void success(Response response, Response response2) {
-
-                Toast.makeText(getActivity(), "User has been invited!", Toast.LENGTH_LONG).show();
-                pd.dismiss();
-
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Toast.makeText(getActivity(), "Failed to invite user", Toast.LENGTH_LONG).show();
-                pd.dismiss();
-            }
-        });*/
         DM.getApi().postInviteUsers(DM.getAuthString(), "unknown", email, true, this.group.groupId, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
@@ -247,7 +230,7 @@ public class NoticeboardFragment extends Fragment {
         }
         else
         {
-            setHasOptionsMenu(true);
+            setHasOptionsMenu(false);
         }
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_notice_board, container, false);
@@ -259,7 +242,6 @@ public class NoticeboardFragment extends Fragment {
         textPoster = view.findViewById(R.id.textposter);
         if(group == null) textPoster.setVisibility(View.GONE);
 
-        //textPoster = (TextPoster) view.findViewById(R.id.textposter);
         textPoster.setOnSendListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -269,14 +251,11 @@ public class NoticeboardFragment extends Fragment {
 
         listView = view.findViewById(R.id.list);
 
-        /*listView.setVerticalScrollBarEnabled(false);
-        listView.setHorizontalScrollBarEnabled(false);*/
-
         listAdapter = new ArrayAdapter(this.getActivity(), R.layout.main_cell_item) {
 
 
             @Override
-            public View getView(final int position, View convertView, final ViewGroup parent) {
+            public View getView(final int position, View convertView, ViewGroup parent) {
 
                 if (convertView == null) {
 
@@ -336,14 +315,11 @@ public class NoticeboardFragment extends Fragment {
                     convertView = LayoutInflater.from(NoticeboardFragment.this.getContext()).inflate(R.layout.main_cell_item, parent, false);
                     TextView secondTV = convertView.findViewById(R.id.secondTV);
                     Button btnFlag = convertView.findViewById(R.id.flagButton);
-                    //secondTV.setTextColor(Color.WHITE);
                     secondTV.setText(n.text);
                     Button flagButton = convertView.findViewById(R.id.flagButton);
                     flagButton.setOnClickListener(DM.getFlagOnClickListener(getActivity()));
 
                 }
-
-                //top title in listitem
 
                 TextView firstTV = convertView.findViewById(R.id.firstTV);
                 String topString = "Added " + n.getTimeAgo() + " in the  <font color='#e2441f'>" + n.familyName + "</font> group";
@@ -376,7 +352,6 @@ public class NoticeboardFragment extends Fragment {
                         e.printStackTrace();
                     }
                 }
-
 
 
                 //CANNOT USE setItemClickListener in Listview because of flag
@@ -417,52 +392,67 @@ public class NoticeboardFragment extends Fragment {
                                 }
                             });
 
+                            /*DM.getApi().getMediaAlbums(DM.getAuthString(), n.notificationItemId, new Callback<MediaAlbumResponse>() {
+                                @Override
+                                public void success(MediaAlbumResponse mediaAlbumResponse, Response response) {
+                                    pd.dismiss();
+                                    MediaDetailVC.mediaAlbum = mediaAlbumResponse.getData();
+                                    MediaDetailVC.selectedMediaId = n.mediaId; //can be null
+
+                                    Intent i = new Intent(NoticeboardFragment.this.getActivity(), MediaDetailVC.class);
+                                    startActivity(i);
+                                }
+
+                                @Override
+                                public void failure(RetrofitError error) {
+                                    pd.dismiss();
+                                    Toast.makeText(getActivity(), "Could not load media, try later", Toast.LENGTH_LONG).show();
+                                }
+                            });*/
                         }
 
 
-                        /*if (n.notificationTypeId == Notification.TYPE_ARTICLE) {
+                        if (n.notificationTypeId == Notification.TYPE_ARTICLE) {
 
                             final ProgressDialog pd = DM.getPD(getActivity(), "Loading Article...");
                             pd.show();
-                            DM.getApi().getArticle(DM.getAuthString(), n.notificationItemId, new Callback<Article>() {
+
+
+                            DM.getApi().getArticles(DM.getAuthString(), n.notificationItemId, new Callback<Article>() {
                                 @Override
                                 public void success(final Article article, Response response) {
-
-                                    DM.getApi().getAllGroups(DM.getAuthString(), new Callback<List<Group>>() {
+                                    DM.getApi().getAllGrouping(DM.getAuthString(), new Callback<GroupResponse>() {
                                         @Override
-                                        public void success(List<Group> groups, Response response) {
-
+                                        public void success(GroupResponse groups, Response response) {
                                             pd.dismiss();
-                                            for (Group g : groups) {
-                                                if (g.groupId == n.familyId) {
+                                            for(Group g : groups.getData()){
+                                                if (g.groupId == n.familyId){
                                                     ArticleVC.group = g;
                                                     break;
                                                 }
                                             }
-                                            ArticleVC.article = article;
+
+                                            ArticleVC.article =  article;
                                             Intent i = new Intent(NoticeboardFragment.this.getActivity(), ArticleVC.class);
                                             startActivity(i);
                                         }
 
                                         @Override
                                         public void failure(RetrofitError error) {
-
                                             pd.dismiss();
                                             Toast.makeText(getActivity(), "Could not load " + error.getMessage(), Toast.LENGTH_LONG).show();
                                         }
                                     });
-
                                 }
 
                                 @Override
                                 public void failure(RetrofitError error) {
-
                                     pd.dismiss();
                                     Toast.makeText(getActivity(), "Could not load article, try later " + error.getMessage(), Toast.LENGTH_LONG).show();
 
                                 }
                             });
-                        }*/
+                        }
 
 
                         if (n.notificationTypeId == Notification.TYPE_EVENT) {
@@ -474,7 +464,6 @@ public class NoticeboardFragment extends Fragment {
                                 public void success(Event event, Response response) {
 
                                     pd.dismiss();
-
                                     EventVC.event = event;
                                     Intent i = new Intent(NoticeboardFragment.this.getActivity(), EventVC.class);
                                     startActivity(i);
@@ -488,6 +477,21 @@ public class NoticeboardFragment extends Fragment {
                                 }
                             });
 
+                            /*DM.getApi().getEvents(DM.getAuthString(), n.notificationItemId, new Callback<EventResponse>() {
+                                @Override
+                                public void success(EventResponse eventResponse, Response response) {
+                                    pd.dismiss();
+                                    EventVC.event = eventResponse.getData();
+                                    Intent i = new Intent(NoticeboardFragment.this.getActivity(), EventVC.class);
+                                    startActivity(i);
+                                }
+
+                                @Override
+                                public void failure(RetrofitError error) {
+                                    pd.dismiss();
+                                    Toast.makeText(getActivity(), "Could not load event, try later", Toast.LENGTH_LONG).show();
+                                }
+                            });*/
 
                         }
                     }
@@ -550,6 +554,7 @@ public class NoticeboardFragment extends Fragment {
             public void success(NotificationResponse ns, Response response) {
                 notifications = ns.getData();
                 listAdapter.notifyDataSetChanged();
+                listAdapter.clear();
                 refreshLayout.setRefreshing(false);
                 pd.dismiss();
 
@@ -578,6 +583,21 @@ public class NoticeboardFragment extends Fragment {
         }
 
         //Load user groups secretly in background
+        /*DM.getApi().getAllGroups(auth, new Callback<List<Group>>() {
+            @Override
+            public void success(List<Group> gs, Response response) {
+                userGroups = gs;
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+
+            }
+        });*/
+
+
         DM.getApi().getAllGrouping(auth, new Callback<GroupResponse>() {
             @Override
             public void success(GroupResponse groupResponse, Response response) {

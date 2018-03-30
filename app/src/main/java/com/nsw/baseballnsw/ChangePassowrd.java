@@ -4,16 +4,12 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import com.nsw.baseballnsw.models.ChangePW;
-import com.nsw.baseballnsw.models.Profile;
-import com.nsw.baseballnsw.models.Register;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;

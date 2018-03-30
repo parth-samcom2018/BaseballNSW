@@ -17,7 +17,6 @@ import android.widget.Toast;
 
 import com.nsw.baseballnsw.models.Article;
 import com.nsw.baseballnsw.models.ArticleComment;
-import com.nsw.baseballnsw.models.ArticleResponse;
 import com.nsw.baseballnsw.models.Event;
 import com.nsw.baseballnsw.models.Group;
 import com.nsw.baseballnsw.views.TextPoster;

@@ -31,7 +31,6 @@ import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.nsw.baseballnsw.models.Event;
 import com.nsw.baseballnsw.models.Media;
 import com.nsw.baseballnsw.models.MediaAlbum;
-import com.nsw.baseballnsw.models.MediaAlbumResponse;
 import com.nsw.baseballnsw.models.MediaComment;
 import com.nsw.baseballnsw.views.TextPoster;
 import com.squareup.picasso.Picasso;
@@ -45,7 +44,7 @@ public class MediaDetailVC extends BaseVC {
     public static MediaAlbum mediaAlbum;
     public static int selectedMediaId;
 
-    private  Media selectedMedia;
+    private Media selectedMedia;
 
     //VIEWS
     private ListView listView;

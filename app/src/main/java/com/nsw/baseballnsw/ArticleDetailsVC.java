@@ -1,33 +1,17 @@
 package com.nsw.baseballnsw;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.text.Html;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.WebView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nsw.baseballnsw.models.Article;
-import com.nsw.baseballnsw.models.ArticleComment;
-import com.nsw.baseballnsw.models.Event;
-import com.nsw.baseballnsw.models.Group;
-import com.nsw.baseballnsw.views.TextPoster;
-import com.squareup.picasso.Picasso;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 public class ArticleDetailsVC extends Fragment {
 

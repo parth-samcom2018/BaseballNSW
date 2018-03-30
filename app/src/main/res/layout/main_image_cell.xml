@@ -22,7 +22,7 @@
                 android:layout_width="@dimen/user_image_width"
                 android:layout_height="@dimen/user_image_width"
                 android:id="@+id/imageView"
-                android:src="@drawable/splashlogo"
+                android:src="@drawable/logo_log_in"
                 app:civ_border_width="0dp"
                 android:layout_margin="5dp"
                 app:civ_border_color="#FF000000"
@@ -114,8 +114,7 @@
                         android:padding="10dp"
                         android:text="Sports Club HQ"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                        android:textColor="@color/white"
-                        android:layout_alignParentLeft="true" />
+                        android:textColor="@color/white" />
 
 
                 </RelativeLayout>
@@ -143,11 +142,9 @@
                 android:layout_height="0dp"
                 android:text="Third row of text"
                 style="@style/textview_small"
-                android:padding="5dp"
                 android:singleLine="true"
                 android:gravity="bottom|left"
-                android:layout_gravity="bottom|left"
-                android:layout_marginStart="15dp" />
+                android:layout_gravity="bottom|left"/>
 
         </LinearLayout>
 

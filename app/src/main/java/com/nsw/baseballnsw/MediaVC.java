@@ -1,6 +1,5 @@
 package com.nsw.baseballnsw;
 
-import android.*;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -30,7 +29,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -96,15 +94,15 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
 
         // Inflate the layout for this fragment
         inflater = (LayoutInflater) this.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = inflater.inflate(R.layout.fragment_media_vc, container, false);
+        View v = inflater.inflate(com.nsw.baseballnsw.R.layout.fragment_media_vc, container, false);
 
-        emptyIV = v.findViewById(R.id.empty);
+        emptyIV = v.findViewById(com.nsw.baseballnsw.R.id.empty);
 
-        listView = v.findViewById(R.id.list);
+        listView = v.findViewById(com.nsw.baseballnsw.R.id.list);
         listView.setDivider(null);
 
 
-        listAdapter = new ArrayAdapter(this.getActivity(), R.layout.media_cell) {
+        listAdapter = new ArrayAdapter(this.getActivity(), com.nsw.baseballnsw.R.layout.media_cell) {
 
 
             @Override
@@ -112,19 +110,19 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
 
                 if(convertView == null)
                 {
-                    convertView = LayoutInflater.from(MediaVC.this.getActivity()).inflate(R.layout.media_cell, parent, false);
+                    convertView = LayoutInflater.from(MediaVC.this.getActivity()).inflate(com.nsw.baseballnsw.R.layout.media_cell, parent, false);
 
                 }
 
                 final MediaAlbum album = albums.get(position);
 
-                final TextView tv_media = convertView.findViewById(R.id.tv_media);
+                final TextView tv_media = convertView.findViewById(com.nsw.baseballnsw.R.id.tv_media);
                 tv_media.setVisibility(View.VISIBLE);
 
-                final ProgressBar progressBar = convertView.findViewById(R.id.progressBar_media);
+                final ProgressBar progressBar = convertView.findViewById(com.nsw.baseballnsw.R.id.progressBar_media);
                 progressBar.setVisibility(View.VISIBLE);
 
-                final ImageView showiv = convertView.findViewById(R.id.iv);
+                final ImageView showiv = convertView.findViewById(com.nsw.baseballnsw.R.id.iv);
 
                 if (showiv!=null || album.mediaModels!=null){
                     Picasso.Builder builder = new Picasso.Builder(MediaVC.this.getActivity());
@@ -138,13 +136,13 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
                     Picasso p = builder.build();
 
                     if (showiv==null || album.mediaModels==null){
-                        showiv.setImageResource(R.drawable.icon);
+                        showiv.setImageResource(com.nsw.baseballnsw.R.drawable.icon);
                         showiv.setClickable(false);
 
                     }
                     else {
                         p.load(album.coverImage)//.networkPolicy(NetworkPolicy.NO_CACHE)
-                                .placeholder(R.drawable.icon).into(showiv);
+                                .placeholder(com.nsw.baseballnsw.R.drawable.icon).into(showiv);
 
                         p.load(album.coverImage).transform(new RoundedCornersTransform()).into(showiv, new com.squareup.picasso.Callback() {
                             @Override
@@ -169,7 +167,7 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
                                 tv_media.setVisibility(View.GONE);
                                 progressBar.setVisibility(View.GONE);
 
-                                showiv.setImageResource(R.drawable.splashlogo);
+                                showiv.setImageResource(com.nsw.baseballnsw.R.drawable.splashlogo);
                                 showiv.setScaleType(ImageView.ScaleType.FIT_CENTER);
                             }
                         });
@@ -192,11 +190,11 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
                     }
                 }
 
-                TextView firstTV = convertView.findViewById(R.id.firstTV);
+                TextView firstTV = convertView.findViewById(com.nsw.baseballnsw.R.id.firstTV);
                 firstTV.setText(album.name+" \n" +album.mediaModels.size()+" photos");
-                firstTV.setTextColor(getResources().getColor(R.color.white));
+                firstTV.setTextColor(getResources().getColor(com.nsw.baseballnsw.R.color.white));
 
-                Button flagButton = convertView.findViewById(R.id.flagButton);
+                Button flagButton = convertView.findViewById(com.nsw.baseballnsw.R.id.flagButton);
                 flagButton.setOnClickListener(DM.getFlagOnClickListener(MediaVC.this.getActivity()));
 
 
@@ -210,7 +208,7 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
         };
         listView.setAdapter(listAdapter);
 
-        refreshLayout = v.findViewById(R.id.swiperefresh);
+        refreshLayout = v.findViewById(com.nsw.baseballnsw.R.id.swiperefresh);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -220,7 +218,7 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
 
 
 
-        View cameraButton = v.findViewById(R.id.cameraIV);
+        View cameraButton = v.findViewById(com.nsw.baseballnsw.R.id.cameraIV);
         cameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -233,7 +231,7 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
             }
         });
 
-        View uploadButton = v.findViewById(R.id.uploadIV);
+        View uploadButton = v.findViewById(com.nsw.baseballnsw.R.id.uploadIV);
         uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -282,7 +280,7 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
 
-        inflater.inflate(R.menu.create_album_menu, menu);
+        inflater.inflate(com.nsw.baseballnsw.R.menu.create_album_menu, menu);
     }
 
 
@@ -466,12 +464,12 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
         AlertDialog.Builder d = new AlertDialog.Builder(this.getActivity());
         d.setTitle("Upload Image To Folder?");
 
-        View v = this.getActivity().getLayoutInflater().inflate(R.layout.uploadphoto_dialog,null);
+        View v = this.getActivity().getLayoutInflater().inflate(com.nsw.baseballnsw.R.layout.uploadphoto_dialog,null);
 
-        ImageView iv = v.findViewById(R.id.imageView);
+        ImageView iv = v.findViewById(com.nsw.baseballnsw.R.id.imageView);
         iv.setImageBitmap(b);
 
-        final NumberPicker picker = v.findViewById(R.id.numberPicker);
+        final NumberPicker picker = v.findViewById(com.nsw.baseballnsw.R.id.numberPicker);
         picker.setMinValue(0);
         picker.setMaxValue(albums.size() - 1);
         picker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS); //stops editing...

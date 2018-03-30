@@ -3,20 +3,12 @@ package com.nsw.baseballnsw;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Html;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -24,7 +16,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nsw.baseballnsw.models.Event;
 import com.nsw.baseballnsw.models.EventResponse;
@@ -38,7 +29,7 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class EventsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
-
+    Event event;
     Group group;
     private ListView listView;
     private ArrayAdapter<Event> listAdapter;
@@ -190,30 +181,6 @@ public class EventsFragment extends Fragment implements SwipeRefreshLayout.OnRef
                 pd.dismiss();
             }
         });
-        /*DM.getApi().getAllEventings(auth,new Callback<EventResponse>() {
-            @Override
-            public void success(EventResponse events, Response response) {
-
-
-                EventsFragment.this.events = events.getData();
-                Log.d("hq", "events: "+(events.getData()).size()+"");
-                listAdapter.notifyDataSetChanged();
-                refreshLayout.setRefreshing(false);
-                pd.dismiss();
-
-                if((events.getData()).size()==0) emptyIV.setVisibility(View.VISIBLE);
-                else emptyIV.setVisibility(View.GONE);
-
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-
-                Log.d("hq", "failed: "+error.getMessage());
-                refreshLayout.setRefreshing(false);
-                pd.dismiss();
-            }
-        });*/
 
     }
 

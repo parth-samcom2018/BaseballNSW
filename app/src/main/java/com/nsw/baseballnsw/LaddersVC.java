@@ -1,35 +1,23 @@
 package com.nsw.baseballnsw;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.nsw.baseballnsw.models.Event;
-import com.nsw.baseballnsw.models.Group;
-import com.nsw.baseballnsw.models.GroupResponse;
 import com.nsw.baseballnsw.models.Ladders;
 import com.nsw.baseballnsw.models.LaddersResponse;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 import java.util.Vector;
@@ -46,6 +34,7 @@ public class LaddersVC extends Fragment implements SwipeRefreshLayout.OnRefreshL
     private ArrayAdapter<Ladders> listadapter;
     private SwipeRefreshLayout refreshLayout;
     private TextView emptyIV;
+    private LinearLayout ll_first,ll_second;
 
 
     private List<Ladders> ladders = new Vector<Ladders>();
@@ -66,7 +55,12 @@ public class LaddersVC extends Fragment implements SwipeRefreshLayout.OnRefreshL
         if(this.isVisible())pd.show();
 
         listView = v.findViewById(R.id.list);
-        listView.setDividerHeight(0);
+        ll_first = v.findViewById(R.id.ll_first);
+        ll_second = v.findViewById(R.id.ll_second);
+
+
+        ll_first.setVisibility(View.VISIBLE);
+        ll_second.setVisibility(View.VISIBLE);
 
         listadapter= new ArrayAdapter<Ladders>(this.getActivity(), R.layout.ladder_cell){
 
@@ -159,14 +153,22 @@ public class LaddersVC extends Fragment implements SwipeRefreshLayout.OnRefreshL
             @Override
             public void success(LaddersResponse gs, Response response) {
 
+                if(gs.getData().size()==0)
+                {
+                    emptyIV.setVisibility(View.VISIBLE);
+                    ll_first.setVisibility(View.GONE);
+                    ll_second.setVisibility(View.GONE);
+                }
+                else{
+                    emptyIV.setVisibility(View.GONE);
+                    ll_first.setVisibility(View.VISIBLE);
+                    ll_second.setVisibility(View.VISIBLE);
 
-                ladders = gs.getData();
-                listadapter.notifyDataSetChanged();
-                refreshLayout.setRefreshing(false);
-                pd.dismiss();
-
-                if(gs.getData().size()==0) emptyIV.setVisibility(View.VISIBLE);
-                else emptyIV.setVisibility(View.GONE);
+                    ladders = gs.getData();
+                    listadapter.notifyDataSetChanged();
+                    refreshLayout.setRefreshing(false);
+                    pd.dismiss();
+                }
 
             }
 

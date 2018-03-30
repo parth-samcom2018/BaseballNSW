@@ -4,7 +4,6 @@ package com.nsw.baseballnsw.api;
 import com.nsw.baseballnsw.models.Article;
 import com.nsw.baseballnsw.models.ArticleComment;
 import com.nsw.baseballnsw.models.ArticleResponse;
-import com.nsw.baseballnsw.models.ChangePW;
 import com.nsw.baseballnsw.models.Event;
 import com.nsw.baseballnsw.models.EventResponse;
 import com.nsw.baseballnsw.models.Folder;
@@ -47,6 +46,7 @@ public interface API {
                       @Field("password") String password,
                       Callback<Token> callback);
 
+    //new api v2
     @POST("/apiv2/account/register")
     public void register(@Header("Authorization") String auth,
                          @Body Register registerModel,
@@ -94,8 +94,7 @@ public interface API {
     public void getAllEvents(@Header("Authorization") String auth, Callback<EventResponse> response);
 
 
-    @GET("/apiv2/events/all")      //here is the other url part.best way is to start using /
-    public void getAllEventings(@Header("Authorization") String auth, Callback<EventResponse> response);
+
 
     @POST("/apiv2/events/save")
     public void postEvent(@Header("Authorization") String auth,
@@ -125,8 +124,12 @@ public interface API {
     @GET("/apiv2/ladders/14")
     public void getLadders(@Header("Authorization") String auth, Callback<LaddersResponse> response);
 
+    //new api v2
+    @GET("/apiv2/events/all")      //here is the other url part.best way is to start using /
+    public void getAllEventings(@Header("Authorization") String auth, Callback<EventResponse> response);
 
-    @GET("/apiv2/events/{eventID}")
+    //older api
+    @GET("/api/events/{eventID}")
     public void getEvent(@Header("Authorization") String auth,@Path("eventID") int eventID, Callback<Event> response);
 
     @FormUrlEncoded
@@ -135,6 +138,7 @@ public interface API {
                                   @Field("EventId") int eventID,
                                   @Field("Comment") String comment,
                                   Callback<Response> callback);
+
 
     @FormUrlEncoded
     @POST("/apiv2/media/album")

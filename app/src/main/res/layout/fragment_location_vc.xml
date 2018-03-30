@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LocationVC"
+    tools:context="com.nsw.baseballnsw.LocationVC"
     android:padding="@dimen/med_pad"
     android:background="@drawable/textshape">
 

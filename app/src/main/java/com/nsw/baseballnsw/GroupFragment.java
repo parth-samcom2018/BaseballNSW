@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -17,7 +16,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,7 +23,6 @@ import com.nsw.baseballnsw.models.Event;
 import com.nsw.baseballnsw.models.Group;
 import com.nsw.baseballnsw.models.GroupResponse;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.util.List;
 import java.util.Vector;
@@ -36,15 +33,14 @@ import retrofit.client.Response;
 
 public class GroupFragment extends Fragment {
 
-    public static Group group;
+    Group group;
     private GridView gridView;
     private ArrayAdapter<Event> gridAdapter;
     private SwipeRefreshLayout refreshLayout;
     private ImageView emptyIV;
 
     private List<Group> groups = new Vector<Group>();
-    //int REQUEST_PHONE = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_PHONE_STATE);
-    private Target target;
+
 
     public GroupFragment() {
         // Required empty public constructor
@@ -72,7 +68,7 @@ public class GroupFragment extends Fragment {
         gridView = v.findViewById(R.id.list);
 
 
-        gridAdapter= new ArrayAdapter<Event>(this.getActivity(), R.layout.group_cell){
+        gridAdapter= new ArrayAdapter<Event>(GroupFragment.this.getActivity(), R.layout.group_cell){
 
 
             @Override
@@ -128,16 +124,20 @@ public class GroupFragment extends Fragment {
         };
         gridView.setAdapter(gridAdapter);
 
-
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Group g = groups.get(position);
-                GroupVC.group = g;
-                Intent i = new Intent(GroupFragment.this.getActivity(), GroupVC.class);
-                startActivity(i);
-                //   getActivity().overridePendingTransition(android.R.anim.slide_out_right,android.R.anim.slide_in_left);
+                try {
+                    Group g = groups.get(position);
+                    GroupVC.group = g;
+                    Intent i = new Intent(GroupFragment.this.getActivity(), GroupVC.class);
+                    startActivity(i);
+                }
+                catch (NullPointerException e){
+                    e.printStackTrace();
+                }
+
             }
         });
 

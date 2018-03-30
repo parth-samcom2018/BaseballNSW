@@ -14,7 +14,10 @@
         android:layout_height="wrap_content"
         android:id="@+id/empty"
         android:src="@drawable/noticeboard_empty_baseball"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:scaleType="fitCenter"
+        android:padding="10dp"
+        android:layout_margin="10dp"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -28,10 +31,12 @@
             tools:context=".NoticeBoardVC"
             android:id="@+id/swiperefresh">
 
+
             <ListView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/list"/>
+
 
         </android.support.v4.widget.SwipeRefreshLayout>
     </ScrollView>
