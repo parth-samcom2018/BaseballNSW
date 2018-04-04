@@ -52,10 +52,10 @@ import retrofit.mime.TypedByteArray;
 
 public class Registration extends BaseVC{
 
-    private ListView listView;
-    private ArrayAdapter<ClubNames> listAdapter;
+
     //MODELS
     private List<ClubNames> clubNames = new Vector<ClubNames>(); //empty
+    ArrayAdapter<ClubNames> listAdapter;
 
     public static final String MYPref = "Pref";
     public static final String ALLOW_KEY = "ALLOWED";
@@ -75,6 +75,7 @@ public class Registration extends BaseVC{
     private EditText passwordConfirmET;
     private EditText firstNameET;
     private EditText surnameET;
+    private EditText clubET;
     private SegmentedGroup genderSG;
     private RadioButton buttonSG1;
     private RadioButton buttonSG2;
@@ -99,6 +100,7 @@ public class Registration extends BaseVC{
         passwordConfirmET = findViewById(R.id.password_confirm);
         firstNameET = findViewById(R.id.firstNameET);
         surnameET = findViewById(R.id.surnameET);
+
 
         genderSG = findViewById(R.id.genderSG);
         buttonSG1 = findViewById(R.id.buttonsg1);
@@ -166,7 +168,8 @@ public class Registration extends BaseVC{
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showAlert();
+                //showAlert();
+                registerAction();
             }
         });
 
@@ -192,6 +195,81 @@ public class Registration extends BaseVC{
                 switchOn = isChecked;
             }
         });
+    }
+
+    private void registerAction() {
+        final ProgressDialog pd = DM.getPD(Registration.this,"Loading Clubs...");
+        pd.show();
+
+        final Dialog dialog = new Dialog(Registration.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.custom_dialogbox_register);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        Button btn_dialog = dialog.findViewById(R.id.btn_dialog);
+        ListView listView = dialog.findViewById(R.id.list);
+
+        listAdapter = new ArrayAdapter<ClubNames>(Registration.this, R.layout.club_one) {
+
+            @Override
+            public View getView(final int position, View convertView, ViewGroup parent) {
+
+                if (convertView == null) {
+                    convertView = LayoutInflater.from(Registration.this).inflate(R.layout.club_one, parent, false);
+                }
+
+                final ClubNames e = clubNames.get(position);
+
+                cbItem = convertView.findViewById(R.id.cb1);
+                cbItem.setText(e.groupName);
+                cbItem.setChecked(false);
+
+                cbItem.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean ischeck) {
+                        Toast.makeText(Registration.this, ""+ position, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                return convertView;
+            }
+
+            @Override
+            public int getCount() {
+                return clubNames.size();
+            }
+        };
+        listView.setAdapter(listAdapter);
+
+        btn_dialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (cbItem.isChecked()){
+                    Toast.makeText(Registration.this, "Click", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(Registration.this, "No Selection", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+        DM.getApi().getClubNames(new Callback<ClubResponse>() {
+            @Override
+            public void success(ClubResponse clubResponse, Response response) {
+                clubNames = clubResponse.getData();
+                listAdapter.notifyDataSetChanged();
+                pd.dismiss();
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                pd.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
 
@@ -404,7 +482,8 @@ public class Registration extends BaseVC{
 
                         makeRegistrationRequest(registerModel);
                     } else {
-
+                        final ProgressDialog pd = DM.getPD(Registration.this,"Loading Clubs...");
+                        pd.show();
 
                         final Dialog dialog = new Dialog(Registration.this);
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -412,10 +491,10 @@ public class Registration extends BaseVC{
                         dialog.setContentView(R.layout.custom_dialogbox_register);
                         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
-                        listView = dialog.findViewById(R.id.list);
+                        Button btn_dialog = dialog.findViewById(R.id.btn_dialog);
+                        ListView listView = dialog.findViewById(R.id.list);
 
                         listAdapter = new ArrayAdapter<ClubNames>(Registration.this, R.layout.club_one) {
-
 
                             @Override
                             public View getView(final int position, View convertView, ViewGroup parent) {
@@ -424,7 +503,7 @@ public class Registration extends BaseVC{
                                     convertView = LayoutInflater.from(Registration.this).inflate(R.layout.club_one, parent, false);
                                 }
 
-                                ClubNames e = clubNames.get(position);
+                                final ClubNames e = clubNames.get(position);
 
                                 cbItem = convertView.findViewById(R.id.cb1);
                                 cbItem.setText(e.groupName);
@@ -433,14 +512,15 @@ public class Registration extends BaseVC{
                                 cbItem.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                                     @Override
                                     public void onCheckedChanged(CompoundButton compoundButton, boolean ischeck) {
+                                        String name = cbItem.getText().toString();
 
-                                        if (cbItem.isChecked()){
-                                            cbItem.setChecked(true);
-                                            Toast.makeText(Registration.this, "" + position,
-                                                    Toast.LENGTH_SHORT).show();
-                                        }
+                                        cbItem.setChecked(true);
+                                        Toast.makeText(Registration.this, "" + position, Toast.LENGTH_SHORT).show();
+                                        registerModel.groupName = name;
+                                        registerModel.groupId = position;
                                     }
                                 });
+
                                 return convertView;
                             }
 
@@ -451,8 +531,18 @@ public class Registration extends BaseVC{
                         };
                         listView.setAdapter(listAdapter);
 
-                        final ProgressDialog pd = DM.getPD(Registration.this,"Loading Clubs...");
-                        pd.show();
+                        btn_dialog.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                cbItem.setChecked(true);
+                                String name = cbItem.getText().toString();
+                                registerModel.groupName = name;
+                                registerModel.groupId = cbItem.getId();
+                                makeRegistrationRequest(registerModel);
+
+                            }
+                        });
+
 
                         DM.getApi().getClubNames(new Callback<ClubResponse>() {
                             @Override
@@ -469,6 +559,7 @@ public class Registration extends BaseVC{
                         });
 
                         dialog.show();
+
                         /*String name = "Baseball NSW";
 
                         registerModel.GroupName = name;
