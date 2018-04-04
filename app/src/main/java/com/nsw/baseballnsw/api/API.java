@@ -4,6 +4,7 @@ package com.nsw.baseballnsw.api;
 import com.nsw.baseballnsw.models.Article;
 import com.nsw.baseballnsw.models.ArticleComment;
 import com.nsw.baseballnsw.models.ArticleResponse;
+import com.nsw.baseballnsw.models.ClubResponse;
 import com.nsw.baseballnsw.models.Event;
 import com.nsw.baseballnsw.models.EventResponse;
 import com.nsw.baseballnsw.models.Folder;
@@ -93,7 +94,8 @@ public interface API {
     @GET("/apiv2/events/all")      //here is the other url part.best way is to start using /
     public void getAllEvents(@Header("Authorization") String auth, Callback<EventResponse> response);
 
-
+    @GET("/apiv2/groupmembers/all")
+    void getClubNames(Callback<ClubResponse> callback);
 
 
     @POST("/apiv2/events/save")

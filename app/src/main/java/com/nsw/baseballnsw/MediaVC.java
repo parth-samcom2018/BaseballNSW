@@ -284,7 +284,6 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
 
     private void cameraAction() {
 
-
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(this.getActivity().getPackageManager()) != null) {
@@ -299,12 +298,10 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
             if (photoFile != null) {
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
                         Uri.fromFile(photoFile));
-                startActivityForResult(takePictureIntent,REQUEST_TAKE_PHOTO);
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
             }
         }
-
         saveToPreferences(MediaVC.this.getActivity(), ALLOW_KEY, true);
-
     }
 
     @Override
@@ -384,10 +381,9 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
 
         switch (requestCode) {
             case REQUEST_TAKE_PHOTO:
-                if (requestCode == REQUEST_TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
+                if (resultCode == Activity.RESULT_OK &&
+                        null != data) {
                     // Get the Image from data
-
-
                     try {
                         bitmapImage= MediaStore.Images.Media.getBitmap(getActivity().getApplicationContext().getContentResolver(), capturedImageUri);
                         Log.d("hipcook", "I now have a photo bitmap:" + bitmapImage.getWidth());
@@ -418,17 +414,23 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
 
                     // Get the cursor
                     Cursor cursor = getActivity().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-                    cursor.moveToFirst();
+                    //cursor.moveToFirst();
+                    cursor.moveToNext();
 
                     int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                     imgDecodableString = cursor.getString(columnIndex);
                     cursor.close();
 
-                    bitmapImage = DM.decodeSampledBitmapFromFile(imgDecodableString, 640,640);
-                    Log.d("hipcook", "I now have a bitmap:" + bitmapImage.getWidth());
+                    try {
+                        bitmapImage = DM.decodeSampledBitmapFromFile(imgDecodableString, 640,640);
+                        Log.d("hipcook", "I now have a bitmap:" + bitmapImage.getWidth());
+                    }
+                    catch (NullPointerException e){
+                        e.printStackTrace();
+                    }
 
                 } else {
-                    Toast.makeText(this.getActivity(), "You haven't picked Image", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MediaVC.this.getActivity(), "You haven't Picked Image", Toast.LENGTH_LONG).show();
                 }
                 break;
 

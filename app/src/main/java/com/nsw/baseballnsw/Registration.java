@@ -3,33 +3,44 @@ package com.nsw.baseballnsw;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nsw.baseballnsw.models.ClubNames;
+import com.nsw.baseballnsw.models.ClubResponse;
 import com.nsw.baseballnsw.models.Register;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Vector;
 
@@ -41,6 +52,10 @@ import retrofit.mime.TypedByteArray;
 
 public class Registration extends BaseVC{
 
+    private ListView listView;
+    private ArrayAdapter<ClubNames> listAdapter;
+    //MODELS
+    private List<ClubNames> clubNames = new Vector<ClubNames>(); //empty
 
     public static final String MYPref = "Pref";
     public static final String ALLOW_KEY = "ALLOWED";
@@ -52,6 +67,7 @@ public class Registration extends BaseVC{
     private static final int MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE = 100;
 
     boolean isSelected;
+    private CheckBox cbItem;
 
     private Button registerButton;
     private EditText emailET;
@@ -223,7 +239,6 @@ public class Registration extends BaseVC{
         birthYearET.setError(null);
         countryET.setError(null);
 
-
         // Store values at the time of the login attempt.
         String email = emailET.getText().toString();
         String password = passwordET.getText().toString();
@@ -389,10 +404,75 @@ public class Registration extends BaseVC{
 
                         makeRegistrationRequest(registerModel);
                     } else {
-                        String name = "Baseball NSW";
+
+
+                        final Dialog dialog = new Dialog(Registration.this);
+                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        dialog.setCancelable(true);
+                        dialog.setContentView(R.layout.custom_dialogbox_register);
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+                        listView = dialog.findViewById(R.id.list);
+
+                        listAdapter = new ArrayAdapter<ClubNames>(Registration.this, R.layout.club_one) {
+
+
+                            @Override
+                            public View getView(final int position, View convertView, ViewGroup parent) {
+
+                                if (convertView == null) {
+                                    convertView = LayoutInflater.from(Registration.this).inflate(R.layout.club_one, parent, false);
+                                }
+
+                                ClubNames e = clubNames.get(position);
+
+                                cbItem = convertView.findViewById(R.id.cb1);
+                                cbItem.setText(e.groupName);
+                                cbItem.setChecked(false);
+
+                                cbItem.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                                    @Override
+                                    public void onCheckedChanged(CompoundButton compoundButton, boolean ischeck) {
+
+                                        if (cbItem.isChecked()){
+                                            cbItem.setChecked(true);
+                                            Toast.makeText(Registration.this, "" + position,
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                                return convertView;
+                            }
+
+                            @Override
+                            public int getCount() {
+                                return clubNames.size();
+                            }
+                        };
+                        listView.setAdapter(listAdapter);
+
+                        final ProgressDialog pd = DM.getPD(Registration.this,"Loading Clubs...");
+                        pd.show();
+
+                        DM.getApi().getClubNames(new Callback<ClubResponse>() {
+                            @Override
+                            public void success(ClubResponse clubResponse, Response response) {
+                                clubNames = clubResponse.getData();
+                                listAdapter.notifyDataSetChanged();
+                                pd.dismiss();
+                            }
+
+                            @Override
+                            public void failure(RetrofitError error) {
+                                pd.dismiss();
+                            }
+                        });
+
+                        dialog.show();
+                        /*String name = "Baseball NSW";
 
                         registerModel.GroupName = name;
-                        makeRegistrationRequest(registerModel);
+                        makeRegistrationRequest(registerModel);*/
 
                         SharedPreferences preferences = getSharedPreferences(MYPref, Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = preferences.edit();
@@ -430,7 +510,6 @@ public class Registration extends BaseVC{
                 Login.justRegisteredPassword = registerModel.password;
 
                 finish();
-
             }
 
             @Override
