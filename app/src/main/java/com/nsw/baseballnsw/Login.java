@@ -13,23 +13,47 @@ import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nsw.baseballnsw.models.ClubNames;
+import com.nsw.baseballnsw.models.ClubResponse;
 import com.nsw.baseballnsw.models.Member;
 import com.nsw.baseballnsw.models.Token;
+
+import java.util.List;
+import java.util.Vector;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class Login extends BaseVC {
+
+    //temp
+    private CheckBox checkBox;
+    private ListView listView;
+    private Button btn_dialog;
+    private ProgressBar pr;
+    Dialog dialog;
+
+    //MODELS
+    private List<ClubNames> clubNames = new Vector<ClubNames>(); //empty
+    private ArrayAdapter<ClubNames> arrayAdapter;
 
     private static final String TAG = "RegisterToken";
     private TextView DeviceID;
@@ -61,7 +85,8 @@ public class Login extends BaseVC {
         tv_forgot1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                forgot();
+                //forgot();
+                tempForgot();
             }
         });
 
@@ -106,6 +131,115 @@ public class Login extends BaseVC {
         DeviceID.setText("My ID is: " + unique_id);
         Log.i(TAG, "Registration Device: " + unique_id);
 
+    }
+
+    private void tempForgot() {
+
+        dialog = new Dialog(Login.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.custom_dialogbox_register);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        pr = dialog.findViewById(R.id.progressbar);
+        btn_dialog = dialog.findViewById(R.id.btn_dialog);
+        listView = dialog.findViewById(R.id.list);
+
+        DM.getApi().getClubNames(new Callback<ClubResponse>() {
+            @Override
+            public void success(ClubResponse clubResponse, Response response) {
+                clubNames = clubResponse.getData();
+                arrayAdapter.notifyDataSetChanged();
+                pr.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                pr.setVisibility(View.GONE);
+            }
+        });
+
+        dialog = new Dialog(Login.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.custom_dialogbox_register);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        pr = dialog.findViewById(R.id.progressbar);
+        btn_dialog = dialog.findViewById(R.id.btn_dialog);
+        listView = dialog.findViewById(R.id.list);
+
+        arrayAdapter = new ArrayAdapter<ClubNames>(Login.this, R.layout.club_one) {
+
+            @Override
+            public View getView(final int position, View convertView, ViewGroup parent) {
+
+                if (convertView == null) {
+                    convertView = LayoutInflater.from(Login.this).inflate(R.layout.club_one, parent, false);
+                }
+
+                final ClubNames e = clubNames.get(position);
+
+                checkBox = convertView.findViewById(R.id.cb1);
+                checkBox.setText(e.groupName);
+                checkBox.setChecked(false);
+
+                return convertView;
+            }
+
+            @Override
+            public int getCount() {
+                return clubNames.size();
+            }
+        };
+        listView.setAdapter(arrayAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Toast.makeText(Login.this, "" + i, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        btn_dialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                /*checkBox.setChecked(true);
+                String name = checkBox.getText().toString();
+                Toast.makeText(Login.this, "" +name.toString(), Toast.LENGTH_SHORT).show();*/
+
+                SparseBooleanArray sp = listView.getCheckedItemPositions();
+
+                StringBuilder sb= new StringBuilder();
+
+                for(int i=0;i<sp.size();i++){
+                    if(sp.valueAt(i)==true){
+                        ClubNames user= (ClubNames) listView.getItemAtPosition(i);
+                        // Or:
+                        // String s = ((CheckedTextView) listView.getChildAt(i)).getText().toString();
+                        String s= user.getUserName();
+                        sb = sb.append(" "+s);
+                    }
+                }
+                Toast.makeText(Login.this, "Selected items are: "+sb.toString(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+        DM.getApi().getClubNames(new Callback<ClubResponse>() {
+            @Override
+            public void success(ClubResponse clubResponse, Response response) {
+                clubNames = clubResponse.getData();
+                arrayAdapter.notifyDataSetChanged();
+                pr.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                pr.setVisibility(View.GONE);
+            }
+        });
+
+
+
+        dialog.show();
     }
 
     private void forgot() {
