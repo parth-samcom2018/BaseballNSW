@@ -16,6 +16,7 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.nsw.baseballnsw.models.ClubNames;
 import com.nsw.baseballnsw.models.Event;
 import com.nsw.baseballnsw.models.Group;
 

@@ -15,7 +15,6 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,8 +40,10 @@ import android.widget.Toast;
 
 import com.nsw.baseballnsw.models.ClubNames;
 import com.nsw.baseballnsw.models.ClubResponse;
+import com.nsw.baseballnsw.models.Event;
 import com.nsw.baseballnsw.models.Register;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Vector;
@@ -58,6 +59,7 @@ public class Registration extends BaseVC{
     //MODELS
     private List<ClubNames> clubNames = new Vector<ClubNames>(); //empty
     private ArrayAdapter<ClubNames> arrayAdapter;
+    ArrayList<String> selectedItems;
 
     public static final String MYPref = "Pref";
     public static final String ALLOW_KEY = "ALLOWED";
@@ -74,6 +76,7 @@ public class Registration extends BaseVC{
     private Button btn_dialog;
     private ProgressBar pr;
     Dialog dialog;
+    Event event;
 
     private Button registerButton;
     private EditText emailET;
@@ -81,7 +84,6 @@ public class Registration extends BaseVC{
     private EditText passwordConfirmET;
     private EditText firstNameET;
     private EditText surnameET;
-    private EditText clubET;
     private SegmentedGroup genderSG;
     private RadioButton buttonSG1;
     private RadioButton buttonSG2;
@@ -107,6 +109,7 @@ public class Registration extends BaseVC{
         firstNameET = findViewById(R.id.firstNameET);
         surnameET = findViewById(R.id.surnameET);
 
+        selectedItems=new ArrayList<String>();
 
         genderSG = findViewById(R.id.genderSG);
         buttonSG1 = findViewById(R.id.buttonsg1);
@@ -203,10 +206,7 @@ public class Registration extends BaseVC{
         });
     }
 
-
-
     private void registerAction() {
-
         dialog = new Dialog(Registration.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(true);
@@ -229,15 +229,6 @@ public class Registration extends BaseVC{
                 pr.setVisibility(View.GONE);
             }
         });
-
-        dialog = new Dialog(Registration.this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(true);
-        dialog.setContentView(R.layout.custom_dialogbox_register);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        pr = dialog.findViewById(R.id.progressbar);
-        btn_dialog = dialog.findViewById(R.id.btn_dialog);
-        listView = dialog.findViewById(R.id.list);
 
         arrayAdapter = new ArrayAdapter<ClubNames>(Registration.this, R.layout.club_one) {
 
@@ -254,6 +245,16 @@ public class Registration extends BaseVC{
                 checkBox.setText(e.groupName);
                 checkBox.setChecked(false);
 
+                final View finalConvertView = convertView;
+                checkBox.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        TextView c = finalConvertView.findViewById(R.id.cb1);
+                        String selectedItem = c.getText().toString();
+                        Toast.makeText(Registration.this, selectedItem, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
                 return convertView;
             }
 
@@ -266,9 +267,10 @@ public class Registration extends BaseVC{
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int listposition, long l) {
-                String s = ((CheckBox) listView.getChildAt(listposition)).getText().toString();
-                Toast.makeText(Registration.this, "" + s, Toast.LENGTH_SHORT).show();
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                TextView c = view.findViewById(R.id.cb1);
+                String selectedItem = c.getText().toString();
+                Toast.makeText(Registration.this,selectedItem, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -276,44 +278,25 @@ public class Registration extends BaseVC{
             @Override
             public void onClick(View view) {
 
+                StringBuffer responseText= new StringBuffer();
 
-                /*checkBox.setChecked(true);
-                String name = checkBox.getText().toString();*/
+                for(int i=0;i<clubNames.size();i++)
+                {
+                    ClubNames state = clubNames.get(i);
 
-                SparseBooleanArray sp = listView.getCheckedItemPositions();
-                StringBuffer sb = new StringBuffer();
-                for (int i=0;i<clubNames.size();i++){
-                    if (sp.valueAt(i)==true){
-                        ClubNames cn = (ClubNames)listView.getItemAtPosition(i);
-                        String s = cn.groupName.toString();
-                        sb = sb.append(" " +s);
+                    if(state.isSelected())
+                    {
+                        responseText.append("\n" + state.getName());
                     }
                 }
-                Toast.makeText(Registration.this, "Selected" + sb.toString(), Toast.LENGTH_SHORT).show();
+
+                Toast.makeText(Registration.this,
+                        responseText, Toast.LENGTH_LONG).show();
             }
         });
-
-        DM.getApi().getClubNames(new Callback<ClubResponse>() {
-            @Override
-            public void success(ClubResponse clubResponse, Response response) {
-                clubNames = clubResponse.getData();
-                arrayAdapter.notifyDataSetChanged();
-                pr.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                pr.setVisibility(View.GONE);
-            }
-        });
-
-
 
         dialog.show();
-
     }
-
-
 
     private void hideKeyBoard(View view) {
         InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
@@ -534,6 +517,20 @@ public class Registration extends BaseVC{
                         btn_dialog = dialog.findViewById(R.id.btn_dialog);
                         listView = dialog.findViewById(R.id.list);
 
+                        DM.getApi().getClubNames(new Callback<ClubResponse>() {
+                            @Override
+                            public void success(ClubResponse clubResponse, Response response) {
+                                clubNames = clubResponse.getData();
+                                arrayAdapter.notifyDataSetChanged();
+                                pr.setVisibility(View.GONE);
+                            }
+
+                            @Override
+                            public void failure(RetrofitError error) {
+                                pr.setVisibility(View.GONE);
+                            }
+                        });
+
                         arrayAdapter = new ArrayAdapter<ClubNames>(Registration.this, R.layout.club_one) {
 
                             @Override
@@ -549,6 +546,25 @@ public class Registration extends BaseVC{
                                 checkBox.setText(e.groupName);
                                 checkBox.setChecked(false);
 
+                                final View finalConvertView = convertView;
+                                checkBox.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        TextView c = finalConvertView.findViewById(R.id.cb1);
+                                        String selectedItem = c.getText().toString();
+                                        Toast.makeText(Registration.this, selectedItem, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                /*checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                                    @Override
+                                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                                        TextView c = finalConvertView.findViewById(R.id.cb1);
+                                        String selectedItem = c.getText().toString();
+                                        Toast.makeText(Registration.this,selectedItem, Toast.LENGTH_SHORT).show();
+                                    }
+                                });*/
+
                                 return convertView;
                             }
 
@@ -559,39 +575,45 @@ public class Registration extends BaseVC{
                         };
                         listView.setAdapter(arrayAdapter);
 
-                        for (int i=0;i<checkBox.length();i++){
-                            listView.setItemChecked(i,true);
-                        }
+                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                ClubNames e = clubNames.get(i);
+                                String name = "Baseball NSW";
+
+                                registerModel.groupId = e.groupId;
+                                registerModel.groupName = name;
+                                makeRegistrationRequest(registerModel);
+                            }
+                        });
 
                         btn_dialog.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                //int selectedItem = (view).getId();
+                                int selectedItem = listView.getId();
+
+                                String selItems="";
+                                if (clubNames.isEmpty()){
+                                    Toast.makeText(Registration.this, "Empty Selection", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                                for(ClubNames item:clubNames){
+
+                                    if(selItems=="")
+                                        selItems= String.valueOf(item);
+                                    else
+                                        selItems+="/"+item;
 
 
-                                checkBox.setChecked(true);
-                                String name = checkBox.getText().toString();
+                                }
+                                //Toast.makeText(Registration.this, selItems, Toast.LENGTH_LONG).show();
+                                String name = "Baseball NSW";
+                                registerModel.groupId = selectedItem;
                                 registerModel.groupName = name;
-                                registerModel.groupId = checkBox.getId();
                                 makeRegistrationRequest(registerModel);
-
                             }
                         });
-
-                        DM.getApi().getClubNames(new Callback<ClubResponse>() {
-                            @Override
-                            public void success(ClubResponse clubResponse, Response response) {
-                                clubNames = clubResponse.getData();
-                                arrayAdapter.notifyDataSetChanged();
-                                pr.setVisibility(View.GONE);
-                            }
-
-                            @Override
-                            public void failure(RetrofitError error) {
-                                pr.setVisibility(View.GONE);
-                            }
-                        });
-
-
 
                         dialog.show();
 

@@ -4,12 +4,13 @@ public class ClubNames {
 
     public int groupId;
     public String groupName;
+    public boolean selected;
 
-    public String setUserName(){
-        return groupName;
+    public boolean isSelected() {
+        return selected;
     }
 
-    public String getUserName() {
+    public String getName() {
         return groupName;
     }
 }

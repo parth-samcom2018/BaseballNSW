@@ -34,6 +34,7 @@
             android:clickable="true"
             android:choiceMode="singleChoice"
             android:layout_below="@+id/tvHeading"/>
+
         <Button
             android:id="@+id/btn_dialog"
             android:layout_width="match_parent"

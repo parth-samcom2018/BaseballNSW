@@ -26,7 +26,6 @@
             android:fontFamily="@font/lato_regular"
             android:focusableInTouchMode="false" />
 
-
     </LinearLayout>
 
 
