@@ -289,7 +289,6 @@ public class Registration extends BaseVC{
                         responseText.append("\n" + state.getName());
                     }
                 }
-
                 Toast.makeText(Registration.this,
                         responseText, Toast.LENGTH_LONG).show();
             }
