@@ -104,7 +104,7 @@
         <activity
             android:name=".Registration"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity
             android:name=".EventVC"
             android:configChanges="orientation|screenSize"

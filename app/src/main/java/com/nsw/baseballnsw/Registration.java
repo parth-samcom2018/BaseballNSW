@@ -26,7 +26,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
+import android.widget.CheckedTextView;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -71,7 +71,7 @@ public class Registration extends BaseVC{
     private static final int MY_PERMISSIONS_REQUEST_EXTERNAL_STORAGE = 100;
 
     boolean isSelected;
-    private CheckBox checkBox;
+    private CheckedTextView checkBox;
     private ListView listView;
     private Button btn_dialog;
     private ProgressBar pr;
@@ -177,8 +177,7 @@ public class Registration extends BaseVC{
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //showAlert();
-                registerAction();
+                showAlert();
             }
         });
 
@@ -204,97 +203,6 @@ public class Registration extends BaseVC{
                 switchOn = isChecked;
             }
         });
-    }
-
-    private void registerAction() {
-        dialog = new Dialog(Registration.this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(true);
-        dialog.setContentView(R.layout.custom_dialogbox_register);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        pr = dialog.findViewById(R.id.progressbar);
-        btn_dialog = dialog.findViewById(R.id.btn_dialog);
-        listView = dialog.findViewById(R.id.list);
-
-        DM.getApi().getClubNames(new Callback<ClubResponse>() {
-            @Override
-            public void success(ClubResponse clubResponse, Response response) {
-                clubNames = clubResponse.getData();
-                arrayAdapter.notifyDataSetChanged();
-                pr.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                pr.setVisibility(View.GONE);
-            }
-        });
-
-        arrayAdapter = new ArrayAdapter<ClubNames>(Registration.this, R.layout.club_one) {
-
-            @Override
-            public View getView(final int position, View convertView, ViewGroup parent) {
-
-                if (convertView == null) {
-                    convertView = LayoutInflater.from(Registration.this).inflate(R.layout.club_one, parent, false);
-                }
-
-                final ClubNames e = clubNames.get(position);
-
-                checkBox = convertView.findViewById(R.id.cb1);
-                checkBox.setText(e.groupName);
-                checkBox.setChecked(false);
-
-                final View finalConvertView = convertView;
-                checkBox.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        TextView c = finalConvertView.findViewById(R.id.cb1);
-                        String selectedItem = c.getText().toString();
-                        Toast.makeText(Registration.this, selectedItem, Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-                return convertView;
-            }
-
-            @Override
-            public int getCount() {
-                return clubNames.size();
-            }
-        };
-        listView.setAdapter(arrayAdapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                TextView c = view.findViewById(R.id.cb1);
-                String selectedItem = c.getText().toString();
-                Toast.makeText(Registration.this,selectedItem, Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        btn_dialog.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                StringBuffer responseText= new StringBuffer();
-
-                for(int i=0;i<clubNames.size();i++)
-                {
-                    ClubNames state = clubNames.get(i);
-
-                    if(state.isSelected())
-                    {
-                        responseText.append("\n" + state.getName());
-                    }
-                }
-                Toast.makeText(Registration.this,
-                        responseText, Toast.LENGTH_LONG).show();
-            }
-        });
-
-        dialog.show();
     }
 
     private void hideKeyBoard(View view) {
@@ -514,8 +422,9 @@ public class Registration extends BaseVC{
                         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
                         pr = dialog.findViewById(R.id.progressbar);
                         btn_dialog = dialog.findViewById(R.id.btn_dialog);
-                        listView = dialog.findViewById(R.id.list);
 
+                        listView = dialog.findViewById(R.id.list);
+                        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
                         DM.getApi().getClubNames(new Callback<ClubResponse>() {
                             @Override
                             public void success(ClubResponse clubResponse, Response response) {
@@ -541,28 +450,8 @@ public class Registration extends BaseVC{
 
                                 final ClubNames e = clubNames.get(position);
 
-                                checkBox = convertView.findViewById(R.id.cb1);
+                                checkBox = convertView.findViewById(R.id.txt_title);
                                 checkBox.setText(e.groupName);
-                                checkBox.setChecked(false);
-
-                                final View finalConvertView = convertView;
-                                checkBox.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        TextView c = finalConvertView.findViewById(R.id.cb1);
-                                        String selectedItem = c.getText().toString();
-                                        Toast.makeText(Registration.this, selectedItem, Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                                /*checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                                    @Override
-                                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
-                                        TextView c = finalConvertView.findViewById(R.id.cb1);
-                                        String selectedItem = c.getText().toString();
-                                        Toast.makeText(Registration.this,selectedItem, Toast.LENGTH_SHORT).show();
-                                    }
-                                });*/
 
                                 return convertView;
                             }
@@ -574,10 +463,22 @@ public class Registration extends BaseVC{
                         };
                         listView.setAdapter(arrayAdapter);
 
-                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                // selected item
+                                /*String selectedItem = ((TextView) view).getText().toString();
+                                Toast.makeText(Registration.this, "" + selectedItem, Toast.LENGTH_SHORT).show();*/
+                            }
+
+                        });
+
+                        btn_dialog.setOnClickListener(new View.OnClickListener() {
                             @Override
-                            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                ClubNames e = clubNames.get(i);
+                            public void onClick(View view) {
+
+                                int selectedItem = listView.getCheckedItemPosition();
+                                //Toast.makeText(Registration.this, "" + selectedItem, Toast.LENGTH_SHORT).show();
+                                ClubNames e = clubNames.get(selectedItem);
                                 String name = "Baseball NSW";
 
                                 registerModel.groupId = e.groupId;
@@ -585,35 +486,6 @@ public class Registration extends BaseVC{
                                 makeRegistrationRequest(registerModel);
                             }
                         });
-
-                        btn_dialog.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                //int selectedItem = (view).getId();
-                                int selectedItem = listView.getId();
-
-                                String selItems="";
-                                if (clubNames.isEmpty()){
-                                    Toast.makeText(Registration.this, "Empty Selection", Toast.LENGTH_SHORT).show();
-                                    return;
-                                }
-                                for(ClubNames item:clubNames){
-
-                                    if(selItems=="")
-                                        selItems= String.valueOf(item);
-                                    else
-                                        selItems+="/"+item;
-
-
-                                }
-                                //Toast.makeText(Registration.this, selItems, Toast.LENGTH_LONG).show();
-                                String name = "Baseball NSW";
-                                registerModel.groupId = selectedItem;
-                                registerModel.groupName = name;
-                                makeRegistrationRequest(registerModel);
-                            }
-                        });
-
                         dialog.show();
 
                         /*String name = "Baseball NSW";
@@ -745,7 +617,6 @@ public class Registration extends BaseVC{
     {
         this.finish();
     }
-
 
 
     public boolean isOnline() {
