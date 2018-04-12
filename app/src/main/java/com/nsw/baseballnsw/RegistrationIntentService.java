@@ -14,12 +14,10 @@ import retrofit.client.Response;
 
 public class RegistrationIntentService extends IntentService {
 
-
     public RegistrationIntentService()
     {
         super("My Intent service");
     }
-
 
     public RegistrationIntentService(String name) {
         super(name);
@@ -28,9 +26,7 @@ public class RegistrationIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
 
-
         Log.d("hq","My service on handle intent");
-
 
         try {
             InstanceID instanceID = InstanceID.getInstance(this);
@@ -72,7 +68,6 @@ public class RegistrationIntentService extends IntentService {
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putString("GCM_TOKEN",token);
                     editor.commit();
-
                 }
 
                 @Override
@@ -81,13 +76,7 @@ public class RegistrationIntentService extends IntentService {
                     Log.d("hq","could not register for push "+error.getMessage());
                 }
             });
-
-
         }
-
-
-
-
     }
 }
 

@@ -93,6 +93,7 @@
                     android:layout_weight="1.9"
                     android:singleLine="false"
                     android:layout_marginLeft="10dp"
+                    android:clickable="true"
                     android:gravity="center_vertical" />
 
                 <TextView

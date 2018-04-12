@@ -89,12 +89,12 @@
         <TextView
             android:id="@+id/secondTV"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:text="Second row of text"
             style="@style/textview_normal"
-            android:singleLine="true"
+            android:singleLine="false"
             android:gravity="center_vertical"
-            android:layout_weight="1"/>
+            android:layout_weight="3"/>
 
         <!-- Third Row -->
         <TextView

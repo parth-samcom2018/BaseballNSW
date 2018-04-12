@@ -13,11 +13,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 
 
-    <permission
-        android:name="com.nsw.baseballnsw.permission.MAPS_RECEIVE"
-        android:protectionLevel="signature" />
-
-    <uses-permission android:name="com.hq.sporthqnetwork.permission.MAPS_RECEIVE" />
+    <uses-permission android:name="com.nsw.baseballnsw.permission.MAPS_RECEIVE" />
 
     <uses-feature
         android:name="android.hardware.camera2"
@@ -29,9 +25,6 @@
         android:name="com.nsw.baseballnsw.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
-    <uses-permission
-        android:name="com.nsw.baseballnsw.permission.C2D_MESSAGE"
-        tools:ignore="UniquePermission" />
 
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
@@ -142,11 +135,6 @@
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".NotificationVC"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name=".ArticleVC"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan" />

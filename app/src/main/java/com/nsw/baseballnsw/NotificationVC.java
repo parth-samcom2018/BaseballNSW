@@ -2,14 +2,19 @@ package com.nsw.baseballnsw;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -25,6 +30,8 @@ import com.nsw.baseballnsw.views.TextPoster;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
+
+import java.util.regex.Pattern;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -119,8 +126,9 @@ public class NotificationVC extends BaseVC {
         TextView secondTV = findViewById(R.id.secondTV);
         secondTV.setText(notification.getTimeAgo() + "");
 
-        TextView mainTV = findViewById(R.id.mainTV);
-        mainTV.setText(notification.text);
+        final TextView mainTV = findViewById(R.id.mainTV);
+        mainTV.setMovementMethod(LinkMovementMethod.getInstance());
+        mainTV.setText(Html.fromHtml(notification.text));
 
         ll_back = findViewById(R.id.ll_back);
         ll_back.setOnClickListener(new View.OnClickListener() {
@@ -138,8 +146,18 @@ public class NotificationVC extends BaseVC {
                 //.fetch();
                 .into(userIV);
 
+        Linkify.addLinks(mainTV, Linkify.WEB_URLS);
 
+        /*mainTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+                WebVC.url ="https://" +mainTV.getText().toString();
+                WebVC.title = "Terms";
+                Intent i = new Intent(NotificationVC.this, WebVC.class);
+                startActivity(i);
+            }
+        });*/
         textPoster = findViewById(R.id.textposter);
         textPoster.setOnSendListener(new View.OnClickListener() {
             @Override
@@ -185,9 +203,9 @@ public class NotificationVC extends BaseVC {
                         //.fetch();
                         .into(userIV);
 
-
                 Button flagButton = convertView.findViewById(R.id.flagButton);
                 flagButton.setOnClickListener(DM.getFlagOnClickListener(NotificationVC.this));
+
 
                 return convertView;
             }
@@ -240,9 +258,5 @@ public class NotificationVC extends BaseVC {
         });
 
     }
-
-
-
-
 }
 

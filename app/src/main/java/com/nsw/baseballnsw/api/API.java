@@ -1,9 +1,6 @@
 package com.nsw.baseballnsw.api;
 
 
-import com.nsw.baseballnsw.models.Article;
-import com.nsw.baseballnsw.models.ArticleComment;
-import com.nsw.baseballnsw.models.ArticleResponse;
 import com.nsw.baseballnsw.models.ClubResponse;
 import com.nsw.baseballnsw.models.Event;
 import com.nsw.baseballnsw.models.EventResponse;
@@ -231,24 +228,7 @@ public interface API {
     @GET("/apiv2/media/get/{groupID}")
     public void getGroupingMediaAlbums(@Header("Authorization") String auth, @Path("groupID") int groupID, Callback<MediaAlbumResponse> response);
 
-    //new api v2
-    @FormUrlEncoded
-    @POST("/apiv2/articles/Comment/{groupID}/{articleID}")
-    public void postArticleComments(@Header("Authorization") String auth,
-                                    @Path("groupID") int  groupID,
-                                    @Path("articleID") int articleID,
-                                    @Field("ArticleCommentDescription") String comment,
-                                    Callback<ArticleComment> callback);
 
-    //new api v2
-    @GET("/apiv2/Articles/{articleID}")
-    public void getArticles(@Header("Authorization") String auth,
-                            @Path("articleID") int articleID,
-                            Callback<Article> response);
-
-    //new api v2
-    @GET("/apiv2/articles/get/{groupID}")
-    public void getGroupArticlesnew(@Header("Authorization") String auth, @Path("groupID") int groupID, Callback<ArticleResponse> response);
 
     //new api v2
     @GET("/apiv2/document/get/{groupID}")

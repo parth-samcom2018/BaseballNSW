@@ -178,6 +178,7 @@ public class Registration extends BaseVC{
             @Override
             public void onClick(View v) {
                 showAlert();
+
             }
         });
 
@@ -204,6 +205,7 @@ public class Registration extends BaseVC{
             }
         });
     }
+
 
     private void hideKeyBoard(View view) {
         InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
@@ -618,7 +620,6 @@ public class Registration extends BaseVC{
         this.finish();
     }
 
-
     public boolean isOnline() {
 
         ConnectivityManager connec =
@@ -640,6 +641,4 @@ public class Registration extends BaseVC{
         }
         return false;
     }
-
-
 }

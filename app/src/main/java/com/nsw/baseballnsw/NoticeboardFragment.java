@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Html;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -33,7 +34,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nsw.baseballnsw.api.API;
-import com.nsw.baseballnsw.models.Article;
 import com.nsw.baseballnsw.models.Event;
 import com.nsw.baseballnsw.models.Group;
 import com.nsw.baseballnsw.models.GroupResponse;
@@ -316,9 +316,20 @@ public class NoticeboardFragment extends Fragment {
                     TextView secondTV = convertView.findViewById(R.id.secondTV);
                     Button btnFlag = convertView.findViewById(R.id.flagButton);
                     secondTV.setText(n.text);
-                    Button flagButton = convertView.findViewById(R.id.flagButton);
-                    flagButton.setOnClickListener(DM.getFlagOnClickListener(getActivity()));
+                    Linkify.addLinks(secondTV, Linkify.WEB_URLS);
 
+                    btnFlag.setOnClickListener(DM.getFlagOnClickListener(getActivity()));
+                    secondTV.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (n.notificationTypeId == Notification.TYPE_NOTIFICATION) {
+
+                                NotificationVC.notification = n;
+                                Intent i = new Intent(NoticeboardFragment.this.getActivity(), NotificationVC.class);
+                                startActivity(i);
+                            }
+                        }
+                    });
                 }
 
                 TextView firstTV = convertView.findViewById(R.id.firstTV);
@@ -353,7 +364,6 @@ public class NoticeboardFragment extends Fragment {
                     }
                 }
 
-
                 //CANNOT USE setItemClickListener in Listview because of flag
                 // Log.d("hq","notification type: "+n.notificationTypeId);
                 convertView.setOnClickListener(new View.OnClickListener() {
@@ -362,6 +372,7 @@ public class NoticeboardFragment extends Fragment {
 
 
                         if (n.notificationTypeId == Notification.TYPE_NOTIFICATION) {
+
                             NotificationVC.notification = n;
                             Intent i = new Intent(NoticeboardFragment.this.getActivity(), NotificationVC.class);
                             startActivity(i);
@@ -412,47 +423,6 @@ public class NoticeboardFragment extends Fragment {
                         }
 
 
-                        if (n.notificationTypeId == Notification.TYPE_ARTICLE) {
-
-                            final ProgressDialog pd = DM.getPD(getActivity(), "Loading Article...");
-                            pd.show();
-
-
-                            DM.getApi().getArticles(DM.getAuthString(), n.notificationItemId, new Callback<Article>() {
-                                @Override
-                                public void success(final Article article, Response response) {
-                                    DM.getApi().getAllGrouping(DM.getAuthString(), new Callback<GroupResponse>() {
-                                        @Override
-                                        public void success(GroupResponse groups, Response response) {
-                                            pd.dismiss();
-                                            for(Group g : groups.getData()){
-                                                if (g.groupId == n.familyId){
-                                                    ArticleVC.group = g;
-                                                    break;
-                                                }
-                                            }
-
-                                            ArticleVC.article =  article;
-                                            Intent i = new Intent(NoticeboardFragment.this.getActivity(), ArticleVC.class);
-                                            startActivity(i);
-                                        }
-
-                                        @Override
-                                        public void failure(RetrofitError error) {
-                                            pd.dismiss();
-                                            Toast.makeText(getActivity(), "Could not load " + error.getMessage(), Toast.LENGTH_LONG).show();
-                                        }
-                                    });
-                                }
-
-                                @Override
-                                public void failure(RetrofitError error) {
-                                    pd.dismiss();
-                                    Toast.makeText(getActivity(), "Could not load article, try later " + error.getMessage(), Toast.LENGTH_LONG).show();
-
-                                }
-                            });
-                        }
 
 
                         if (n.notificationTypeId == Notification.TYPE_EVENT) {
@@ -507,8 +477,6 @@ public class NoticeboardFragment extends Fragment {
             }
         };
         listView.setAdapter(listAdapter);
-
-
 
 
         refreshLayout = view.findViewById(R.id.swiperefresh);
