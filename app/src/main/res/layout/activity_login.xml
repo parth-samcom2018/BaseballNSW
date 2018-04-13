@@ -121,13 +121,13 @@
                             android:hint="@string/prompt_password"
                             android:inputType="textPassword"
                             android:maxLines="1"
+                            android:imeActionId="@+id/login"
                             android:backgroundTint="@android:color/transparent"
                             android:singleLine="true"
                             android:focusable="true"
                             android:textColor="@color/white"
                             android:background="@android:color/transparent"
                             android:focusableInTouchMode="true"
-                            tools:ignore="InvalidImeActionId"
                             android:fontFamily="@font/lato_regular"
                             android:textColorHint="@color/white"/>
 
