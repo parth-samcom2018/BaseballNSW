@@ -29,11 +29,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.ProgressBar;
@@ -78,6 +81,7 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
     private ListView listView;
     private ArrayAdapter listAdapter;
     private ImageView emptyIV;
+    private ProgressDialog pd;
     File photoFile = null;
 
     public MediaVC() {
@@ -110,7 +114,7 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
 
                 if(convertView == null)
                 {
-                    convertView = LayoutInflater.from(MediaVC.this.getActivity()).inflate(com.nsw.baseballnsw.R.layout.media_cell, parent, false);
+                    convertView = LayoutInflater.from(MediaVC.this.getActivity()).inflate(R.layout.media_cell, parent, false);
 
                 }
 
@@ -193,10 +197,12 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
                 TextView firstTV = convertView.findViewById(com.nsw.baseballnsw.R.id.firstTV);
                 firstTV.setText(album.name+" \n" +album.mediaModels.size()+" photos");
                 firstTV.setTextColor(getResources().getColor(com.nsw.baseballnsw.R.color.white));
-
+                if (album.mediaModels.size()==0){
+                    firstTV.setTextColor(getResources().getColor(R.color.black));
+                    return convertView;
+                }
                 Button flagButton = convertView.findViewById(com.nsw.baseballnsw.R.id.flagButton);
                 flagButton.setOnClickListener(DM.getFlagOnClickListener(MediaVC.this.getActivity()));
-
 
                 return convertView;
             }
@@ -281,6 +287,80 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
         inflater.inflate(com.nsw.baseballnsw.R.menu.create_album_menu, menu);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+
+        if(item.getItemId() == R.id.createAlbum) this.createAlbumAction();
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void createAlbumAction() {
+
+        final AlertDialog.Builder alert = new AlertDialog.Builder(MediaVC.this.getActivity());
+
+        LinearLayout lila1 = new LinearLayout(MediaVC.this.getActivity());
+        lila1.setOrientation(LinearLayout.VERTICAL);
+        final EditText nameET = new EditText(MediaVC.this.getActivity());
+        nameET.setHint("Album Name");
+        final EditText descET = new EditText(MediaVC.this.getActivity());
+        descET.setVisibility(View.GONE);
+        descET.setHint("Album Description");
+        lila1.addView(nameET);
+        int pad = (int)getResources().getDimension(R.dimen.small_pad);
+        lila1.setPadding(pad,pad,pad,pad);
+        alert.setView(lila1);
+
+        alert.setTitle("Create Album");
+
+
+        alert.setPositiveButton("Create", new DialogInterface.OnClickListener() {
+            public void onClick(final DialogInterface dialog, int whichButton) {
+                String name = nameET.getText().toString();
+
+                if(name.length() == 0 || name == null)
+                {
+                    Toast.makeText(MediaVC.this.getActivity(),"Enter a name",Toast.LENGTH_LONG).show();
+                    DM.hideKeyboard(MediaVC.this.getActivity());
+                    return;
+                }
+
+
+                pd = DM.getPD(MediaVC.this.getActivity(),"Loading Creating Album..");
+                pd.show();
+
+                DM.getApi().postMediaAlbum(DM.getAuthString(), name,  group.groupId, new Callback<Response>() {
+                    @Override
+                    public void success(Response response, Response response2) {
+                        Toast.makeText(MediaVC.this.getActivity(),"Album Created!",Toast.LENGTH_LONG).show();
+                        pd.dismiss();
+                        dialog.dismiss();
+                        DM.hideKeyboard(MediaVC.this.getActivity());
+
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        Toast.makeText(MediaVC.this.getActivity(),"Could not create album: "+error.getMessage(),Toast.LENGTH_LONG).show();
+                        pd.dismiss();
+                        dialog.dismiss();
+                        DM.hideKeyboard(MediaVC.this.getActivity());
+                    }
+                });
+
+            }
+        });
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                DM.hideKeyboard(MediaVC.this.getActivity());
+                dialog.dismiss();
+            }
+        });
+
+        alert.show();
+    }
 
     private void cameraAction() {
 
@@ -431,77 +511,7 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
         }
     }
 
-    /*private String imgDecodableString;
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
-        Bitmap bitmapImage = null;
-
-        switch (requestCode) {
-            case REQUEST_TAKE_PHOTO:
-                if (resultCode == Activity.RESULT_OK &&
-                        null != data) {
-                    // Get the Image from data
-                    try {
-                        bitmapImage= MediaStore.Images.Media.getBitmap(getActivity().getApplicationContext().getContentResolver(), capturedImageUri);
-                        Log.d("hipcook", "I now have a photo bitmap:" + bitmapImage.getWidth());
-                        float scaleFactor = 640f/ bitmapImage.getWidth();
-                        bitmapImage = DM.createScaledBitmap(bitmapImage,scaleFactor);
-                        Log.d("hipcook", "I now have a scaled photo bitmap:" + bitmapImage.getWidth());
-
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        Log.d("hipcook", "bitmap exception");
-                    }
-
-
-                } else {
-                    Toast.makeText(MediaVC.this.getActivity(), "You haven't Captured Image", Toast.LENGTH_LONG).show();
-                }
-                break;
-
-            case REQUEST_PICK_IMAGE:
-                if (requestCode == REQUEST_PICK_IMAGE &&
-                        resultCode == Activity.RESULT_OK &&
-                        null != data) {
-                    // Get the Image from data
-
-                    Uri selectedImage = data.getData();
-                    String[] filePathColumn = { MediaStore.Images.Media.DATA };
-
-                    // Get the cursor
-                    Cursor cursor = getActivity().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-                    //cursor.moveToFirst();
-                    cursor.moveToNext();
-
-                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                    imgDecodableString = cursor.getString(columnIndex);
-                    cursor.close();
-
-                    try {
-                        bitmapImage = DM.decodeSampledBitmapFromFile(imgDecodableString, 640,640);
-                        Log.d("hipcook", "I now have a bitmap:" + bitmapImage.getWidth());
-                    }
-                    catch (NullPointerException e){
-                        e.printStackTrace();
-                    }
-
-                } else {
-                    Toast.makeText(MediaVC.this.getActivity(), "You haven't Picked Image", Toast.LENGTH_LONG).show();
-                }
-                break;
-        }
-
-        if(bitmapImage != null)
-        {
-            CropActivity.del = this;
-            bitmapToCrop = bitmapImage;
-            Intent i = new Intent(this.getActivity(), CropActivity.class);
-            startActivity(i);
-        }
-    }*/
 
     @Override
     public void didCropBitmap(final Bitmap b) {

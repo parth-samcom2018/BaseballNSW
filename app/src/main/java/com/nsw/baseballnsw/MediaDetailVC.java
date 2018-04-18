@@ -298,7 +298,6 @@ public class MediaDetailVC extends BaseVC {
                 */
 
 
-
         slider.setPresetTransformer(SliderLayout.Transformer.Accordion);
         slider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
 

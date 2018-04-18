@@ -333,7 +333,7 @@ public class NoticeboardFragment extends Fragment {
                 }
 
                 TextView firstTV = convertView.findViewById(R.id.firstTV);
-                String topString = "Added " + n.getTimeAgo() + " in the  <font color='#e2441f'>" + n.familyName + "</font> group";
+                String topString = "Added " + n.getTimeAgo() + " in the  <font color='#198acf'>" + n.familyName + "</font> group";
                 firstTV.setText(Html.fromHtml(topString));
 
                 //comments

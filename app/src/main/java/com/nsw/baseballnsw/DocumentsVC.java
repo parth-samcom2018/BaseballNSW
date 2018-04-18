@@ -61,7 +61,7 @@ public class DocumentsVC extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        setHasOptionsMenu(true);
+        setHasOptionsMenu(false);
 
         // Inflate the layout for this fragment
         inflater = (LayoutInflater) this.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -185,13 +185,9 @@ public class DocumentsVC extends Fragment {
                             Intent i = new Intent(DocumentsVC.this.getActivity(), WebVC.class);
                             startActivity(i);
 
-
-/*
-                            PDFVC.url = chosenFile.url;
+                            /*PDFVC.url = chosenFile.url;
                             Intent i = new Intent(DocumentsVC.this.getContext(), PDFVC.class);
-                            startActivity(i);
-                            */
-
+                            startActivity(i);*/
 
                         }
 
