@@ -35,6 +35,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nsw.baseballnsw.api.API;
+import com.nsw.baseballnsw.models.Article;
 import com.nsw.baseballnsw.models.Event;
 import com.nsw.baseballnsw.models.Group;
 import com.nsw.baseballnsw.models.GroupResponse;
@@ -55,48 +56,43 @@ import retrofit.client.Response;
 
 public class NoticeBoardVCN extends Fragment {
 
+    public static final int MY_PERMISSIONS_REQUEST_CAMERA = 100;
     //MODEL
     public Group group; //OPTIONAL!
     private List<Notification> notifications = new Vector<Notification>();
     private List<Group> userGroups = null;
-
     //VIEWS
     private SwipeRefreshLayout refreshLayout;
     private ListView listView;
     private ArrayAdapter listAdapter;
     private TextPoster textPoster;
-    private ImageView emptyIV,userIV,iv;
+    private ImageView emptyIV, userIV, iv;
     private CircleImageView useriv;
     private Button flagButton;
     private boolean online;
-
-    public static final int MY_PERMISSIONS_REQUEST_CAMERA = 100;
-
+    // NEEDED with configChange in manifest, stops view changer from recalling onCreateView
+    private boolean initialLoaded = false;
 
     public NoticeBoardVCN() {
         // Required empty public constructor
     }
 
-    private void postComment(final String text)
-    {
-        if(text.length() == 0)
-        {
-            Toast.makeText(this.getActivity(),"You must enter text",Toast.LENGTH_LONG).show();
+    private void postComment(final String text) {
+        if (text.length() == 0) {
+            Toast.makeText(this.getActivity(), "You must enter text", Toast.LENGTH_LONG).show();
             return;
         }
 
         DM.hideKeyboard(this.getActivity());
 
 
-
-        if(group == null)
-        {
-            Toast.makeText(this.getActivity(),"Must be within a group to post",Toast.LENGTH_LONG).show();
+        if (group == null) {
+            Toast.makeText(this.getActivity(), "Must be within a group to post", Toast.LENGTH_LONG).show();
             return;
         }
 
 
-        final ProgressDialog pd = DM.getPD(getActivity(),"Posting Comment...");
+        final ProgressDialog pd = DM.getPD(getActivity(), "Posting Comment...");
         pd.show();
 
         Notification n = new Notification();
@@ -104,7 +100,7 @@ public class NoticeBoardVCN extends Fragment {
         n.familyId = group.groupId;
         n.familyName = group.groupName;
 
-        Log.d("HQ","text: "+text+" familyId:" +group.groupId+ " familyName:"+group.groupName);
+        Log.d("HQ", "text: " + text + " familyId:" + group.groupId + " familyName:" + group.groupName);
 
 
         /*DM.getApi().postNotification(DM.getAuthString(), n,  new Callback<Response>() {
@@ -125,11 +121,11 @@ public class NoticeBoardVCN extends Fragment {
             }
         });*/
 
-        DM.getApi().postNotifications(DM.getAuthString(), n,  new Callback<Response>() {
+        DM.getApi().postNotifications(DM.getAuthString(), n, new Callback<Response>() {
             @Override
             public void success(Response response, Response response2) {
 
-                Toast.makeText(getActivity(),"Notification Posted!",Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "Notification Posted!", Toast.LENGTH_LONG).show();
                 textPoster.clearText();
                 loadData(true);
                 refreshLayout.setRefreshing(false);
@@ -139,21 +135,20 @@ public class NoticeBoardVCN extends Fragment {
             @Override
             public void failure(RetrofitError error) {
 
-                Toast.makeText(getActivity(),"Post failed "+error.getMessage(),Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "Post failed " + error.getMessage(), Toast.LENGTH_LONG).show();
                 pd.dismiss();
             }
         });
 
     }
 
-    private void makeInviteRequest(String email)
-    {
+    private void makeInviteRequest(String email) {
         DM.hideKeyboard(NoticeBoardVCN.this.getActivity());
 
-        final ProgressDialog pd = DM.getPD(getActivity(),"Inviting User...");
+        final ProgressDialog pd = DM.getPD(getActivity(), "Inviting User...");
         pd.show();
 
-        Log.d("HQ","groupID : "+this.group.groupId);
+        Log.d("HQ", "groupID : " + this.group.groupId);
 
         /*DM.getApi().postInviteUser(DM.getAuthString(), "unknown", email, true, this.group.groupId, new Callback<Response>() {
             @Override
@@ -185,8 +180,7 @@ public class NoticeBoardVCN extends Fragment {
         });
     }
 
-    private void inviteUserAction()
-    {
+    private void inviteUserAction() {
 
 
         final EditText edittext = new EditText(this.getContext());
@@ -200,8 +194,7 @@ public class NoticeBoardVCN extends Fragment {
             public void onClick(DialogInterface dialog, int whichButton) {
 
                 String email = edittext.getText().toString();
-                if(email.isEmpty() || !DM.isEmailValid(email))
-                {
+                if (email.isEmpty() || !DM.isEmailValid(email)) {
                     Toast.makeText(getActivity(), "You must provide a valid email", Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -226,7 +219,7 @@ public class NoticeBoardVCN extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
 
 
-        if(item.getItemId() == R.id.inviteUser)this.inviteUserAction();
+        if (item.getItemId() == R.id.inviteUser) this.inviteUserAction();
 
         return super.onOptionsItemSelected(item);
     }
@@ -237,7 +230,6 @@ public class NoticeBoardVCN extends Fragment {
 
         inflater.inflate(R.menu.invite_user_menu, menu);
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
@@ -442,7 +434,48 @@ public class NoticeBoardVCN extends Fragment {
                             });*/
                         }
 
+                        if (n.notificationTypeId == Notification.TYPE_ARTICLE) {
 
+                            final ProgressDialog pd = DM.getPD(getActivity(), "Loading Article...");
+                            pd.show();
+                            DM.getApi().getArticle(DM.getAuthString(), n.notificationItemId, new Callback<Article>() {
+                                @Override
+                                public void success(final Article article, Response response) {
+
+                                    DM.getApi().getAllGrouping(DM.getAuthString(), new Callback<GroupResponse>() {
+                                        @Override
+                                        public void success(GroupResponse groups, Response response) {
+
+                                            pd.dismiss();
+                                            for (Group g : groups.getData()) {
+                                                if (g.groupId == n.familyId) {
+                                                    ArticleVC.group = g;
+                                                    break;
+                                                }
+                                            }
+
+                                            ArticleVC.article = article;
+                                            Intent i = new Intent(NoticeBoardVCN.this.getActivity(), ArticleVC.class);
+                                            startActivity(i);
+                                        }
+
+                                        @Override
+                                        public void failure(RetrofitError error) {
+
+                                            pd.dismiss();
+                                            Toast.makeText(getActivity(), "Could not load " + error.getMessage(), Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                                }
+
+                                @Override
+                                public void failure(RetrofitError error) {
+
+                                    pd.dismiss();
+                                    Toast.makeText(getActivity(), "Could not load article, try later " + error.getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }
 
                         if (n.notificationTypeId == Notification.TYPE_EVENT) {
 
@@ -510,12 +543,8 @@ public class NoticeBoardVCN extends Fragment {
         return view;
     }
 
-
-    // NEEDED with configChange in manifest, stops view changer from recalling onCreateView
-    private boolean initialLoaded = false;
-    public void loadIfUnloaded()
-    {
-        if(initialLoaded == false) loadData(true);
+    public void loadIfUnloaded() {
+        if (initialLoaded == false) loadData(true);
     }
 
     @Override
@@ -527,13 +556,12 @@ public class NoticeBoardVCN extends Fragment {
     }
 
 
-    private void loadData(boolean withDialog)
-    {
+    private void loadData(boolean withDialog) {
 
         initialLoaded = true;
 
-        final ProgressDialog pd = DM.getPD(this.getActivity(),"Loading Notifications...");
-        if(withDialog)pd.show();
+        final ProgressDialog pd = DM.getPD(this.getActivity(), "Loading Notifications...");
+        if (withDialog) pd.show();
 
 
         String auth = DM.getAuthString();
@@ -546,7 +574,7 @@ public class NoticeBoardVCN extends Fragment {
                 refreshLayout.setRefreshing(false);
                 pd.dismiss();
 
-                if(ns.getData().size()==0) emptyIV.setVisibility(View.VISIBLE);
+                if (ns.getData().size() == 0) emptyIV.setVisibility(View.VISIBLE);
                 else emptyIV.setVisibility(View.GONE);
 
             }
@@ -558,16 +586,13 @@ public class NoticeBoardVCN extends Fragment {
             }
         };
 
-        if(group == null)
-        {
+        if (group == null) {
             //get all notification
             //api.getAllNotifications(auth,cb);
-            api.getAllNotificationsnew(auth,cb);
-        }
-        else
-        {
+            api.getAllNotificationsnew(auth, cb);
+        } else {
             //api.getGroupNotifications(auth,group.groupId,cb);
-            api.getGroupNotificationsnew(auth,group.groupId,cb);
+            api.getGroupNotificationsnew(auth, group.groupId, cb);
         }
 
         //Load user groups secretly in background
@@ -601,18 +626,18 @@ public class NoticeBoardVCN extends Fragment {
 
     public boolean isOnline() {
         ConnectivityManager connec =
-                (ConnectivityManager)getActivity().getSystemService(getActivity().getBaseContext().CONNECTIVITY_SERVICE);
+                (ConnectivityManager) getActivity().getSystemService(getActivity().getBaseContext().CONNECTIVITY_SERVICE);
 
-        if ( connec.getNetworkInfo(0).getState() == android.net.NetworkInfo.State.CONNECTED ||
+        if (connec.getNetworkInfo(0).getState() == android.net.NetworkInfo.State.CONNECTED ||
                 connec.getNetworkInfo(0).getState() == android.net.NetworkInfo.State.CONNECTING ||
                 connec.getNetworkInfo(1).getState() == android.net.NetworkInfo.State.CONNECTING ||
-                connec.getNetworkInfo(1).getState() == android.net.NetworkInfo.State.CONNECTED ) {
+                connec.getNetworkInfo(1).getState() == android.net.NetworkInfo.State.CONNECTED) {
 
             return true;
 
         } else if (
                 connec.getNetworkInfo(0).getState() == android.net.NetworkInfo.State.DISCONNECTED ||
-                        connec.getNetworkInfo(1).getState() == android.net.NetworkInfo.State.DISCONNECTED  ) {
+                        connec.getNetworkInfo(1).getState() == android.net.NetworkInfo.State.DISCONNECTED) {
 
             Toast.makeText(NoticeBoardVCN.this.getActivity(), "Internet is not Connected! ", Toast.LENGTH_LONG).show();
             return false;

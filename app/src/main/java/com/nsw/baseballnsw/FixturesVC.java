@@ -59,7 +59,6 @@ public class FixturesVC extends Fragment implements SwipeRefreshLayout.OnRefresh
 
         emptyIV = v.findViewById(R.id.empty);
 
-
         listView = v.findViewById(R.id.list);
 
         listAdapter= new ArrayAdapter<Event>(this.getActivity(), R.layout.event_cell){
@@ -101,12 +100,13 @@ public class FixturesVC extends Fragment implements SwipeRefreshLayout.OnRefresh
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                 Event e = events.get(position);
                 EventVC.event = e;
 
-                Intent i = new Intent(FixturesVC.this.getActivity(), EventVC.class);
-                i.putExtra("Key",e.groupName);
-                startActivity(i);
+                Intent j = new Intent(FixturesVC.this.getActivity(), EventVC.class);
+                j.putExtra("Key",e.groupName);
+                startActivity(j);
             }
         });
 
@@ -132,31 +132,27 @@ public class FixturesVC extends Fragment implements SwipeRefreshLayout.OnRefresh
 
         String auth = DM.getAuthString();
 
-
-        DM.getApi().getAllEventings(auth,new Callback<EventResponse>() {
+        DM.getApi().getFixtureGroup(auth, group.groupId, new Callback<EventResponse>() {
             @Override
             public void success(EventResponse events, Response response) {
-
-
                 FixturesVC.this.events = events.getData();
                 Log.d("hq", "events: "+(events.getData()).size()+"");
                 listAdapter.notifyDataSetChanged();
                 refreshLayout.setRefreshing(false);
                 pd.dismiss();
 
-                if((events.getData()).size()==0) emptyIV.setVisibility(View.VISIBLE);
+                if(events.getData().size()==0) emptyIV.setVisibility(View.VISIBLE);
                 else emptyIV.setVisibility(View.GONE);
-
             }
 
             @Override
             public void failure(RetrofitError error) {
-
                 Log.d("hq", "failed: "+error.getMessage());
                 refreshLayout.setRefreshing(false);
                 pd.dismiss();
             }
         });
+
     }
 
     @Override

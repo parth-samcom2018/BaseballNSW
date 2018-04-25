@@ -34,6 +34,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nsw.baseballnsw.api.API;
+import com.nsw.baseballnsw.models.Article;
 import com.nsw.baseballnsw.models.Event;
 import com.nsw.baseballnsw.models.Group;
 import com.nsw.baseballnsw.models.GroupResponse;
@@ -422,7 +423,52 @@ public class NoticeboardFragment extends Fragment {
                             });*/
                         }
 
+                        if (n.notificationTypeId == Notification.TYPE_ARTICLE) {
 
+                            final ProgressDialog pd = DM.getPD(getActivity(), "Loading Article...");
+                            pd.show();
+                            DM.getApi().getArticle(DM.getAuthString(), n.notificationItemId, new Callback<Article>() {
+                                @Override
+                                public void success(final Article article, Response response) {
+
+
+                                    DM.getApi().getAllGrouping(DM.getAuthString(), new Callback<GroupResponse>() {
+                                        @Override
+                                        public void success(GroupResponse groups, Response response) {
+
+                                            pd.dismiss();
+                                            for (Group g : groups.getData()) {
+                                                if (g.groupId == n.familyId) {
+                                                    ArticleVC.group = g;
+                                                    break;
+                                                }
+                                            }
+
+                                            ArticleVC.article = article;
+                                            Intent i = new Intent(NoticeboardFragment.this.getActivity(), ArticleVC.class);
+                                            startActivity(i);
+                                        }
+
+                                        @Override
+                                        public void failure(RetrofitError error) {
+
+                                            pd.dismiss();
+                                            Toast.makeText(getActivity(), "Could not load " + error.getMessage(), Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+
+
+                                }
+
+                                @Override
+                                public void failure(RetrofitError error) {
+
+                                    pd.dismiss();
+                                    Toast.makeText(getActivity(), "Could not load article, try later " + error.getMessage(), Toast.LENGTH_LONG).show();
+
+                                }
+                            });
+                        }
 
 
                         if (n.notificationTypeId == Notification.TYPE_EVENT) {

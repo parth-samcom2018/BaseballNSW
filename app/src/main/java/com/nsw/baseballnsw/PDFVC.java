@@ -13,6 +13,7 @@ import java.net.URL;
 public class PDFVC extends AppCompatActivity {
 
     public static String url;
+    public static String title;
 
     private PDFView pdfView;
 
