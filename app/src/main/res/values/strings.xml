@@ -27,7 +27,7 @@
     <string name="team">TEAM </string>
     <string name="score">PTS </string>
 
-
+    <string name="alert_msg">Authorisation is denied..!!</string>
 
     <string name="f_name">First Name:</string>
     <string name="l_name">Last Name:</string>
