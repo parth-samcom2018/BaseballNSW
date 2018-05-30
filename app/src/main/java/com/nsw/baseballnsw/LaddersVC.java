@@ -94,9 +94,6 @@ public class LaddersVC extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 TextView textdrawn = convertView.findViewById(R.id.tvdrawn);
                 textdrawn.setText(Integer.toString(ladder.gamesDrawn));
 
-                TextView textplayed = convertView.findViewById(R.id.tvplayed);
-                textplayed.setText(Integer.toString(ladder.gamesPlayed));
-
                 TextView textpoints = convertView.findViewById(R.id.tvpoints);
                 textpoints.setText(Integer.toString(ladder.totalPoints));
 

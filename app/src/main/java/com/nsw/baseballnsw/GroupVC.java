@@ -49,7 +49,7 @@ public class GroupVC extends BaseVC {
     private DocumentsVC documentsVC;
     public Folder rootFolder = null;
 
-    private String[] titles = {"Notification", "Media", "Articles", "Fixtures", "Ladders", "Documents"};
+    private String[] titles = {"Notification", "Fixtures", "Ladders", "Media", "Articles", "Documents"};
 
 
     @Override
@@ -102,24 +102,25 @@ public class GroupVC extends BaseVC {
                         case 0:
 
                             noticeBoardVCN.loadIfUnloaded();
-
                             break;
-                        case 1:
-                            mediaVC.loadIfUnloaded();
 
+                        case 1:
+
+                            fixturesVC.loadIfUnloaded();
                             break;
 
                         case 2:
-                            articlesVC.loadIfUnloaded();
 
+                            laddersVC.loadIfUnloaded();
                             break;
 
                         case 3:
-                            fixturesVC.loadIfUnloaded();
+
+                            mediaVC.loadIfUnloaded();
                             break;
                         case 4:
-                            laddersVC.loadIfUnloaded();
 
+                            articlesVC.loadIfUnloaded();
                             break;
 
                         case 5:
@@ -147,17 +148,17 @@ public class GroupVC extends BaseVC {
             this.noticeBoardVCN = (NoticeBoardVCN) NoticeBoardVCN.instantiate(this, NoticeBoardVCN.class.getName());
             this.noticeBoardVCN.group = group;
 
-            this.mediaVC = (MediaVC) MediaVC.instantiate(this, MediaVC.class.getName());
-            this.mediaVC.group = group;
-
-            this.articlesVC = (ArticlesVC) ArticlesVC.instantiate(this, ArticlesVC.class.getName());
-            this.articlesVC.group = group;
-
             this.fixturesVC = (FixturesVC) FixturesVC.instantiate(this, FixturesVC.class.getName());
             this.fixturesVC.group = group;
 
             this.laddersVC = (LaddersVC)LaddersVC.instantiate(this, LaddersVC.class.getName());
             this.laddersVC.ladder = ladder;
+
+            this.mediaVC = (MediaVC) MediaVC.instantiate(this, MediaVC.class.getName());
+            this.mediaVC.group = group;
+
+            this.articlesVC = (ArticlesVC) ArticlesVC.instantiate(this, ArticlesVC.class.getName());
+            this.articlesVC.group = group;
 
             this.documentsVC = (DocumentsVC) DocumentsVC.instantiate(this, DocumentsVC.class.getName());
             this.documentsVC.group = group;
@@ -182,10 +183,10 @@ public class GroupVC extends BaseVC {
         public Fragment getItem(int position) {
 
             if (position == 0) return noticeBoardVCN;
-            else if (position == 1) return mediaVC;
-            else if (position ==2) return articlesVC;
-            else if (position == 3) return fixturesVC;
-            else if (position ==4) return laddersVC;
+            else if (position == 1) return fixturesVC;
+            else if (position ==2) return laddersVC;
+            else if (position == 3) return mediaVC;
+            else if (position ==4) return articlesVC;
             else return documentsVC;
         }
 

@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="6"
+        android:weightSum="5.5"
         android:id="@+id/ll_first"
         android:layout_margin="10dp"
         android:background="@android:color/transparent"
@@ -43,7 +43,7 @@
             android:id="@+id/tvwin"/>
 
         <TextView
-            android:layout_weight="0.6"
+            android:layout_weight="0.7"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="0"
@@ -66,20 +66,9 @@
             android:gravity="center"
             android:id="@+id/tvdrawn"/>
 
-        <TextView
-            android:layout_weight="0.6"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="0"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:textColor="@color/black"
-            android:fontFamily="@font/lato_regular"
-            android:id="@+id/tvplayed"
-            android:padding="5dp"/>
 
         <TextView
-            android:layout_weight="0.8"
+            android:layout_weight="0.6"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/score"

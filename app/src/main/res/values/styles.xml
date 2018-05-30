@@ -9,6 +9,7 @@
         <item name="android:actionMenuTextColor">@color/white</item>
         <item name="android:actionMenuTextAppearance">@style/Base.TextAppearance.AppCompat.Medium</item>
         <item name="actionMenuTextAppearance">@style/Base.TextAppearance.AppCompat.Small</item>
+        <item name="actionMenuTextColor">@color/white</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

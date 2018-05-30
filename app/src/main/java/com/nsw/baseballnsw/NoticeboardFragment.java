@@ -671,7 +671,7 @@ public class NoticeboardFragment extends Fragment {
         getActivity().finish();
 
         Intent i = new Intent(NoticeboardFragment.this.getActivity(), Login.class);
-        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(i);
 
     }
