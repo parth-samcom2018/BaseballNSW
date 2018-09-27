@@ -519,6 +519,7 @@ public class Registration extends BaseVC{
     }
 
 
+
     private void makeRegistrationRequest(final Register registerModel)
     {
         final ProgressDialog pd = DM.getPD(this, "Registering...");

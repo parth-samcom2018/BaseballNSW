@@ -97,6 +97,7 @@ public class MainTabbing extends BaseVC {
     private int MY_PERMISSIONS_REQUEST_CAMERA = 2000;
 
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -222,6 +223,7 @@ public class MainTabbing extends BaseVC {
         };
 
         mViewPager.addOnPageChangeListener(pageListener);
+
 
 
         tabLayout = findViewById(R.id.tabs);

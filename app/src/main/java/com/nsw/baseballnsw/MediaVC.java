@@ -337,7 +337,7 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
                         pd.dismiss();
                         dialog.dismiss();
                         DM.hideKeyboard(MediaVC.this.getActivity());
-
+                        loadData();
                     }
 
                     @Override
@@ -346,6 +346,7 @@ public class MediaVC extends Fragment implements CropActivity.CropProtocol {
                         pd.dismiss();
                         dialog.dismiss();
                         DM.hideKeyboard(MediaVC.this.getActivity());
+                        loadData();
                     }
                 });
 

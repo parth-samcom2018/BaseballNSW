@@ -39,6 +39,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.gson.JsonObject;
 import com.nsw.baseballnsw.api.API;
 import com.nsw.baseballnsw.models.Article;
 import com.nsw.baseballnsw.models.Event;
@@ -51,6 +52,8 @@ import com.nsw.baseballnsw.views.TextPoster;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Vector;
@@ -62,6 +65,7 @@ import retrofit.client.Response;
 
 public class NoticeboardFragment extends Fragment {
 
+    private static final String TAG = "Success";
     //MODEL
     public Group group; //OPTIONAL!
     private List<Notification> notifications = new Vector<Notification>();

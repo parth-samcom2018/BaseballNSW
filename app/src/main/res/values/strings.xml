@@ -25,7 +25,7 @@
     <string name="tv_message">Welcome Baseball NSW!\nAs you are not yet connected to any groups, we need to get you started with your first group.</string>
     <string name="rotate">Rotate for Full Ladder </string>
     <string name="team">TEAM </string>
-    <string name="score">PTS </string>
+    <string name="score">PCT </string>
 
     <string name="alert_msg">Authorisation is denied..!!</string>
 

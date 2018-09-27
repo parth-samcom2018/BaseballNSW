@@ -1,97 +1,91 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.nsw.baseballnsw.MediaVC"
-    android:clickable="true">
+    android:clickable="true"
+    tools:context="com.nsw.baseballnsw.MediaVC">
 
     <ImageView
+        android:id="@+id/empty"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/empty"
+        android:layout_centerInParent="true"
         android:src="@drawable/media_empty"
-        android:visibility="gone"
-        />
+        android:visibility="gone" />
 
     <ProgressBar
         android:id="@+id/progressBar_media_main"
-        android:indeterminateTintMode="src_atop"
-        android:indeterminateTint="@color/colorPrimary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:visibility="gone"
+        android:elevation="5dp"
         android:indeterminate="true"
-        android:elevation="5dp"/>
+        android:indeterminateTint="@color/colorPrimary"
+        android:indeterminateTintMode="src_atop"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/tv_media_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_centerInParent="true"
-        android:text="Baseball NSW"
-        android:elevation="5dp"
-        android:textColor="@color/colorPrimary"
         android:layout_below="@+id/progressBar_media_main"
-        android:visibility="gone"/>
+        android:layout_centerInParent="true"
+        android:elevation="5dp"
+        android:gravity="center"
+        android:text="Baseball NSW"
+        android:textColor="@color/colorPrimary"
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/ll"
         android:layout_width="match_parent"
         android:layout_height="@dimen/grid_cell_height_small"
-        android:orientation="vertical"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="1px"
-            android:orientation="vertical"
             android:background="@color/black"
-            >
-        </LinearLayout>
+            android:orientation="vertical"></LinearLayout>
 
         <LinearLayout
 
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="@dimen/med_pad"
-            >
+            android:padding="@dimen/med_pad">
+
             <ImageView
                 android:id="@+id/cameraIV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/camera"
-                android:layout_weight="1"
                 android:layout_gravity="center_vertical"
-                />
+                android:layout_weight="1"
+                android:src="@drawable/camera" />
 
             <ImageView
                 android:id="@+id/uploadIV"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/upload"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
-                />
+                android:src="@drawable/upload" />
 
         </LinearLayout>
     </LinearLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swiperefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/swiperefresh"
         android:layout_above="@+id/ll"
-        android:layout_alignParentTop="true"
-        >
+        android:layout_alignParentTop="true">
+
         <ListView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:id="@+id/list"
-            />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </android.support.v4.widget.SwipeRefreshLayout>
 
 

@@ -2,23 +2,30 @@ package com.nsw.baseballnsw;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.graphics.drawable.RippleDrawable;
 import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.nsw.baseballnsw.models.ClubNames;
+import com.nsw.baseballnsw.models.ClubResponse;
+import com.nsw.baseballnsw.models.Group;
 import com.nsw.baseballnsw.models.Ladders;
 import com.nsw.baseballnsw.models.LaddersResponse;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Vector;
 
@@ -29,6 +36,7 @@ import retrofit.client.Response;
 
 public class LaddersVC extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
+    public Group group;
     Ladders ladder;
     private ListView listView;
     private ArrayAdapter<Ladders> listadapter;
@@ -38,6 +46,8 @@ public class LaddersVC extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
 
     private List<Ladders> ladders = new Vector<Ladders>();
+    private String TAG = "Ladders";
+
     public LaddersVC() {
         // Required empty public constructor
     }
@@ -65,25 +75,21 @@ public class LaddersVC extends Fragment implements SwipeRefreshLayout.OnRefreshL
         listadapter= new ArrayAdapter<Ladders>(this.getActivity(), R.layout.ladder_cell){
 
 
-            @SuppressLint("NewApi")
             @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
+            public View getView(final int position, View convertView, ViewGroup parent) {
 
                 if (convertView == null) {
-                    try
-                    {
-                        convertView = LayoutInflater.from(LaddersVC.this.getActivity()).inflate(R.layout.ladder_cell, parent, false);
-                    }
-
-                    catch (NullPointerException e){
-                        e.printStackTrace();
-                    }
+                    convertView = LayoutInflater.from(LaddersVC.this.getActivity()).inflate(R.layout.ladder_cell, parent, false);
                 }
 
-                Ladders ladder = ladders.get(position);
+
+                final Ladders ladder = ladders.get(position);
 
                 TextView textteam = convertView.findViewById(R.id.tvteam);
                 textteam.setText(""+ladder.teamName);
+
+                TextView textplayed = convertView.findViewById(R.id.tvplayed);
+                textplayed.setText(Integer.toString(ladder.gamesPlayed));
 
                 TextView textwin = convertView.findViewById(R.id.tvwin);
                 textwin.setText(Integer.toString(ladder.gamesWon));
@@ -95,7 +101,8 @@ public class LaddersVC extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 textdrawn.setText(Integer.toString(ladder.gamesDrawn));
 
                 TextView textpoints = convertView.findViewById(R.id.tvpoints);
-                textpoints.setText(Integer.toString(ladder.totalPoints));
+                textpoints.setText(Double.toString(ladder.totalPoints));
+
 
                 return convertView;
             }
@@ -124,8 +131,6 @@ public class LaddersVC extends Fragment implements SwipeRefreshLayout.OnRefreshL
             }
         });
 
-
-
         return v;
     }
 
@@ -138,7 +143,7 @@ public class LaddersVC extends Fragment implements SwipeRefreshLayout.OnRefreshL
     private void loadData()
     {
         initialLoaded = true;
-
+        Log.d("hq","groupID: "+group.groupId);
         final ProgressDialog pd = DM.getPD(getActivity(),"Loading Ladders...");
         if(this.isVisible())pd.show();
 
@@ -146,27 +151,16 @@ public class LaddersVC extends Fragment implements SwipeRefreshLayout.OnRefreshL
         String auth = DM.getAuthString();
 
 
-        DM.getApi().getLadders(auth, new Callback<LaddersResponse>() {
+        DM.getApi().getLadders(auth,group.groupId,   new Callback<LaddersResponse>() {
             @Override
             public void success(LaddersResponse gs, Response response) {
 
-                if(gs.getData().size()==0)
-                {
-                    emptyIV.setVisibility(View.VISIBLE);
-                    ll_first.setVisibility(View.GONE);
-                    ll_second.setVisibility(View.GONE);
-                }
-                else{
-                    emptyIV.setVisibility(View.GONE);
-                    ll_first.setVisibility(View.VISIBLE);
-                    ll_second.setVisibility(View.VISIBLE);
+                ladders = gs.getData();
+                listadapter.notifyDataSetChanged();
+                refreshLayout.setRefreshing(false);
+                pd.dismiss();
 
-                    ladders = gs.getData();
-                    listadapter.notifyDataSetChanged();
-                    refreshLayout.setRefreshing(false);
-                    pd.dismiss();
-                }
-
+                Log.d(TAG, "success:" + response.getStatus());
             }
 
             @Override
@@ -174,8 +168,13 @@ public class LaddersVC extends Fragment implements SwipeRefreshLayout.OnRefreshL
                 refreshLayout.setRefreshing(false);
                 pd.dismiss();
 
+                Log.d(TAG, "failure: " + error.getMessage());
+                Log.d(TAG, "fail: " + error.getResponse());
             }
         });
+
+
+
     }
 
     @Override

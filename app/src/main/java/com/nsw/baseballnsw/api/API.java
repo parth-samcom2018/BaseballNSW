@@ -26,6 +26,7 @@ import java.util.List;
 import retrofit.Callback;
 import retrofit.client.Response;
 import retrofit.http.Body;
+import retrofit.http.DELETE;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
@@ -123,8 +124,8 @@ public interface API {
     @GET("/apiv2/groupMembers/groups")      //here is the other url part.best way is to start using /
     public void getAllGrouping(@Header("Authorization") String auth, Callback<GroupResponse> response);
 
-    @GET("/apiv2/ladders/14")
-    public void getLadders(@Header("Authorization") String auth, Callback<LaddersResponse> response);
+    @GET("/apiv2/ladders/{groupID}")
+    public void getLadders(@Header("Authorization") String auth,@Path("groupID") int groupID, Callback<LaddersResponse> response);
 
     //new api v2
     @GET("/apiv2/events/all")      //here is the other url part.best way is to start using /
@@ -281,4 +282,13 @@ public interface API {
     public void postProfileImage(@Header("Authorization") String auth,
                                  @Part("image") TypedFile file,
                                  Callback<Response> response);
+
+    @DELETE("/apiv2/events/delete/{eventID}")
+    public void delete(@Header("Authorization") String auth,
+                       @Path("eventID") int eventID,  Callback<Response> callback);
+
+    @DELETE("/apiv2/media/delete/{MediaId}")
+    public void deleteMediaItem(@Header("Authorization") String auth,
+                                @Path("MediaId") int mediaID,
+                                Callback<Response> callback);
 }

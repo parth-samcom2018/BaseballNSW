@@ -435,7 +435,7 @@ public class MediaDetailVC extends BaseVC {
 
 
         if(item.getItemId() == R.id.edit) this.editAlbumAction();
-
+        if(item.getItemId() == R.id.delete) this.deleteAlbumAction();
         return super.onOptionsItemSelected(item);
     }
 
@@ -515,6 +515,49 @@ public class MediaDetailVC extends BaseVC {
 
         alert.show();
 
+    }
+
+    private void deleteAlbumAction() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+        String message = "Are you sure want to delete this item?";
+        alert.setMessage(message);
+        alert.setTitle("Delete Album image?");
+
+        alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+
+                //Toast.makeText(MediaDetailVC.this, "" + selectedMedia.mediaId, Toast.LENGTH_SHORT).show();
+
+                String auth = DM.getAuthString();
+
+                DM.getApi().deleteMediaItem(auth, selectedMedia.mediaId, new Callback<Response>() {
+                    @Override
+                    public void success(Response response, Response response2) {
+
+                        Toast.makeText(MediaDetailVC.this, "Successfully deleted media item", Toast.LENGTH_SHORT).show();
+                        refreshLayout.setRefreshing(true);
+                        //startActivity(new Intent(MediaDetailVC.this, GroupVC.class));
+                        finish();
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        Toast.makeText(MediaDetailVC.this, "Media item cannot be deleted", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                dialog.dismiss();
+            }
+        });
+
+        alert.show();
     }
 
 }

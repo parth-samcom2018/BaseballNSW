@@ -8,7 +8,7 @@ public class Ladders {
     public int gamesLost;
     public int gamesDrawn;
     public int gamesPlayed;
-    public int totalPoints;
+    public double totalPoints;
     public String teamLogo;
 
 }

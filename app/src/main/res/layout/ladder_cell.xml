@@ -40,6 +40,18 @@
             android:textColor="@color/black"
             android:fontFamily="@font/lato_regular"
             android:gravity="center"
+            android:id="@+id/tvplayed"/>
+
+        <TextView
+            android:layout_weight="0.6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:padding="5dp"
+            android:layout_gravity="center"
+            android:textColor="@color/black"
+            android:fontFamily="@font/lato_regular"
+            android:gravity="center"
             android:id="@+id/tvwin"/>
 
         <TextView
@@ -64,6 +76,7 @@
             android:textColor="@color/black"
             android:fontFamily="@font/lato_regular"
             android:gravity="center"
+            android:visibility="gone"
             android:id="@+id/tvdrawn"/>
 
 

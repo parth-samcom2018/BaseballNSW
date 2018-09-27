@@ -152,7 +152,7 @@ public class GroupVC extends BaseVC {
             this.fixturesVC.group = group;
 
             this.laddersVC = (LaddersVC)LaddersVC.instantiate(this, LaddersVC.class.getName());
-            this.laddersVC.ladder = ladder;
+            this.laddersVC.group = group;
 
             this.mediaVC = (MediaVC) MediaVC.instantiate(this, MediaVC.class.getName());
             this.mediaVC.group = group;

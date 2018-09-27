@@ -1,9 +1,12 @@
 package com.nsw.baseballnsw;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Html;
@@ -16,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nsw.baseballnsw.models.Event;
 import com.nsw.baseballnsw.models.EventResponse;
@@ -41,7 +45,6 @@ public class EventsFragment extends Fragment implements SwipeRefreshLayout.OnRef
 
     //MODELS
     private List<Event> events = new Vector<Event>(); //empty
-
 
 
     public EventsFragment() {
@@ -84,7 +87,7 @@ public class EventsFragment extends Fragment implements SwipeRefreshLayout.OnRef
 
         listView = v.findViewById(R.id.list);
 
-        listAdapter= new ArrayAdapter<Event>(this.getContext(), R.layout.event_cell){
+        listAdapter = new ArrayAdapter<Event>(this.getContext(), R.layout.event_cell) {
 
 
             @Override
@@ -103,13 +106,13 @@ public class EventsFragment extends Fragment implements SwipeRefreshLayout.OnRef
                 tv_group_title.setText(e.groupName);
 
                 TextView locationTV = convertView.findViewById(R.id.locationTV);
-                locationTV.setText("At "+e.location);
+                locationTV.setText("At " + e.location);
 
-                String topString = " <font color='#d7d7d7'> At </font>" +e.location ;
+                String topString = " <font color='#d7d7d7'> At </font>" + e.location;
                 locationTV.setText(Html.fromHtml(topString));
 
                 TextView timeTV = convertView.findViewById(R.id.timeTV);
-                timeTV.setText(e.getDateString()+"\n"+e.getTimeString());
+                timeTV.setText(e.getDateString() + "\n" + e.getTimeString());
 
                 return convertView;
             }
@@ -127,12 +130,25 @@ public class EventsFragment extends Fragment implements SwipeRefreshLayout.OnRef
                 EventVC.event = e;
 
                 Intent i = new Intent(EventsFragment.this.getActivity(), EventVC.class);
-                i.putExtra("Key",e.groupName);
+                i.putExtra("Key", e.groupName);
                 startActivity(i);
             }
         });
 
 
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Event e = events.get(i);
+                EventVC.event = e;
+
+                //Toast.makeText(getActivity(), "" + event.eventId, Toast.LENGTH_SHORT).show();
+
+                deleteEvent();
+
+                return true;
+            }
+        });
         refreshLayout = v.findViewById(R.id.swiperefresh);
         refreshLayout.setOnRefreshListener(this);
 
@@ -140,35 +156,77 @@ public class EventsFragment extends Fragment implements SwipeRefreshLayout.OnRef
         return v;
     }
 
-    // NEEDED with configChange in manifest, stops view changer from recalling onCreateView
-    private boolean initialLoaded = false;
-    public void loadIfUnloaded()
-    {
-        if(initialLoaded == false) loadData();
+    private void deleteEvent() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Delete Event");
+        builder.setMessage("Are you sure want to delete this event?");
+        builder.setPositiveButton("Yes",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+
+                        Event e = events.get(0);
+                        EventVC.event = e;
+
+                        String auth = DM.getAuthString();
+
+                        DM.getApi().delete(auth,e.eventId, new Callback<Response>() {
+                            @Override
+                            public void success(Response response, Response response2) {
+
+                                Toast.makeText(getActivity(), "Successfully Deleted Event", Toast.LENGTH_SHORT).show();
+                                loadData();
+                            }
+
+                            @Override
+                            public void failure(RetrofitError error) {
+                                Toast.makeText(getActivity(), "Event cannot be delete!!", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
+        builder.setNegativeButton("No",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                        //Toast.makeText(getActivity(), "Dismiss", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        final AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
-    private void loadData()
-    {
+    // NEEDED with configChange in manifest, stops view changer from recalling onCreateView
+    private boolean initialLoaded = false;
+
+    public void loadIfUnloaded() {
+        if (initialLoaded == false) loadData();
+    }
+
+    private void loadData() {
         initialLoaded = true;
 
-        final  ProgressDialog pd = DM.getPD(this.getActivity(),"Loading Events...");
-        if(true)pd.show();
+        final ProgressDialog pd = DM.getPD(this.getActivity(), "Loading Events...");
+        if (true) pd.show();
 
         String auth = DM.getAuthString();
 
 
-        DM.getApi().getAllEvents(auth,new Callback<EventResponse>() {
+        DM.getApi().getAllEvents(auth, new Callback<EventResponse>() {
             @Override
             public void success(EventResponse events, Response response) {
 
 
                 EventsFragment.this.events = events.getData();
-                Log.d("hq", "events: "+events.getData().size()+"");
+                Log.d("hq", "events: " + events.getData().size() + "");
                 listAdapter.notifyDataSetChanged();
                 refreshLayout.setRefreshing(false);
                 pd.dismiss();
 
-                if(events.getData().size()==0) emptyIV.setVisibility(View.VISIBLE);
+                if (events.getData().size() == 0) emptyIV.setVisibility(View.VISIBLE);
                 else emptyIV.setVisibility(View.GONE);
 
             }
@@ -176,7 +234,7 @@ public class EventsFragment extends Fragment implements SwipeRefreshLayout.OnRef
             @Override
             public void failure(RetrofitError error) {
 
-                Log.d("hq", "failed: "+error.getMessage());
+                Log.d("hq", "failed: " + error.getMessage());
                 refreshLayout.setRefreshing(false);
                 pd.dismiss();
             }
@@ -193,8 +251,7 @@ public class EventsFragment extends Fragment implements SwipeRefreshLayout.OnRef
     @Override
     public void onResume() {
 
-        if(oneShotRefresh)
-        {
+        if (oneShotRefresh) {
             loadData();
             oneShotRefresh = true;
         }
