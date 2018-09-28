@@ -1,12 +1,11 @@
 package com.nsw.baseballnsw;
 
-import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Html;
@@ -14,8 +13,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -33,12 +34,15 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class EventsFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+
+    private static final String TAG = "NSW";
     Event event;
     Group group;
     private ListView listView;
     private ArrayAdapter<Event> listAdapter;
     private SwipeRefreshLayout refreshLayout;
     private ImageView emptyIV;
+    Dialog dialog;
 
     public static boolean oneShotRefresh = false;
 
@@ -114,6 +118,8 @@ public class EventsFragment extends Fragment implements SwipeRefreshLayout.OnRef
                 TextView timeTV = convertView.findViewById(R.id.timeTV);
                 timeTV.setText(e.getDateString() + "\n" + e.getTimeString());
 
+                Log.d(TAG, "" + e.eventId);
+
                 return convertView;
             }
 
@@ -123,6 +129,7 @@ public class EventsFragment extends Fragment implements SwipeRefreshLayout.OnRef
             }
         };
         listView.setAdapter(listAdapter);
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -135,16 +142,70 @@ public class EventsFragment extends Fragment implements SwipeRefreshLayout.OnRef
             }
         });
 
-
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Event e = events.get(i);
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
+
+                final Event e = events.get(position);
                 EventVC.event = e;
+                //Toast.makeText(getActivity(), "" + e.eventId, Toast.LENGTH_SHORT).show();
 
-                //Toast.makeText(getActivity(), "" + event.eventId, Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "event created: " + e.memberId);
+                Log.d(TAG, "event id: " + e.eventId);
+                Log.d(TAG, "memberID: " + DM.member.memberId);
 
-                deleteEvent();
+                dialog = new Dialog(getActivity());
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setCancelable(true);
+                dialog.setContentView(R.layout.my_events);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+                TextView tvdata = dialog.findViewById(R.id.tvData);
+
+                tvdata.setText("" + e.eventName);
+                Button btn_no = dialog.findViewById(R.id.btn_no);
+                btn_no.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+
+                Button btnYes = dialog.findViewById(R.id.btn_yes);
+
+                btnYes.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        if (e.memberId == DM.member.memberId) {
+
+                            String auth = DM.getAuthString();
+
+                            DM.getApi().delete(auth, e.eventId, new Callback<Response>() {
+                                @Override
+                                public void success(Response response, Response response2) {
+                                    Toast.makeText(getActivity(), "Successfully deleted event!!", Toast.LENGTH_SHORT).show();
+                                    refreshLayout.setRefreshing(true);
+                                    loadData();
+                                    dialog.dismiss();
+                                }
+
+                                @Override
+                                public void failure(RetrofitError error) {
+                                    Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                                    refreshLayout.setRefreshing(true);
+                                    loadData();
+                                    dialog.dismiss();
+                                }
+                            });
+                        } else {
+                            Toast.makeText(getActivity(), "Cannot delete this event!!", Toast.LENGTH_SHORT).show();
+                        }
+
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
 
                 return true;
             }
@@ -152,52 +213,9 @@ public class EventsFragment extends Fragment implements SwipeRefreshLayout.OnRef
         refreshLayout = v.findViewById(R.id.swiperefresh);
         refreshLayout.setOnRefreshListener(this);
 
-
         return v;
     }
 
-    private void deleteEvent() {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Delete Event");
-        builder.setMessage("Are you sure want to delete this event?");
-        builder.setPositiveButton("Yes",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-
-                        Event e = events.get(0);
-                        EventVC.event = e;
-
-                        String auth = DM.getAuthString();
-
-                        DM.getApi().delete(auth,e.eventId, new Callback<Response>() {
-                            @Override
-                            public void success(Response response, Response response2) {
-
-                                Toast.makeText(getActivity(), "Successfully Deleted Event", Toast.LENGTH_SHORT).show();
-                                loadData();
-                            }
-
-                            @Override
-                            public void failure(RetrofitError error) {
-                                Toast.makeText(getActivity(), "Event cannot be delete!!", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                });
-        builder.setNegativeButton("No",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                        //Toast.makeText(getActivity(), "Dismiss", Toast.LENGTH_SHORT).show();
-                    }
-                });
-        final AlertDialog dialog = builder.create();
-        dialog.show();
-    }
 
     // NEEDED with configChange in manifest, stops view changer from recalling onCreateView
     private boolean initialLoaded = false;
