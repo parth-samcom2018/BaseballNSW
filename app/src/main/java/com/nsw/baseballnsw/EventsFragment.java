@@ -42,6 +42,7 @@ public class EventsFragment extends Fragment implements SwipeRefreshLayout.OnRef
     private ArrayAdapter<Event> listAdapter;
     private SwipeRefreshLayout refreshLayout;
     private ImageView emptyIV;
+    private TextView tvMsg;
     Dialog dialog;
 
     public static boolean oneShotRefresh = false;
@@ -87,7 +88,7 @@ public class EventsFragment extends Fragment implements SwipeRefreshLayout.OnRef
         View v = inflater.inflate(R.layout.fragment_events, container, false);
 
         emptyIV = v.findViewById(R.id.empty);
-
+        tvMsg = v.findViewById(R.id.tvMessage);
 
         listView = v.findViewById(R.id.list);
 
@@ -244,9 +245,14 @@ public class EventsFragment extends Fragment implements SwipeRefreshLayout.OnRef
                 refreshLayout.setRefreshing(false);
                 pd.dismiss();
 
-                if (events.getData().size() == 0) emptyIV.setVisibility(View.VISIBLE);
-                else emptyIV.setVisibility(View.GONE);
-
+                if (events.getData().size() == 0) {
+                    emptyIV.setVisibility(View.VISIBLE);
+                    tvMsg.setVisibility(View.GONE);
+                }
+                else {
+                    emptyIV.setVisibility(View.GONE);
+                    tvMsg.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
