@@ -199,7 +199,7 @@ public class EventsFragment extends Fragment implements SwipeRefreshLayout.OnRef
                                 }
                             });
                         } else {
-                            Toast.makeText(getActivity(), "Cannot delete this event!!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Sorry!! you cannot delete this event!!", Toast.LENGTH_SHORT).show();
                         }
 
                         dialog.dismiss();

@@ -252,6 +252,7 @@ public class ProfileFragment extends Fragment {
         SharedPreferences.Editor editor = preferences.edit();
         editor.remove("HQUsername");
         editor.remove("HQToken");
+        editor.remove("HQMemberId");
         editor.apply();
 
         unregisterForPush();
