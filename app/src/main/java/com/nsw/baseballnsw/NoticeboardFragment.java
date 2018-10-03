@@ -71,6 +71,8 @@ public class NoticeboardFragment extends Fragment {
     private List<Notification> notifications = new Vector<Notification>();
     private List<Group> userGroups = null;
 
+    Dialog dialog;
+
     //VIEWS
     private SwipeRefreshLayout refreshLayout;
     private ListView listView;
@@ -342,6 +344,35 @@ public class NoticeboardFragment extends Fragment {
                             }
                         }
                     });
+
+                    convertView.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View view) {
+                            if (DM.member.memberId == n.memberId) {
+                                String auth = DM.getAuthString();
+
+                                DM.getApi().notificationDelete(auth, n.notificationId, new Callback<Response>() {
+                                    @Override
+                                    public void success(Response response, Response response2) {
+                                        Toast.makeText(getActivity(), "Delete Notification", Toast.LENGTH_SHORT).show();
+                                        loadData(true);
+                                        refreshLayout.setRefreshing(true);
+                                    }
+
+                                    @Override
+                                    public void failure(RetrofitError error) {
+                                        Toast.makeText(getActivity(), "Cannot", Toast.LENGTH_SHORT).show();
+                                        loadData(true);
+                                        refreshLayout.setRefreshing(true);
+                                    }
+                                });
+                            }
+                            else {
+                                Toast.makeText(getActivity(), "You are authorized to delete this notification!!", Toast.LENGTH_SHORT).show();
+                            }
+                            return true;
+                        }
+                    });
                 }
 
                 TextView firstTV = convertView.findViewById(R.id.firstTV);
@@ -521,6 +552,75 @@ public class NoticeboardFragment extends Fragment {
                             });*/
 
                         }
+                    }
+                });
+
+                convertView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View view) {
+                        dialog = new Dialog(getActivity());
+                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        dialog.setCancelable(true);
+                        dialog.setContentView(R.layout.my_notifications);
+                        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+                        /*TextView tvdata = dialog.findViewById(R.id.tvData);
+
+                        tvdata.setText("" + n.comments);*/
+
+                        /*Log.d(TAG, "notification created: " + n.notificationId);
+                        Log.d(TAG, "notification id: " + n.familyId);
+                        Log.d(TAG, "NotificationitemID: " + n.notificationItemId);
+                        Log.d(TAG, "NotificationtypeID: " + n.notificationTypeId);*/
+                        Log.d(TAG, "memberID: " + DM.member.memberId);
+                        Log.d(TAG, "NotificationmemberID: " + n.memberId);
+
+
+                        Button btn_no = dialog.findViewById(R.id.btn_no);
+                        btn_no.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                dialog.dismiss();
+                            }
+                        });
+
+                        Button btnYes = dialog.findViewById(R.id.btn_yes);
+
+                        btnYes.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                                if (DM.member.memberId == n.memberId) {
+                                    String auth = DM.getAuthString();
+
+                                    DM.getApi().notificationDelete(auth, n.notificationId, new Callback<Response>() {
+                                        @Override
+                                        public void success(Response response, Response response2) {
+                                            Toast.makeText(getActivity(), "Delete Notification", Toast.LENGTH_SHORT).show();
+                                            loadData(true);
+                                            refreshLayout.setRefreshing(true);
+                                        }
+
+                                        @Override
+                                        public void failure(RetrofitError error) {
+                                            Toast.makeText(getActivity(), "Cannot", Toast.LENGTH_SHORT).show();
+                                            loadData(true);
+                                            refreshLayout.setRefreshing(true);
+                                        }
+                                    });
+                                }
+                                else {
+                                    Toast.makeText(getActivity(), "You are authorized to delete this notification!!", Toast.LENGTH_SHORT).show();
+                                }
+
+
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.show();
+
+
+                        return true;
                     }
                 });
 
