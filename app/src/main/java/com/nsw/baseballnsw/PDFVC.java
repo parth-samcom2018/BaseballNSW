@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.joanzapata.pdfview.PDFView;
 
@@ -12,6 +13,7 @@ import java.net.URL;
 
 public class PDFVC extends AppCompatActivity {
 
+    private static final String TAG = "NSW";
     public static String url;
     public static String title;
 
@@ -82,6 +84,7 @@ public class PDFVC extends AppCompatActivity {
         protected void onPostExecute(Long result) {
             // showDialog("Downloaded " + result + " bytes");
             pdfView.fromFile(file).load();
+            Log.d(TAG, "" + file);
         }
     }
 }

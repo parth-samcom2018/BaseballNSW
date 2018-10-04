@@ -93,7 +93,7 @@
             android:layout_marginLeft="10dp"
             app:tabGravity="center"
             app:tabMaxWidth="0dp"
-            app:tabTextColor="@color/gray"
+            app:tabTextColor="@color/textgray"
             android:layout_marginRight="10dp"
             app:tabMode="scrollable"
             app:tabSelectedTextColor="@color/tab_background_selected"
