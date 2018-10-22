@@ -20,6 +20,8 @@ import com.nsw.baseballnsw.models.NotificationResponse;
 import com.nsw.baseballnsw.models.Profile;
 import com.nsw.baseballnsw.models.Register;
 import com.nsw.baseballnsw.models.Token;
+import com.nsw.baseballnsw.models.VideoAlbum;
+import com.nsw.baseballnsw.models.VideoAlbumResponse;
 
 import java.util.List;
 
@@ -153,6 +155,21 @@ public interface API {
                                 Callback<Response> callback);
 
     @FormUrlEncoded
+    @POST("/apiv2/media/album")
+    public void postVideoAlbum(@Header("Authorization") String auth,
+                               @Field("name") String name,
+                               @Field("groupid") int groupID,
+                               @Field("albumtype") String type,
+                               Callback<Response> callback);
+
+    @FormUrlEncoded
+    @POST("/apiv2/media/postvideo")
+    public void postVideoToAlbum(@Header("Authorization") String auth,
+                                 @Field("mediaAlbumId") int mediaAlbumID,
+                                 @Field("videourl") String url,
+                                 Callback<Response> callback);
+
+    @FormUrlEncoded
     @POST("/apiv2/groupmembers/invite")
     public void postInviteUsers(@Header("Authorization") String auth,
                                 @Field("Name") String name,
@@ -212,6 +229,10 @@ public interface API {
     public void getMediaAlbums(@Header("Authorization") String auth, @Path("id") int mediaAlbumID, Callback<MediaAlbumResponse> response);
 
 
+    @GET("/apiv2/video/album/{id}")
+    public void getVideoAlbum(@Header("Authorization") String auth, @Path("id") int mediaAlbumID, Callback<MediaAlbum> response);
+
+
     @FormUrlEncoded
     @POST("/apiv2/notifications/comment")
     public void postNotificationComments(@Header("Authorization") String auth,
@@ -257,6 +278,9 @@ public interface API {
     //new api v2
     @GET("/apiv2/media/get/{groupID}")
     public void getGroupingMediaAlbums(@Header("Authorization") String auth, @Path("groupID") int groupID, Callback<MediaAlbumResponse> response);
+
+    @GET("/apiv2/video/get/{groupID}")
+    public void getGroupingVideoAlbum(@Header("Authorization") String auth, @Path("groupID") int groupID, Callback<MediaAlbumResponse> response);
 
 
 

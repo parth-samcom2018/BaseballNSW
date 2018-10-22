@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "1006978669053-n1v3hkvls2olmn9npnfnmqk34lr1ahsq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nsw.baseballnsw",
+            "certificate_hash": "4425e4ade43eb8c2d06e58a13c365d9a3781b49e"
+          }
+        },
+        {
           "client_id": "1006978669053-hvjrv661te8a6967k8lgbiop4gtcc9rv.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -42,6 +50,13 @@
             {
               "client_id": "1006978669053-hvjrv661te8a6967k8lgbiop4gtcc9rv.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "1006978669053-pvksb46mkf0ep6v2jn7dhkda2sfd6q6n.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.thehqnetwork.BaseballNSW"
+              }
             }
           ]
         },
