@@ -2,8 +2,10 @@ package com.nsw.baseballnsw;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -27,6 +29,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -159,7 +162,13 @@ public class MainTabbing extends BaseVC {
                             tv_left.setVisibility(View.GONE);
                             frmL.setVisibility(View.GONE);
                             mTitle.setText("Groups");
-                            //ll_edit.setVisibility(View.GONE);
+                            /*tvend.setText("+ Groups");
+                            tvend.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    newGroupAction();
+                                }
+                            });*/
                             groupsVC.loadIfUnloaded();
                         }
                         catch (NullPointerException e){
@@ -171,17 +180,17 @@ public class MainTabbing extends BaseVC {
                     case 2:
 
                         try{
-                            tvend.setVisibility(View.VISIBLE);
+                            tvend.setVisibility(View.GONE);
                             tv_left.setVisibility(View.GONE);
                             frmL.setVisibility(View.GONE);
                             mTitle.setText("Events");
-                            tvend.setText("CREATE");
+                            /*tvend.setText("+ Events");
                             tvend.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     newEventAction();
                                 }
-                            });
+                            });*/
                             eventsVC.loadIfUnloaded();
                             break;
                         }
@@ -269,6 +278,74 @@ public class MainTabbing extends BaseVC {
                         "Could not load member details:"+error.getMessage(),Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private void newGroupAction() {
+        final AlertDialog.Builder alert = new AlertDialog.Builder(MainTabbing.this);
+
+        LinearLayout lila1 = new LinearLayout(MainTabbing.this);
+        lila1.setOrientation(LinearLayout.VERTICAL);
+        final EditText nameET = new EditText(MainTabbing.this);
+        nameET.setHint("Group Name");
+        final EditText descET = new EditText(MainTabbing.this);
+        descET.setVisibility(View.GONE);
+        descET.setHint("Group Description");
+        lila1.addView(nameET);
+        int pad = (int)getResources().getDimension(R.dimen.small_pad);
+        lila1.setPadding(pad,pad,pad,pad);
+        alert.setView(lila1);
+
+        alert.setTitle("Create Group");
+
+
+        alert.setPositiveButton("Create", new DialogInterface.OnClickListener() {
+            public void onClick(final DialogInterface dialog, int whichButton) {
+                String name = nameET.getText().toString();
+
+                if(name.length() == 0 || name == null)
+                {
+                    Toast.makeText(MainTabbing.this,"Enter a Group Name",Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                Log.d("group","name :" + name);
+
+                pd = DM.getPD(MainTabbing.this,"Loading Creating Group..");
+                pd.show();
+
+                DM.getApi().creategroup(DM.getAuthString(), name, new Callback<Response>() {
+                    @Override
+                    public void success(Response response, Response response2) {
+                        Toast.makeText(MainTabbing.this,"Group Created!",Toast.LENGTH_LONG).show();
+                        pd.dismiss();
+                        dialog.dismiss();
+                        DM.hideKeyboard(MainTabbing.this);
+
+                        finish();
+                        startActivity(getIntent());
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        Toast.makeText(MainTabbing.this,"Could not create group: "+error.getMessage(),Toast.LENGTH_LONG).show();
+                        pd.dismiss();
+                        dialog.dismiss();
+                        DM.hideKeyboard(MainTabbing.this);
+
+                    }
+                });
+
+            }
+        });
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                DM.hideKeyboard(MainTabbing.this);
+                dialog.dismiss();
+            }
+        });
+
+        alert.show();
     }
 
     private void onChangePassword() {

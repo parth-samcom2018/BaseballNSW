@@ -11,6 +11,9 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -56,7 +59,7 @@ public class EventsFragment extends Fragment implements SwipeRefreshLayout.OnRef
         // Required empty public constructor
     }
 
-    /*@Override
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.create_menu, menu);
     }
@@ -76,7 +79,7 @@ public class EventsFragment extends Fragment implements SwipeRefreshLayout.OnRef
         Log.d("hq","click!");
         Intent i = new Intent(EventsFragment.this.getContext(),EventFormVC.class);
         startActivity(i);
-    }*/
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

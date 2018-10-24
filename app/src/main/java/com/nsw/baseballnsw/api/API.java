@@ -341,4 +341,10 @@ public interface API {
     public void eventCommentdelete(@Header("Authorization") String auth,
                                    @Path("eventCommentId") int eventCommentId,
                                    Callback<Response> callback);
+
+    @FormUrlEncoded
+    @POST("/apiv2/groupmembers/creategroup")
+    public void creategroup(@Header("Authorization") String auth,
+                            @Field("groupname") String name,
+                            Callback<Response> callback);
 }
