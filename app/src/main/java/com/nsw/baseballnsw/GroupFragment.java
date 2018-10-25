@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -45,6 +46,7 @@ public class GroupFragment extends Fragment {
     private ArrayAdapter<Event> gridAdapter;
     private SwipeRefreshLayout refreshLayout;
     private ImageView emptyIV;
+    private TextView tv_group_edit;
 
     private ProgressDialog pd;
 
@@ -151,6 +153,7 @@ public class GroupFragment extends Fragment {
         isOnline();
 
         emptyIV = v.findViewById(R.id.empty);
+        tv_group_edit = v.findViewById(R.id.tvMessage_edit);
 
         final ProgressDialog pd = DM.getPD(getActivity(),"Loading Groups...");
         if(this.isVisible())pd.show();
@@ -231,6 +234,16 @@ public class GroupFragment extends Fragment {
             }
         });
 
+        gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int pos, long l) {
+
+                Group gs = groups.get(pos);
+                renameGroup(gs.groupId, gs.groupName);
+                return true;
+            }
+        });
+
         refreshLayout = v.findViewById(R.id.swiperefresh);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -268,6 +281,56 @@ public class GroupFragment extends Fragment {
     }
 
 
+    private void renameGroup(final int groupId, final String groupName) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(GroupFragment.this.getActivity());
+
+        final EditText edittext = new EditText(GroupFragment.this.getActivity());
+        edittext.setText(groupName);
+        String message = "Enter the new Group name";
+        alert.setMessage(message);
+        alert.setTitle("Edit Group");
+        alert.setView(edittext);
+
+        alert.setPositiveButton("Update", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+
+                String name = edittext.getText().toString();
+                Log.d("hq", "update group with name:" + name);
+
+                if (TextUtils.isEmpty(name)) {
+                    Toast.makeText(GroupFragment.this.getActivity(), "Enter a name", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                DM.getApi().putGroupname(DM.getAuthString(), groupId, edittext.getText().toString() , new Callback<Response>() {
+                    @Override
+                    public void success(Response response, Response response2) {
+
+                        Toast.makeText(GroupFragment.this.getActivity(), "Group Updated!", Toast.LENGTH_LONG).show();
+                        DM.hideKeyboard(GroupFragment.this.getActivity());
+                        loadData();
+                        refreshLayout.setRefreshing(true);
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                        Toast.makeText(GroupFragment.this.getActivity(), "Could not update group:" + error.getMessage(), Toast.LENGTH_LONG).show();
+                        DM.hideKeyboard(GroupFragment.this.getActivity());
+                    }
+                });
+            }
+        });
+
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // what ever you want to do with No option.
+            }
+        });
+
+        alert.show();
+    }
+
     // NEEDED with configChange in manifest, stops view changer from recalling onCreateView
     private boolean initialLoaded = false;
     public void loadIfUnloaded()
@@ -300,9 +363,14 @@ public class GroupFragment extends Fragment {
                 refreshLayout.setRefreshing(false);
                 pd.dismiss();
 
-                if(gs.getData().size()==0) emptyIV.setVisibility(View.VISIBLE);
-                else emptyIV.setVisibility(View.GONE);
-
+                if(gs.getData().size()==0)  {
+                    emptyIV.setVisibility(View.VISIBLE);
+                    tv_group_edit.setVisibility(View.GONE);
+                }
+                else {
+                    emptyIV.setVisibility(View.GONE);
+                    tv_group_edit.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
